@@ -4,6 +4,7 @@ import { promisify } from "util";
 import os from "os";
 
 const execAsync = promisify(exec);
+const isWindows = process.platform === "win32";
 
 // Systemd services to check — override via SYSTEMD_WATCHED_SERVICES env var (comma-separated)
 const SYSTEMD_SERVICES: string[] = process.env.SYSTEMD_WATCHED_SERVICES
@@ -30,18 +31,35 @@ export async function GET() {
     let diskUsed = 0;
     let diskTotal = 100;
     try {
-      // macOS: df -g (1G blocks), Linux: df -BG
-      const isMac = process.platform === "darwin";
-      const dfCmd = isMac ? "df -g / | tail -1" : "df -BG / | tail -1";
-      const { stdout } = await execAsync(dfCmd);
-      const parts = stdout.trim().split(/\s+/);
-      if (isMac) {
-        // macOS: Filesystem 512-blocks Used Available Capacity ... OR with -g: Filesystem Gblocks Used Available ...
-        diskTotal = parseInt(parts[1]) || 100;
-        diskUsed = parseInt(parts[2]) || 0;
+      if (isWindows) {
+        // Windows 系统使用 wmic 命令获取磁盘信息
+        const { stdout } = await execAsync('wmic logicaldisk where "DeviceID=\'C:\'" get Size,FreeSpace');
+        const lines = stdout.trim().split('\n');
+        if (lines.length > 1) {
+          const dataLine = lines[1].trim();
+          const [freeSpaceStr, sizeStr] = dataLine.split(/\s+/).filter(Boolean);
+          if (freeSpaceStr && sizeStr) {
+            const freeSpace = parseInt(freeSpaceStr);
+            const totalSpace = parseInt(sizeStr);
+            diskTotal = Math.round(totalSpace / 1024 / 1024 / 1024);
+            const diskFree = Math.round(freeSpace / 1024 / 1024 / 1024);
+            diskUsed = diskTotal - diskFree;
+          }
+        }
       } else {
-        diskTotal = parseInt(parts[1].replace("G", ""));
-        diskUsed = parseInt(parts[2].replace("G", ""));
+        // macOS: df -g (1G blocks), Linux: df -BG
+        const isMac = process.platform === "darwin";
+        const dfCmd = isMac ? "df -g / | tail -1" : "df -BG / | tail -1";
+        const { stdout } = await execAsync(dfCmd);
+        const parts = stdout.trim().split(/\s+/);
+        if (isMac) {
+          // macOS: Filesystem 512-blocks Used Available Capacity ... OR with -g: Filesystem Gblocks Used Available ...
+          diskTotal = parseInt(parts[1]) || 100;
+          diskUsed = parseInt(parts[2]) || 0;
+        } else {
+          diskTotal = parseInt(parts[1].replace("G", ""));
+          diskUsed = parseInt(parts[2].replace("G", ""));
+        }
       }
     } catch (error) {
       console.error("Failed to get disk stats:", error);
