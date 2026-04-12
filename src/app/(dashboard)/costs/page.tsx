@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { DollarSign, TrendingUp, TrendingDown, AlertTriangle, Calendar, PieChart } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, PieChart as RePieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { useI18n } from "@/i18n";
 
 interface CostData {
   today: number;
@@ -31,6 +32,7 @@ const MODEL_PRICES = {
 };
 
 export default function CostsPage() {
+  const { t } = useI18n();
   const [costData, setCostData] = useState<CostData | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeframe, setTimeframe] = useState<"7d" | "30d" | "90d">("30d");
@@ -60,7 +62,7 @@ export default function CostsPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: "var(--accent)" }}></div>
-          <p style={{ color: "var(--text-secondary)" }}>Loading cost data...</p>
+          <p style={{ color: "var(--text-secondary)" }}>{t("common.loading")}</p>
         </div>
       </div>
     );
@@ -71,7 +73,7 @@ export default function CostsPage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <DollarSign className="w-16 h-16 mx-auto mb-4" style={{ color: "var(--text-muted)" }} />
-          <p style={{ color: "var(--text-secondary)" }}>Unable to load cost data</p>
+          <p style={{ color: "var(--text-secondary)" }}>{t("costs.no_data")}</p>
         </div>
       </div>
     );
@@ -94,10 +96,10 @@ export default function CostsPage() {
               color: "var(--text-primary)",
             }}
           >
-            Cost Analysis
+            {t("costs.title")}
           </h1>
           <p style={{ color: "var(--text-secondary)" }}>
-            Token usage and cost tracking across all agents
+            {t("costs.subtitle")}
           </p>
         </div>
 
@@ -113,7 +115,7 @@ export default function CostsPage() {
                 color: timeframe === tf ? "white" : "var(--text-secondary)",
               }}
             >
-              {tf === "7d" ? "7 days" : tf === "30d" ? "30 days" : "90 days"}
+              {t(`costs.timeframe.${tf}`)}
             </button>
           ))}
         </div>
@@ -132,7 +134,7 @@ export default function CostsPage() {
         {/* Today */}
         <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>Today</span>
+            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{t("costs.kpi.today")}</span>
             {todayChange !== 0 && isFinite(todayChange) && (
               <div className="flex items-center gap-1">
                 {todayChange > 0 ? (
@@ -153,14 +155,14 @@ export default function CostsPage() {
             ${(costData.today ?? 0).toFixed(2)}
           </div>
           <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-            vs ${(costData.yesterday ?? 0).toFixed(2)} yesterday
+            {t("costs.kpi.vs_yesterday", { amount: (costData.yesterday ?? 0).toFixed(2) })}
           </p>
         </div>
 
         {/* This Month */}
         <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>This Month</span>
+            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{t("costs.kpi.this_month")}</span>
             {monthChange !== 0 && isFinite(monthChange) && (
               <div className="flex items-center gap-1">
                 {monthChange > 0 ? (
@@ -181,27 +183,27 @@ export default function CostsPage() {
             ${(costData.thisMonth ?? 0).toFixed(2)}
           </div>
           <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-            vs ${(costData.lastMonth ?? 0).toFixed(2)} last month
+            {t("costs.kpi.vs_last_month", { amount: (costData.lastMonth ?? 0).toFixed(2) })}
           </p>
         </div>
 
         {/* Projected */}
         <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>Projected Monthly</span>
+            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{t("costs.kpi.projected")}</span>
           </div>
           <div className="text-3xl font-bold" style={{ color: "var(--warning)" }}>
             ${(costData.projected ?? 0).toFixed(2)}
           </div>
           <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-            Based on current pace
+            {t("costs.kpi.projected_note")}
           </p>
         </div>
 
         {/* Budget */}
         <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>Budget</span>
+            <span className="text-sm" style={{ color: "var(--text-secondary)" }}>{t("costs.kpi.budget")}</span>
             {budgetPercent > 80 && (
               <AlertTriangle className="w-4 h-4" style={{ color: "var(--error)" }} />
             )}
@@ -226,7 +228,7 @@ export default function CostsPage() {
         {/* Daily Trend */}
         <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-            Daily Cost Trend
+            {t("costs.chart.daily_trend")}
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={costData.daily}>
@@ -241,7 +243,7 @@ export default function CostsPage() {
                 }}
               />
               <Legend />
-              <Line type="monotone" dataKey="cost" stroke="var(--accent)" strokeWidth={2} name="Cost ($)" />
+              <Line type="monotone" dataKey="cost" stroke="var(--accent)" strokeWidth={2} name={t("costs.chart.cost_label")} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -249,7 +251,7 @@ export default function CostsPage() {
         {/* Cost by Agent */}
         <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-            Cost by Agent
+            {t("costs.chart.by_agent")}
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={costData.byAgent}>
@@ -263,7 +265,7 @@ export default function CostsPage() {
                   borderRadius: "8px",
                 }}
               />
-              <Bar dataKey="cost" fill="var(--accent)" name="Cost ($)" />
+              <Bar dataKey="cost" fill="var(--accent)" name={t("costs.chart.cost_label")} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -271,7 +273,7 @@ export default function CostsPage() {
         {/* Cost by Model */}
         <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-            Cost by Model
+            {t("costs.chart.by_model")}
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <RePieChart>
@@ -302,7 +304,7 @@ export default function CostsPage() {
         {/* Token Usage */}
         <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-            Token Usage (Daily)
+            {t("costs.chart.token_usage")}
           </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={costData.daily}>
@@ -317,8 +319,8 @@ export default function CostsPage() {
                 }}
               />
               <Legend />
-              <Bar dataKey="input" stackId="a" fill="#60A5FA" name="Input Tokens" />
-              <Bar dataKey="output" stackId="a" fill="#F59E0B" name="Output Tokens" />
+              <Bar dataKey="input" stackId="a" fill="#60A5FA" name={t("costs.chart.input_tokens")} />
+              <Bar dataKey="output" stackId="a" fill="#F59E0B" name={t("costs.chart.output_tokens")} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -327,17 +329,17 @@ export default function CostsPage() {
       {/* Model Pricing Table */}
       <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
         <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-          Model Pricing (per 1M tokens)
+          {t("costs.table.model_pricing_title")}
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                <th className="text-left py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Model</th>
-                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Input</th>
-                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Output</th>
-                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Cache Read</th>
-                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Cache Write</th>
+                <th className="text-left py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.model")}</th>
+                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.input")}</th>
+                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.output")}</th>
+                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.cache_read")}</th>
+                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.cache_write")}</th>
               </tr>
             </thead>
             <tbody>
@@ -360,16 +362,16 @@ export default function CostsPage() {
       {/* Detailed table by agent */}
       <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
         <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-          Detailed Breakdown by Agent
+          {t("costs.table.breakdown_title")}
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
                 <th className="text-left py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Agent</th>
-                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Tokens</th>
-                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Cost</th>
-                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>% of Total</th>
+                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.tokens")}</th>
+                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.cost")}</th>
+                <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.percent_total")}</th>
               </tr>
             </thead>
             <tbody>

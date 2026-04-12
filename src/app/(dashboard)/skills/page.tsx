@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { SectionHeader, MetricCard } from "@/components/TenacitOS";
+import { useI18n } from "@/i18n";
 
 interface Skill {
   id: string;
@@ -32,6 +33,7 @@ interface SkillsData {
 }
 
 export default function SkillsPage() {
+  const { t } = useI18n();
   const [data, setData] = useState<SkillsData | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSource, setFilterSource] = useState<"all" | "workspace" | "system">("all");
@@ -94,7 +96,7 @@ export default function SkillsPage() {
             marginBottom: "4px",
           }}
         >
-          Skills Manager
+          {t("skills.page_title")}
         </h1>
         <p
           style={{
@@ -103,7 +105,7 @@ export default function SkillsPage() {
             color: "var(--text-secondary)",
           }}
         >
-          Skills disponibles en el sistema OpenClaw
+          {t("skills.page_subtitle")}
         </p>
       </div>
 
@@ -116,17 +118,17 @@ export default function SkillsPage() {
           marginBottom: "24px",
         }}
       >
-        <MetricCard icon={Puzzle} value={skills.length} label="Total Skills" />
+        <MetricCard icon={Puzzle} value={skills.length} label={t("skills.stats.total")} />
         <MetricCard
           icon={FolderOpen}
           value={workspaceCount}
-          label="Workspace Skills"
+          label={t("skills.stats.workspace")}
           changeColor="positive"
         />
         <MetricCard
           icon={Package}
           value={systemCount}
-          label="System Skills"
+          label={t("skills.stats.system")}
           changeColor="secondary"
         />
       </div>
@@ -155,7 +157,7 @@ export default function SkillsPage() {
           />
           <input
             type="text"
-            placeholder="Buscar skills..."
+            placeholder={t("skills.search.placeholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
@@ -191,7 +193,7 @@ export default function SkillsPage() {
               transition: "all 150ms ease",
             }}
           >
-            Todas ({skills.length})
+            {t("skills.filter.all", { count: skills.length })}
           </button>
           <button
             onClick={() => setFilterSource("workspace")}
@@ -208,7 +210,7 @@ export default function SkillsPage() {
               transition: "all 150ms ease",
             }}
           >
-            Workspace ({workspaceCount})
+            {t("skills.filter.workspace", { count: workspaceCount })}
           </button>
           <button
             onClick={() => setFilterSource("system")}
@@ -225,7 +227,7 @@ export default function SkillsPage() {
               transition: "all 150ms ease",
             }}
           >
-            System ({systemCount})
+            {t("skills.filter.system", { count: systemCount })}
           </button>
         </div>
       </div>
@@ -248,14 +250,14 @@ export default function SkillsPage() {
               margin: "0 auto 16px",
             }}
           />
-          <p style={{ color: "var(--text-secondary)" }}>No se encontraron skills</p>
+          <p style={{ color: "var(--text-secondary)" }}>{t("skills.empty.no_skills")}</p>
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
           {/* Workspace Skills */}
           {workspaceSkills.length > 0 && (filterSource === "all" || filterSource === "workspace") && (
             <div>
-              <SectionHeader label="WORKSPACE SKILLS" />
+              <SectionHeader label={t("skills.section.workspace")} />
               <div
                 style={{
                   display: "grid",
@@ -412,7 +414,7 @@ function SkillCard({ skill, onClick }: { skill: Skill; onClick: () => void }) {
               color: "var(--text-muted)",
             }}
           >
-            {skill.fileCount} files
+            {t("skills.card.files", { count: skill.fileCount })}
           </span>
         </div>
         {skill.homepage && (
@@ -502,7 +504,7 @@ function SkillDetailModal({ skill, onClose }: { skill: Skill; onClose: () => voi
               </p>
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                 <div className="badge-positive">{skill.source}</div>
-                <div className="badge-info">{skill.fileCount} archivos</div>
+                <div className="badge-info">{t("skills.detail.archivos", { count: skill.fileCount })}</div>
                 {skill.agents && skill.agents.length > 0 && skill.agents.map((agent) => (
                   <div
                     key={agent}
@@ -535,7 +537,7 @@ function SkillDetailModal({ skill, onClose }: { skill: Skill; onClose: () => voi
                       textDecoration: "none",
                     }}
                   >
-                    Homepage <ExternalLink style={{ width: "12px", height: "12px" }} />
+                    {t("skills.detail.homepage")} <ExternalLink style={{ width: "12px", height: "12px" }} />
                   </a>
                 )}
               </div>
@@ -554,7 +556,7 @@ function SkillDetailModal({ skill, onClose }: { skill: Skill; onClose: () => voi
               marginBottom: "12px",
             }}
           >
-            Archivos ({skill.files.length})
+            {t("skills.detail.files_header", { count: skill.files.length })}
           </h3>
           <div
             style={{

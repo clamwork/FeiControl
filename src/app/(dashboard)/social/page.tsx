@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 /* ─── Types ─── */
 interface SocialPost {
@@ -318,6 +319,7 @@ function PostModal({
 
 /* ─── Main Page ─── */
 export default function SocialPage() {
+  const { t } = useI18n();
   const [data, setData] = useState<SocialData | null>(null);
   const [loading, setLoading] = useState(true);
   const [monthOffset, setMonthOffset] = useState(0);

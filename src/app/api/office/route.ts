@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { readFileSync, statSync, readdirSync, openSync, readSync, closeSync } from "fs";
+import { readFileSync, statSync, readdirSync, openSync, readSync, closeSync, existsSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
 
@@ -185,52 +185,109 @@ function getAgentSessionStats(agentId: string) {
 export async function GET() {
   try {
     const configPath = join(OPENCLAW_DIR, "openclaw.json");
+    
+    // 检查配置文件是否存在
+    if (!existsSync(configPath)) {
+      console.warn(`OpenClaw 配置文件不存在: ${configPath}`);
+      return NextResponse.json({ 
+        agents: [], 
+        timestamp: Date.now(),
+        warning: "OpenClaw 配置文件未找到，请确保 OPENCLAW_DIR 环境变量已正确设置"
+      });
+    }
+    
     const config = JSON.parse(readFileSync(configPath, "utf-8"));
 
+    // 验证配置结构
+    if (!config.agents || !Array.isArray(config.agents.list)) {
+      console.warn("OpenClaw 配置中缺少 agents.list 数组");
+      return NextResponse.json({ 
+        agents: [], 
+        timestamp: Date.now(),
+        warning: "配置格式不正确：缺少 agents.list 数组"
+      });
+    }
+
     const agents = config.agents.list.map((agent: any) => {
-      const state = getAgentStatusFromSessions(agent.id);
-      const stats = getAgentSessionStats(agent.id);
+      try {
+        const state = getAgentStatusFromSessions(agent.id);
+        const stats = getAgentSessionStats(agent.id);
 
-      // Get model from config
-      const agentModel = typeof agent.model === "string"
-        ? agent.model
-        : agent.model?.primary;
-      const defaultModel = typeof config.agents.defaults.model === "string"
-        ? config.agents.defaults.model
-        : config.agents.defaults.model?.primary;
-      const model = (agentModel || defaultModel || "unknown")
-        .replace("github-copilot/", "");
+        // Get model from config
+        const agentModel = typeof agent.model === "string"
+          ? agent.model
+          : agent.model?.primary;
+        const defaultModel = typeof config.agents.defaults.model === "string"
+          ? config.agents.defaults.model
+          : config.agents.defaults.model?.primary;
+        const model = (agentModel || defaultModel || "unknown")
+          .replace("github-copilot/", "");
 
-      // Get task hint from latest session if active
-      let taskHint: string | null = null;
-      if (state.isActive) {
-        const sessionsDir = join(OPENCLAW_DIR, "agents", agent.id, "sessions");
-        const files = readdirSync(sessionsDir)
-          .filter((f: string) => f.endsWith(".jsonl"))
-          .map((f: string) => ({ name: f, mtime: statSync(join(sessionsDir, f)).mtimeMs }))
-          .sort((a: { mtime: number }, b: { mtime: number }) => b.mtime - a.mtime);
-        if (files.length > 0) {
-          taskHint = getLatestTaskHint(join(sessionsDir, files[0].name));
+        // Get task hint from latest session if active
+        let taskHint: string | null = null;
+        if (state.isActive) {
+          const sessionsDir = join(OPENCLAW_DIR, "agents", agent.id, "sessions");
+          if (existsSync(sessionsDir)) {
+            const files = readdirSync(sessionsDir)
+              .filter((f: string) => f.endsWith(".jsonl"))
+              .map((f: string) => ({ name: f, mtime: statSync(join(sessionsDir, f)).mtimeMs }))
+              .sort((a: { mtime: number }, b: { mtime: number }) => b.mtime - a.mtime);
+            if (files.length > 0) {
+              taskHint = getLatestTaskHint(join(sessionsDir, files[0].name));
+            }
+          }
         }
-      }
 
-      return {
-        id: agent.id,
-        name: agent.name || agent.id,
-        model,
-        currentTask: taskHint || state.currentTask,
-        isActive: state.isActive,
-        status: state.status,
-        lastSeen: state.lastSeen,
-        sessionCount: stats.sessionCount,
-        totalTokens: stats.totalTokens,
-        recentSessions: stats.recentSessions,
-      };
+        return {
+          id: agent.id,
+          name: agent.name || agent.id,
+          model,
+          currentTask: taskHint || state.currentTask,
+          isActive: state.isActive,
+          status: state.status,
+          lastSeen: state.lastSeen,
+          sessionCount: stats.sessionCount,
+          totalTokens: stats.totalTokens,
+          recentSessions: stats.recentSessions,
+        };
+      } catch (agentError) {
+        console.error(`处理 Agent "${agent.id}" 时出错:`, agentError);
+        // 返回该 agent 的基本信息，即使获取详细状态失败
+        return {
+          id: agent.id,
+          name: agent.name || agent.id,
+          model: "unknown",
+          currentTask: null,
+          isActive: false,
+          status: "error",
+          lastSeen: 0,
+          sessionCount: 0,
+          totalTokens: 0,
+          recentSessions: [],
+          error: "获取 agent 状态失败"
+        };
+      }
     });
 
     return NextResponse.json({ agents, timestamp: Date.now() });
   } catch (error) {
-    console.error("Error getting office data:", error);
-    return NextResponse.json({ error: "Failed to load office data" }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : '未知错误';
+    console.error("获取 Office 数据时发生错误:", error);
+    
+    // 根据错误类型提供不同的提示
+    let userMessage = "加载 Office 数据失败";
+    if (errorMessage.includes('ENOENT') || errorMessage.includes('no such file')) {
+      userMessage = "OpenClaw 配置文件未找到，请检查 OPENCLAW_DIR 环境变量";
+    } else if (errorMessage.includes('JSON')) {
+      userMessage = "OpenClaw 配置文件格式错误，请检查 JSON 格式";
+    } else if (errorMessage.includes('EACCES') || errorMessage.includes('permission')) {
+      userMessage = "没有权限访问 OpenClaw 配置目录，请检查文件权限";
+    }
+    
+    return NextResponse.json({ 
+      error: userMessage,
+      details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+      timestamp: Date.now() 
+    }, { status: 500 });
   }
 }

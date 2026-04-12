@@ -170,7 +170,7 @@ export default function AboutPage() {
               {BRANDING.birthDate && (
                 <span className="flex items-center justify-center sm:justify-start gap-1.5">
                   <Calendar className="w-4 h-4" />
-                  {t("about.born_label")} {new Date(BRANDING.birthDate).toLocaleDateString("en-US", {
+                  Born {new Date(BRANDING.birthDate).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -245,7 +245,7 @@ export default function AboutPage() {
             {stats?.totalActivities.toLocaleString() || "..."}
           </div>
           <div className="text-xs" style={{ color: "var(--text-muted)" }}>
-            {t("about.stats.activities")}
+            activities
           </div>
         </div>
 
@@ -270,7 +270,7 @@ export default function AboutPage() {
             {stats?.successRate || "..."}%
           </div>
           <div className="text-xs" style={{ color: "var(--text-muted)" }}>
-            {t("about.stats.success_rate")}
+            success rate
           </div>
         </div>
 
@@ -295,7 +295,7 @@ export default function AboutPage() {
             {stats?.skillsCount || "..."}
           </div>
           <div className="text-xs" style={{ color: "var(--text-muted)" }}>
-            {t("about.stats.skills")}
+            skills
           </div>
         </div>
       </div>
@@ -318,7 +318,7 @@ export default function AboutPage() {
                 color: "var(--text-primary)",
               }}
             >
-              {t("about.sections.about")}
+              About
             </h2>
           </div>
           <div
@@ -366,7 +366,7 @@ export default function AboutPage() {
                 color: "var(--text-primary)",
               }}
             >
-              {t("about.sections.personality")}
+              Personality
             </h2>
           </div>
           <div className="grid grid-cols-2 gap-2 md:gap-3">
@@ -411,7 +411,7 @@ export default function AboutPage() {
               color: "var(--text-primary)",
             }}
           >
-            {t("about.sections.philosophy")}
+            Working Philosophy
           </h2>
         </div>
         <div className="grid md:grid-cols-2 gap-2 md:gap-3">
@@ -452,7 +452,7 @@ export default function AboutPage() {
               color: "var(--text-primary)",
             }}
           >
-            {t("about.sections.capabilities")}
+            Capabilities
           </h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
@@ -497,7 +497,7 @@ export default function AboutPage() {
             className="text-sm md:text-base"
             style={{ color: "var(--text-secondary)" }}
           >
-            {t("about.footer.built_with")} <span style={{ color: "var(--accent)" }}>♥</span> on{" "}
+            Built with <span style={{ color: "var(--accent)" }}>♥</span> on{" "}
             <a
               href="https://github.com/openclaw/openclaw"
               target="_blank"
@@ -509,7 +509,7 @@ export default function AboutPage() {
           </span>
         </div>
         <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-          {agentName} {agentEmoji} {t("about.footer.tagline")}
+          {agentName} {agentEmoji} — Your AI co-pilot
         </p>
       </div>
     </div>

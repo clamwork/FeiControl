@@ -18,6 +18,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 interface Agent {
   id: string;
@@ -96,30 +97,31 @@ function ProgressRing({ value, max, color, size = 48 }: { value: number; max: nu
   );
 }
 
-function getGreeting(): { text: string; emoji: string } {
+function getGreeting(t: (key: string) => string): { text: string; emoji: string } {
   const h = new Date().getHours();
-  if (h < 6) return { text: "It's late, get some rest", emoji: "🌙" };
-  if (h < 9) return { text: "Good morning! A new day begins", emoji: "🌅" };
-  if (h < 12) return { text: "Good morning! Stay productive", emoji: "☀️" };
-  if (h < 14) return { text: "Good afternoon! Don't forget to eat", emoji: "🍱" };
-  if (h < 18) return { text: "Good afternoon! Keep it up", emoji: "💪" };
-  if (h < 21) return { text: "Good evening! Great work today", emoji: "🌇" };
-  return { text: "Good night! Another great day", emoji: "🌃" };
+  if (h < 6) return { text: t("greeting.late_night"), emoji: "🌙" };
+  if (h < 9) return { text: t("greeting.early_morning"), emoji: "🌅" };
+  if (h < 12) return { text: t("greeting.morning"), emoji: "☀️" };
+  if (h < 14) return { text: t("greeting.noon"), emoji: "🍱" };
+  if (h < 18) return { text: t("greeting.afternoon"), emoji: "💪" };
+  if (h < 21) return { text: t("greeting.evening"), emoji: "🌇" };
+  return { text: t("greeting.night"), emoji: "🌃" };
 }
 
-function timeAgo(iso: string): string {
+function timeAgo(iso: string, t: (key: string, params?: Record<string, string | number>) => string): string {
   const diff = Date.now() - new Date(iso).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins} min ago`;
+  if (mins < 1) return t("time.just_now");
+  if (mins < 60) return t("time.min_ago", { mins });
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs} hr ago`;
-  return `${Math.floor(hrs / 24)} days ago`;
+  if (hrs < 24) return t("time.hr_ago", { hrs });
+  return t("time.days_ago", { days: Math.floor(hrs / 24) });
 }
 
 const PRIORITY_COLORS: Record<string, string> = { "high": "#ef4444", "medium": "#f59e0b", "low": "#60a5fa" };
 
 export default function DashboardPage() {
+  const { t } = useI18n();
   const [agents, setAgents] = useState<Agent[]>([]);
   const [officeAgents, setOfficeAgents] = useState<Record<string, OfficeAgent>>({});
   const [system, setSystem] = useState<SystemStats | null>(null);
@@ -128,6 +130,12 @@ export default function DashboardPage() {
   const [showAllCron, setShowAllCron] = useState(false);
   const [gatewayUp, setGatewayUp] = useState<boolean | null>(null);
   const [gatewayLatency, setGatewayLatency] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Mark component as mounted (client-side only)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // One-time fetch for static data (agents config, system stats, dashboard)
   useEffect(() => {
@@ -181,7 +189,7 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [fetchOfficeStatus]);
 
-  const greeting = getGreeting();
+  const greeting = getGreeting(t);
   // Derive real-time counts from office status
   const workingAgents = agents.filter((a) => officeAgents[a.id]?.status === "working");
   const idleAgents = agents.filter((a) => officeAgents[a.id]?.status === "idle");
@@ -189,9 +197,9 @@ export default function DashboardPage() {
 
   const getAgentStatus = (id: string): "working" | "idle" | "sleeping" => officeAgents[id]?.status || "sleeping";
   const getStatusDot = (s: "working" | "idle" | "sleeping") => {
-    if (s === "working") return { fill: "#facc15", label: "Working", bg: "rgba(250,204,21,0.1)", border: "rgba(250,204,21,0.25)", textColor: "#facc15" };
-    if (s === "idle") return { fill: "#4ade80", label: "Idle", bg: "rgba(74,222,128,0.06)", border: "rgba(74,222,128,0.2)", textColor: "#4ade80" };
-    return { fill: "#6b7280", label: "Sleeping", bg: "var(--card-elevated)", border: "var(--border)", textColor: "#6b7280" };
+    if (s === "working") return { fill: "#facc15", label: t("dashboard.working"), bg: "rgba(250,204,21,0.1)", border: "rgba(250,204,21,0.25)", textColor: "#facc15" };
+    if (s === "idle") return { fill: "#4ade80", label: t("dashboard.idle"), bg: "rgba(74,222,128,0.06)", border: "rgba(74,222,128,0.2)", textColor: "#4ade80" };
+    return { fill: "#6b7280", label: t("dashboard.sleeping"), bg: "var(--card-elevated)", border: "var(--border)", textColor: "#6b7280" };
   };
 
   return (
@@ -206,7 +214,10 @@ export default function DashboardPage() {
                 {greeting.text}
               </h1>
               <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>
-                🤖 {agents.length} agents · {workingAgents.length} working · {idleAgents.length} standby · {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+                🤖 {agents.length} {t("dock.agents")} · {workingAgents.length} {t("dashboard.working")} · {idleAgents.length} {t("dashboard.standby")}
+                {mounted && (
+                  <> · {new Date().toLocaleDateString(t("locale.code"), { weekday: "long", month: "long", day: "numeric" })}</>
+                )}
               </p>
             </div>
           </div>
@@ -218,7 +229,7 @@ export default function DashboardPage() {
             </span>
             <div className="text-right">
               <span className="text-xs font-semibold" style={{ color: gatewayUp ? "#4ade80" : gatewayUp === false ? "#ef4444" : "#6b7280" }}>
-                Gateway {gatewayUp ? "Running" : gatewayUp === false ? "Offline" : "..."}
+                Gateway {gatewayUp ? t("dashboard.online") : gatewayUp === false ? t("dashboard.offline") : "..."}
               </span>
               {gatewayLatency !== null && gatewayUp && (
                 <span className="text-xs ml-1.5" style={{ color: "var(--text-muted)" }}>{gatewayLatency}ms</span>
@@ -234,7 +245,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 p-5 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <div className="flex items-center gap-2 mb-5">
             <Server className="w-4 h-4" style={{ color: "#4ade80" }} />
-            <h2 className="text-base font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>System Health</h2>
+            <h2 className="text-base font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>{t("dashboard.system_health")}</h2>
           </div>
           {system ? (
             <div className="flex items-center justify-around">
@@ -258,7 +269,7 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="text-sm text-center py-6" style={{ color: "var(--text-muted)" }}>{loading ? "Loading..." : "Unable to fetch"}</div>
+            <div className="text-sm text-center py-6" style={{ color: "var(--text-muted)" }}>{loading ? t("common.loading") : t("common.unable_to_fetch")}</div>
           )}
         </div>
 
@@ -266,18 +277,18 @@ export default function DashboardPage() {
         <div className="lg:col-span-3 p-5 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <div className="flex items-center gap-2 mb-4">
             <Heart className="w-4 h-4" style={{ color: "#f472b6" }} />
-            <h2 className="text-base font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>Agent Team</h2>
+            <h2 className="text-base font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>{t("dashboard.agent_team")}</h2>
             {workingAgents.length > 0 && (
               <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(250,204,21,0.12)", color: "#facc15" }}>
-                {workingAgents.length} ⚡ Working
+                {workingAgents.length} ⚡ {t("dashboard.working")}
               </span>
             )}
             <span className={`text-xs px-2 py-0.5 rounded-full ${workingAgents.length > 0 ? "" : "ml-auto"}`} style={{ backgroundColor: "rgba(74,222,128,0.12)", color: "#4ade80" }}>
-              {idleAgents.length} 🟢 Standby
+              {idleAgents.length} 🟢 {t("dashboard.standby")}
             </span>
             {sleepingAgents.length > 0 && (
               <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: "rgba(107,114,128,0.12)", color: "#9ca3af" }}>
-                {sleepingAgents.length} 💤 Sleeping
+                {sleepingAgents.length} 💤 {t("dashboard.sleeping")}
               </span>
             )}
           </div>
@@ -323,10 +334,10 @@ export default function DashboardPage() {
         <div className="p-5 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <div className="flex items-center gap-2 mb-4">
             <Clock className="w-4 h-4" style={{ color: "#f59e0b" }} />
-            <h2 className="text-base font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>🫀 Heartbeat Tasks</h2>
+            <h2 className="text-base font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>{t("dashboard.heartbeat_tasks")}</h2>
             {dashboard?.cron && (
               <span className="text-xs ml-auto" style={{ color: "var(--text-muted)" }}>
-                Today {dashboard.cron.ranToday}/{dashboard.cron.totalJobs} executed
+                {t("dashboard.cron_executed", { ran: dashboard.cron.ranToday, total: dashboard.cron.totalJobs })}
               </span>
             )}
           </div>
@@ -348,8 +359,8 @@ export default function DashboardPage() {
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-medium truncate" style={{ color: "var(--text-primary)" }}>{job.name}</div>
                     <div className="text-[10px]" style={{ color: "var(--text-muted)" }}>
-                      {job.lastRun ? timeAgo(job.lastRun) : "Never run"}
-                      {job.failures > 0 && <span style={{ color: "#ef4444" }}> · {job.failures} failures</span>}
+                      {job.lastRun ? timeAgo(job.lastRun, t) : t("time.never_run")}
+                      {job.failures > 0 && <span style={{ color: "#ef4444" }}> · {t("time.failures_count", { count: job.failures })}</span>}
                     </div>
                   </div>
                 </div>
@@ -360,17 +371,17 @@ export default function DashboardPage() {
                   className="flex items-center gap-1 text-xs w-full justify-center py-3 rounded-lg transition-all hover:opacity-80"
                   style={{ color: "var(--accent)" }}
                 >
-                  {showAllCron ? <><ChevronUp className="w-3 h-3" /> Collapse</> : <><ChevronDown className="w-3 h-3" /> Show all ({dashboard.cron.jobs.length})</>}
+                  {showAllCron ? <><ChevronUp className="w-3 h-3" /> {t("common.collapse")}</> : <><ChevronDown className="w-3 h-3" /> {t("dashboard.show_all", { count: dashboard.cron.jobs.length })}</>}
                 </button>
               )}
               {dashboard.cron.totalFailures > 0 && (
                 <div className="text-xs p-2 rounded-lg mt-2" style={{ backgroundColor: "rgba(239,68,68,0.08)", color: "#ef4444", border: "1px solid rgba(239,68,68,0.15)" }}>
-                  ⚠️ {dashboard.cron.totalFailures} total task failures, please check
+                  {t("dashboard.cron_failures", { count: dashboard.cron.totalFailures })}
                 </div>
               )}
             </div>
           ) : (
-            <div className="text-sm py-6 text-center" style={{ color: "var(--text-muted)" }}>{loading ? "Loading..." : "No data"}</div>
+            <div className="text-sm py-6 text-center" style={{ color: "var(--text-muted)" }}>{loading ? t("common.loading") : t("common.no_data")}</div>
           )}
         </div>
 
@@ -382,7 +393,7 @@ export default function DashboardPage() {
               className="font-bold"
               style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", fontSize: "1.35rem" }}
             >
-              📝 Yesterday's Review
+              {t("dashboard.yesterday_review")}
             </h2>
             {dashboard?.yesterdayMemory?.available && (
               <span className="ml-auto" style={{ color: "var(--text-muted)", fontSize: "1.05rem" }}>
@@ -421,7 +432,9 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="py-6 text-center" style={{ color: "var(--text-muted)", fontSize: "1.05rem" }}>
-              {loading ? "Loading..." : `📭 Yesterday's summary (${dashboard?.yesterdayMemory?.requestedDate || dashboard?.yesterdayMemory?.date || "unknown date"}) has not been generated yet`}
+              {loading ? t("common.loading") : t("dashboard.yesterday_summary_not_generated", { 
+                date: dashboard?.yesterdayMemory?.requestedDate || dashboard?.yesterdayMemory?.date || "unknown date" 
+              })}
             </div>
           )}
         </div>
@@ -431,7 +444,7 @@ export default function DashboardPage() {
       <div className="p-5 rounded-xl" style={{ background: "linear-gradient(135deg, rgba(129,140,248,0.05), rgba(244,114,182,0.04))", border: "1px solid var(--border)" }}>
         <div className="flex items-center gap-2 mb-5">
           <Sparkles className="w-4 h-4" style={{ color: "#f472b6" }} />
-          <h2 className="text-base font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>🧬 Daily Briefing · Self-Evolution</h2>
+          <h2 className="text-base font-bold" style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}>{t("dashboard.daily_briefing_evolution")}</h2>
           {dashboard?.evolution?.morningBriefDate && (
             <span className="text-xs px-2 py-0.5 rounded-full ml-auto" style={{ backgroundColor: "rgba(244,114,182,0.1)", color: "#f472b6" }}>
               📮 {dashboard.evolution.morningBriefDate}
@@ -444,10 +457,10 @@ export default function DashboardPage() {
             {/* Improvements */}
             <div>
               <div className="text-xs font-bold mb-3 flex items-center gap-1.5" style={{ color: "var(--text-secondary)" }}>
-                🔍 Areas for Improvement
+                {t("dashboard.areas_for_improvement")}
                 {dashboard.evolution.todayGaps > 0 && (
                   <span className="px-1.5 py-0.5 rounded text-[10px]" style={{ backgroundColor: "rgba(239,68,68,0.1)", color: "#ef4444" }}>
-                    +{dashboard.evolution.todayGaps} new
+                    {t("dashboard.new_gaps", { count: dashboard.evolution.todayGaps })}
                   </span>
                 )}
               </div>
@@ -462,14 +475,14 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 )) : (
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>🎉 No improvements needed — perfect!</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("dashboard.no_improvements_needed")}</p>
                 )}
               </div>
             </div>
 
             {/* Recommended Skills */}
             <div>
-              <div className="text-xs font-bold mb-3" style={{ color: "var(--text-secondary)" }}>💡 Recommended Skills</div>
+              <div className="text-xs font-bold mb-3" style={{ color: "var(--text-secondary)" }}>{t("dashboard.recommended_skills_title")}</div>
               <div className="space-y-2">
                 {dashboard.evolution.recommendations.length > 0 ? dashboard.evolution.recommendations.map((rec, i) => (
                   <div key={i} className="flex items-center gap-2 p-2.5 rounded-lg" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
@@ -480,7 +493,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 )) : (
-                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>No new recommendations</p>
+                  <p className="text-xs" style={{ color: "var(--text-muted)" }}>{t("dashboard.no_new_recommendations")}</p>
                 )}
               </div>
             </div>
@@ -488,7 +501,7 @@ export default function DashboardPage() {
             {/* Installed Skills */}
             <div>
               <div className="text-xs font-bold mb-3" style={{ color: "var(--text-secondary)" }}>
-                🧰 Installed Skills ({dashboard.evolution.skillCount})
+                🧰 {t("dashboard.installed_skills", { count: dashboard.evolution.skillCount })}
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {dashboard.evolution.installedSkills.map((skill) => (
@@ -503,16 +516,16 @@ export default function DashboardPage() {
               </div>
               <div className="mt-3 text-[10px] space-y-1" style={{ color: "var(--text-muted)" }}>
                 {dashboard.evolution.lastSignalCollection && (
-                  <div>🔎 Signal collection: {dashboard.evolution.lastSignalCollection}</div>
+                  <div>{t("dashboard.signal_collection")}: {dashboard.evolution.lastSignalCollection}</div>
                 )}
                 {dashboard.evolution.lastReview && (
-                  <div>📋 Daily review: {dashboard.evolution.lastReview}</div>
+                  <div>{t("dashboard.daily_review")}: {dashboard.evolution.lastReview}</div>
                 )}
               </div>
             </div>
           </div>
         ) : (
-          <div className="text-sm py-6 text-center" style={{ color: "var(--text-muted)" }}>{loading ? "Loading..." : "No self-evolution data"}</div>
+          <div className="text-sm py-6 text-center" style={{ color: "var(--text-muted)" }}>{loading ? t("common.loading") : t("dashboard.no_evolution_data")}</div>
         )}
       </div>
     </div>

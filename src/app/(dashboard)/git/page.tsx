@@ -6,6 +6,7 @@ import {
   AlertCircle, CheckCircle, Terminal, X, Loader2, FolderGit2,
 } from "lucide-react";
 import { format } from "date-fns";
+import { useI18n } from "@/i18n";
 
 interface CommitInfo {
   hash: string;
@@ -35,6 +36,7 @@ interface OutputModal {
 }
 
 export default function GitPage() {
+  const { t } = useI18n();
   const [repos, setRepos] = useState<RepoStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -95,7 +97,7 @@ export default function GitPage() {
             Git Dashboard
           </h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "14px" }}>
-            {repos.length} repositories · {dirtyRepos.length} with changes
+            {t("git.subtitle", { count: repos.length })}
           </p>
         </div>
         <button
@@ -120,7 +122,7 @@ export default function GitPage() {
       ) : repos.length === 0 ? (
         <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-muted)" }}>
           <FolderGit2 className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>No Git repositories found in workspace</p>
+          <p>{t("git.empty.no_repos")}</p>
         </div>
       ) : (
         <div className="space-y-4">

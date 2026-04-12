@@ -5,6 +5,7 @@ import { Eye, Edit3, RefreshCw, Brain } from "lucide-react";
 import { FileTree, FileNode } from "@/components/FileTree";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
+import { useI18n } from "@/i18n";
 
 type ViewMode = "edit" | "preview";
 
@@ -34,6 +35,7 @@ function findFirstFile(nodes: FileNode[]): FileNode | null {
 }
 
 export default function MemoryPage() {
+  const { t } = useI18n();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [selectedWorkspace, setSelectedWorkspace] = useState<string | null>(null);
   const [files, setFiles] = useState<FileNode[]>([]);
@@ -155,7 +157,7 @@ export default function MemoryPage() {
           Documents
         </h1>
         <p style={{ fontFamily: "var(--font-body)", fontSize: "13px", color: "var(--text-secondary)" }}>
-          Browse and edit agent memory documents, specs, and skills
+          {t("memory.subtitle")}
         </p>
       </div>
 
@@ -189,7 +191,7 @@ export default function MemoryPage() {
               textTransform: "uppercase",
             }}
           >
-            Workspaces
+            {t("memory.sidebar.workspaces")}
           </p>
 
           {workspaces.map((workspace) => {
@@ -437,7 +439,7 @@ export default function MemoryPage() {
                     >
                       <div style={{ textAlign: "center" }}>
                         <Brain style={{ width: "64px", height: "64px", margin: "0 auto 16px", opacity: 0.3 }} />
-                        <p style={{ fontSize: "14px" }}>Select a document to preview or edit</p>
+                        <p style={{ fontSize: "14px" }}>{t("memory.empty.select_document")}</p>
                       </div>
                     </div>
                   )}
@@ -455,7 +457,7 @@ export default function MemoryPage() {
                 fontSize: "14px",
               }}
             >
-              Please select a workspace
+              {t("memory.empty.select_workspace")}
             </div>
           )}
         </main>

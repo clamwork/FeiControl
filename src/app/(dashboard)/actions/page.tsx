@@ -6,6 +6,7 @@ import {
   Play, Loader2, X, CheckCircle, AlertCircle, Clock, Terminal,
 } from "lucide-react";
 import { format } from "date-fns";
+import { useI18n } from "@/i18n";
 
 interface ActionResult {
   action: string;
@@ -24,54 +25,60 @@ interface QuickAction {
   dangerous?: boolean;
 }
 
-const ACTIONS: QuickAction[] = [
-  {
-    id: "heartbeat",
-    label: "Heartbeat Check",
-    description: "Check if all services are online and sites are reachable",
-    icon: Heart,
-    color: "var(--success)",
-  },
-  {
-    id: "git-status",
-    label: "Git Status (All Repos)",
-    description: "Check uncommitted changes in all workspace repositories",
-    icon: GitBranch,
-    color: "#60A5FA",
-  },
-  {
-    id: "usage-stats",
-    label: "Collect Usage Stats",
-    description: "Get disk, CPU, and memory usage overview",
-    icon: BarChart3,
-    color: "#C084FC",
-  },
-  {
-    id: "restart-gateway",
-    label: "Restart Gateway",
-    description: "Restart the OpenClaw gateway service",
-    icon: RotateCcw,
-    color: "var(--warning, #f59e0b)",
-    dangerous: true,
-  },
-  {
-    id: "clear-temp",
-    label: "Clear Temp Files",
-    description: "Delete temporary files and trim PM2 logs",
-    icon: Trash2,
-    color: "var(--error)",
-    dangerous: true,
-  },
-  {
-    id: "npm-audit",
-    label: "NPM Security Audit",
-    description: "Check for security vulnerabilities in mission-control dependencies",
-    icon: Shield,
-    color: "#4ADE80",
-  },
-];
+const useActions = () => {
+  const { t } = useI18n();
+
+  return [
+    {
+      id: "heartbeat",
+      label: t("actions.heartbeat.label"),
+      description: t("actions.heartbeat.description"),
+      icon: Heart,
+      color: "var(--success)",
+    },
+    {
+      id: "git-status",
+      label: t("actions.git_status.label"),
+      description: t("actions.git_status.description"),
+      icon: GitBranch,
+      color: "#60A5FA",
+    },
+    {
+      id: "usage-stats",
+      label: t("actions.usage_stats.label"),
+      description: t("actions.usage_stats.description"),
+      icon: BarChart3,
+      color: "#C084FC",
+    },
+    {
+      id: "restart-gateway",
+      label: t("actions.restart_gateway.label"),
+      description: t("actions.restart_gateway.description"),
+      icon: RotateCcw,
+      color: "var(--warning, #f59e0b)",
+      dangerous: true,
+    },
+    {
+      id: "clear-temp",
+      label: t("actions.clear_temp.label"),
+      description: t("actions.clear_temp.description"),
+      icon: Trash2,
+      color: "var(--error)",
+      dangerous: true,
+    },
+    {
+      id: "npm-audit",
+      label: t("actions.npm_audit.label"),
+      description: t("actions.npm_audit.description"),
+      icon: Shield,
+      color: "#4ADE80",
+    },
+  ];
+};
 
 export default function ActionsPage() {
+  const { t } = useI18n();
+  const ACTIONS = useActions();
   const [running, setRunning] = useState<string | null>(null);
   const [results, setResults] = useState<Record<string, ActionResult>>({});
   const [selectedResult, setSelectedResult] = useState<ActionResult | null>(null);
@@ -120,10 +127,10 @@ export default function ActionsPage() {
           className="text-3xl font-bold mb-2"
           style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}
         >
-          Quick Actions
+          {t("actions.title")}
         </h1>
         <p style={{ color: "var(--text-secondary)" }}>
-          Run common maintenance and diagnostic tasks with one click
+          {t("actions.subtitle")}
         </p>
       </div>
 
@@ -178,7 +185,7 @@ export default function ActionsPage() {
                     <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
                   )}
                   <span className="flex-1 truncate">
-                    {result.status === "success" ? "Success" : "Failed"} · {result.duration_ms}ms
+                    {result.status === "success" ? t("actions.result.success") : t("actions.result.failed")} · {result.duration_ms}ms
                   </span>
                   <Clock className="w-3 h-3 flex-shrink-0" />
                   <span style={{ color: "var(--text-muted)" }}>
@@ -212,12 +219,12 @@ export default function ActionsPage() {
                 {isRunning ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Running...
+                    {t("actions.button.running")}
                   </>
                 ) : (
                   <>
                     <Play className="w-4 h-4" />
-                    Run
+                    {t("actions.button.run")}
                     {action.dangerous && <span style={{ fontSize: "0.7rem", opacity: 0.7 }}>⚠️</span>}
                   </>
                 )}
@@ -232,7 +239,7 @@ export default function ActionsPage() {
         <div className="rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
           <div className="p-4 border-b" style={{ borderColor: "var(--border)" }}>
             <h2 className="text-sm font-semibold" style={{ color: "var(--text-primary)" }}>
-              Recent Results
+              {t("actions.recent_results")}
             </h2>
           </div>
           <div className="divide-y" style={{ borderColor: "var(--border)" }}>
@@ -299,23 +306,23 @@ export default function ActionsPage() {
             border: "1px solid var(--border)",
           }}>
             <h3 style={{ color: "var(--text-primary)", marginBottom: "0.75rem", fontWeight: 600 }}>
-              ⚠️ Confirm: {confirmAction.label}
+              ⚠️ {t("actions.confirm.prefix")} {confirmAction.label}
             </h3>
             <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>
-              This action may affect running services. Are you sure you want to proceed?
+              {t("actions.confirm.message")}
             </p>
             <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
               <button
                 onClick={() => setConfirmAction(null)}
                 style={{ padding: "0.5rem 1rem", borderRadius: "0.5rem", background: "var(--card-elevated)", color: "var(--text-secondary)", border: "none", cursor: "pointer" }}
               >
-                Cancel
+                {t("common.cancel")}
               </button>
               <button
                 onClick={() => executeAction(confirmAction)}
                 style={{ padding: "0.5rem 1rem", borderRadius: "0.5rem", background: "var(--error, #ef4444)", color: "#fff", border: "none", cursor: "pointer", fontWeight: 600 }}
               >
-                Force Execute
+                {t("actions.confirm.force_execute")}
               </button>
             </div>
           </div>

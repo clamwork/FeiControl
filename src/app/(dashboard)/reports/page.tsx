@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { FileBarChart, FileText, RefreshCw, Clock, HardDrive } from "lucide-react";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
+import { useI18n } from "@/i18n";
 
 interface Report {
   name: string;
@@ -31,6 +32,7 @@ function formatDate(iso: string): string {
 }
 
 export default function ReportsPage() {
+  const { t } = useI18n();
   const [reports, setReports] = useState<Report[]>([]);
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
   const [content, setContent] = useState("");
@@ -108,7 +110,7 @@ export default function ReportsPage() {
               Reports
             </h1>
             <p className="text-xs md:text-sm hidden sm:block" style={{ color: "var(--text-secondary)" }}>
-              Analytics reports and insights
+              {t("reports.subtitle")}
             </p>
           </div>
         </div>
@@ -141,16 +143,16 @@ export default function ReportsPage() {
               className="text-sm font-semibold uppercase tracking-wide"
               style={{ color: "var(--text-secondary)" }}
             >
-              {isLoading ? "Loading..." : `${reports.length} Reports`}
+              {isLoading ? t("common.loading") : t("reports.count", { count: reports.length })}
             </h2>
           </div>
 
           {!isLoading && reports.length === 0 && (
             <div className="p-6 text-center" style={{ color: "var(--text-muted)" }}>
               <FileBarChart className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p>No reports found</p>
+              <p>{t("reports.empty.no_reports")}</p>
               <p className="text-xs mt-1">
-                Reports matching *-analysis-* or *-report-* patterns in memory/ will appear here
+                {t("reports.empty.hint")}
               </p>
             </div>
           )}
@@ -270,7 +272,7 @@ export default function ReportsPage() {
             >
               <div className="text-center">
                 <FileBarChart className="w-16 h-16 mx-auto mb-4 opacity-30" />
-                <p className="text-lg">Select a report to preview</p>
+                <p className="text-lg">{t("reports.empty.select_report")}</p>
               </div>
             </div>
           )}

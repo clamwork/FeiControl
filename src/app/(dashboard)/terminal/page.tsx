@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Terminal, Send, Trash2, Copy, ChevronRight } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 interface HistoryEntry {
   command: string;
@@ -27,6 +28,7 @@ const QUICK_COMMANDS = [
 ];
 
 export default function TerminalPage() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(false);

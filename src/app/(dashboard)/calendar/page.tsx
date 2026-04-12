@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { RefreshCw, CheckSquare, Square, ChevronLeft, ChevronRight } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 interface CalendarEvent {
   key: string;
@@ -28,8 +29,23 @@ interface TasksData {
 
 type EventCompletionState = Record<string, boolean>;
 
-const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const EVENT_COMPLETION_STORAGE_KEY = "mission-control-calendar-event-completions";
+
+function useCalendarI18n() {
+  const { t } = useI18n();
+  
+  const dayLabels = useMemo(() => [
+    t("calendar.weekdays.mon"),
+    t("calendar.weekdays.tue"),
+    t("calendar.weekdays.wed"),
+    t("calendar.weekdays.thu"),
+    t("calendar.weekdays.fri"),
+    t("calendar.weekdays.sat"),
+    t("calendar.weekdays.sun"),
+  ], [t]);
+  
+  return { t, dayLabels };
+}
 
 function getPSTNow() {
   const now = new Date();
@@ -203,6 +219,7 @@ function normalizeEventCompletionState(payload: unknown): EventCompletionState {
 }
 
 export default function CalendarPage() {
+  const { t, dayLabels } = useCalendarI18n();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [todayStr, setTodayStr] = useState("");
   const [tasks, setTasks] = useState<TasksData | null>(null);
@@ -253,7 +270,7 @@ export default function CalendarPage() {
       const payload = await response.json().catch((): unknown => null);
 
       if (!response.ok) {
-        throw new Error(getErrorMessage(payload, "Unable to migrate legacy event completion state"));
+        throw new Error(getErrorMessage(payload, t("calendar.error.migrate_legacy")));
       }
 
       const mergedState = normalizeEventCompletionState(
@@ -268,11 +285,11 @@ export default function CalendarPage() {
     } catch (error) {
       console.error("Failed to migrate legacy event completion state:", error);
       setEventCompletionError(
-        error instanceof Error ? error.message : "Unable to migrate legacy event completion state"
+        error instanceof Error ? error.message : t("calendar.error.migrate_legacy")
       );
       return serverState;
     }
-  }, []);
+  }, [t]);
 
   const fetchData = useCallback(async (offset: number) => {
     setLoading(true);
@@ -301,21 +318,21 @@ export default function CalendarPage() {
       } else {
         setEvents([]);
         setTodayStr("");
-        setCalendarError(getErrorMessage(calendarPayload, "Unable to fetch calendar events"));
+        setCalendarError(getErrorMessage(calendarPayload, t("calendar.error.fetch_events")));
       }
 
       if (taskRes.ok) {
         setTasks(normalizeTasksData(taskPayload));
       } else {
-        setTasksError(getErrorMessage(taskPayload, "Unable to fetch Google Tasks"));
+        setTasksError(getErrorMessage(taskPayload, t("calendar.error.fetch_tasks")));
         setTasks((current) => current ?? { tasks: [], pending: 0, completed: 0 });
       }
     } catch (error) {
       console.error("Failed to fetch calendar page data:", error);
       setEvents([]);
       setTodayStr("");
-      setCalendarError("Failed to load calendar events");
-      setTasksError("Failed to load Google Tasks");
+      setCalendarError(t("calendar.error.load_events"));
+      setTasksError(t("calendar.error.load_tasks"));
       setTasks((current) => current ?? { tasks: [], pending: 0, completed: 0 });
     } finally {
       setLoading(false);
@@ -339,13 +356,13 @@ export default function CalendarPage() {
       const payload = await response.json().catch((): unknown => null);
 
       if (!response.ok) {
-        throw new Error(getErrorMessage(payload, "Unable to sync Google Tasks"));
+        throw new Error(getErrorMessage(payload, t("calendar.error.sync_tasks")));
       }
 
       setTasks(normalizeTasksData(payload));
     } catch (error) {
       console.error("Failed to toggle Google Task:", error);
-      setTasksError(error instanceof Error ? error.message : "Unable to sync Google Tasks");
+      setTasksError(error instanceof Error ? error.message : t("calendar.error.sync_tasks"));
     } finally {
       setTogglingTaskIds((current) => {
         const nextState = { ...current };
@@ -384,7 +401,7 @@ export default function CalendarPage() {
       const payload = await response.json().catch((): unknown => null);
 
       if (!response.ok) {
-        throw new Error(getErrorMessage(payload, "Unable to save event completion state"));
+        throw new Error(getErrorMessage(payload, t("calendar.error.save_completion")));
       }
 
       const nextState = normalizeEventCompletionState(
@@ -407,7 +424,7 @@ export default function CalendarPage() {
         return nextState;
       });
       setEventCompletionError(
-        error instanceof Error ? error.message : "Unable to save event completion state"
+        error instanceof Error ? error.message : t("calendar.error.save_completion")
       );
     } finally {
       setTogglingEventKeys((current) => {
@@ -465,8 +482,8 @@ export default function CalendarPage() {
           void toggleTask(task, nextCompleted);
         }}
         disabled={isToggling || isNotConfigured}
-        title={isCompleted ? "Click to mark as incomplete" : "Click to mark as completed"}
-        aria-label={isCompleted ? `Mark ${task.title} as incomplete` : `Mark ${task.title} as completed`}
+        title={isCompleted ? t("calendar.task.mark_incomplete") : t("calendar.task.mark_complete")}
+        aria-label={isCompleted ? t("calendar.task.aria_mark_incomplete", { title: task.title }) : t("calendar.task.aria_mark_complete", { title: task.title })}
         className="flex items-center gap-3 rounded-lg text-left transition-all duration-200 ease-out hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 hover:brightness-110 disabled:cursor-not-allowed"
         style={{
           backgroundColor: "var(--card-elevated)",
@@ -500,10 +517,10 @@ export default function CalendarPage() {
             className="text-2xl md:text-3xl font-bold"
             style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)", letterSpacing: "-1px" }}
           >
-            📅 Calendar
+            📅 {t("calendar.title")}
           </h1>
           <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-            Google Calendar · Google Tasks
+            {t("calendar.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -523,7 +540,7 @@ export default function CalendarPage() {
                 color: "var(--text-primary)",
               }}
             >
-              This Week
+              {t("calendar.this_week")}
             </button>
             <button
               onClick={() => setWeekOffset((offset) => offset + 1)}
@@ -592,7 +609,7 @@ export default function CalendarPage() {
                 }}
               >
                 <div className="text-base font-medium" style={{ color: isToday ? "#34C759" : "var(--text-muted)" }}>
-                  {DAY_LABELS[i]}
+                  {dayLabels[i]}
                 </div>
                 <div
                   className="text-2xl font-bold"
@@ -635,8 +652,8 @@ export default function CalendarPage() {
                         <div className="flex items-start gap-2">
                           <button
                             type="button"
-                            title={isEventCompleted ? "Click to mark as incomplete" : "Click to mark as completed"}
-                            aria-label={isEventCompleted ? `Mark ${event.title} as incomplete` : `Mark ${event.title} as completed`}
+                            title={isEventCompleted ? t("calendar.task.mark_incomplete") : t("calendar.task.mark_complete")}
+                            aria-label={isEventCompleted ? t("calendar.task.aria_mark_incomplete", { title: event.title }) : t("calendar.task.aria_mark_complete", { title: event.title })}
                             className="mt-0.5 rounded-md transition-all hover:opacity-80 pointer-events-none"
                             style={{
                               background: "none",
@@ -703,12 +720,12 @@ export default function CalendarPage() {
               className="text-lg font-bold"
               style={{ fontFamily: "var(--font-heading)", color: "var(--text-primary)" }}
             >
-              ✅ Google Tasks
+              ✅ {t("calendar.google_tasks.title").replace("✅ ", "")}
             </h2>
           </div>
           {tasks && tasks.configured !== false && (
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-              Pending {tasks.pending} / Total {tasks.tasks.length}
+              {t("calendar.pending")} {tasks.pending} / {t("calendar.total")} {tasks.tasks.length}
             </span>
           )}
         </div>
@@ -720,23 +737,23 @@ export default function CalendarPage() {
           )}
 
           {loading ? (
-            <p style={{ color: "var(--text-muted)" }}>Loading...</p>
+            <p style={{ color: "var(--text-muted)" }}>{t("calendar.loading")}</p>
           ) : tasks && tasks.configured === false ? (
             <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>
-              Google Tasks integration available. Configure <code style={{ fontSize: "13px", padding: "1px 4px", borderRadius: "4px", backgroundColor: "var(--surface-elevated)" }}>GOOGLE_TASKS_SCRIPT</code> in <code style={{ fontSize: "13px", padding: "1px 4px", borderRadius: "4px", backgroundColor: "var(--surface-elevated)" }}>.env.local</code> to connect.
+              {t("calendar.integration_available")} <code style={{ fontSize: "13px", padding: "1px 4px", borderRadius: "4px", backgroundColor: "var(--surface-elevated)" }}>GOOGLE_TASKS_SCRIPT</code> {t("calendar.to_connect")} <code style={{ fontSize: "13px", padding: "1px 4px", borderRadius: "4px", backgroundColor: "var(--surface-elevated)" }}>.env.local</code> {t("calendar.connection")}
             </p>
           ) : tasks && tasks.tasks.length > 0 ? (
             <div className="space-y-3">
               {pendingTasks.length > 0 ? (
                 <div className="space-y-2">{pendingTasks.map((task) => renderTaskRow(task, true))}</div>
               ) : completedTasks.length > 0 ? (
-                <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>🎉 All tasks completed!</p>
+                <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>{t("calendar.all_completed")}</p>
               ) : null}
 
               {completedTasks.length > 0 && (
                 <details className="mt-3" open={pendingTasks.length === 0}>
                   <summary className="text-xs cursor-pointer" style={{ color: "var(--text-muted)" }}>
-                    Completed ({completedTasks.length})
+                    {t("calendar.completed")} ({completedTasks.length})
                   </summary>
                   <div className="space-y-2 mt-2">
                     {completedTasks.map((task) => renderTaskRow(task, false))}
@@ -745,10 +762,10 @@ export default function CalendarPage() {
               )}
             </div>
           ) : tasks ? (
-            <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>No Google Tasks</p>
+            <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>{t("calendar.no_tasks")}</p>
           ) : (
             <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>
-              {tasksError || "No task data available"}
+              {tasksError || t("calendar.no_task_data")}
             </p>
           )}
         </div>

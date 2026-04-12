@@ -2,6 +2,7 @@
 
 import { MessageCircle, Twitter, Mail, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { useI18n } from "@/i18n";
 
 interface Integration {
   id: string;
@@ -21,38 +22,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Mail,
 };
 
-const statusConfig = {
-  connected: {
-    icon: CheckCircle,
-    color: "text-emerald-400",
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/30",
-    label: "Connected",
-  },
-  disconnected: {
-    icon: XCircle,
-    color: "text-red-400",
-    bg: "bg-red-500/10",
-    border: "border-red-500/30",
-    label: "Disconnected",
-  },
-  configured: {
-    icon: CheckCircle,
-    color: "text-blue-400",
-    bg: "bg-blue-500/10",
-    border: "border-blue-500/30",
-    label: "Configured",
-  },
-  not_configured: {
-    icon: AlertCircle,
-    color: "text-yellow-400",
-    bg: "bg-yellow-500/10",
-    border: "border-yellow-500/30",
-    label: "Not Configured",
-  },
-};
-
 export function IntegrationStatus({ integrations }: IntegrationStatusProps) {
+  const { t } = useI18n();
+
   if (!integrations) {
     return (
       <div className="bg-gray-900 rounded-xl p-6 animate-pulse">
@@ -66,17 +38,48 @@ export function IntegrationStatus({ integrations }: IntegrationStatusProps) {
     );
   }
 
+  const statusConfigWithI18n = {
+    connected: {
+      icon: CheckCircle,
+      color: "text-emerald-400",
+      bg: "bg-emerald-500/10",
+      border: "border-emerald-500/30",
+      label: t("settings.integrations.connected"),
+    },
+    disconnected: {
+      icon: XCircle,
+      color: "text-red-400",
+      bg: "bg-red-500/10",
+      border: "border-red-500/30",
+      label: t("settings.integrations.disconnected"),
+    },
+    configured: {
+      icon: CheckCircle,
+      color: "text-blue-400",
+      bg: "bg-blue-500/10",
+      border: "border-blue-500/30",
+      label: t("settings.integrations.configured"),
+    },
+    not_configured: {
+      icon: AlertCircle,
+      color: "text-yellow-400",
+      bg: "bg-yellow-500/10",
+      border: "border-yellow-500/30",
+      label: t("settings.integrations.not_configured"),
+    },
+  };
+
   return (
     <div className="bg-gray-900 rounded-xl p-6">
       <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
         <MessageCircle className="w-5 h-5 text-emerald-400" />
-        Integrations
+        {t("settings.integrations.title")}
       </h2>
 
       <div className="space-y-3">
         {integrations.map((integration) => {
           const Icon = iconMap[integration.icon] || MessageCircle;
-          const status = statusConfig[integration.status];
+          const status = statusConfigWithI18n[integration.status];
           const StatusIcon = status.icon;
 
           return (
@@ -92,7 +95,7 @@ export function IntegrationStatus({ integrations }: IntegrationStatusProps) {
                   <div className="font-medium text-white">{integration.name}</div>
                   {integration.lastActivity && (
                     <div className="text-xs text-gray-400">
-                      Last activity:{" "}
+                      {t("settings.integrations.last_activity")}:{" "}
                       {formatDistanceToNow(new Date(integration.lastActivity), {
                         addSuffix: true,
                       })}

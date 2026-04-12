@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora, JetBrains_Mono } from "next/font/google";
+import { I18nProvider } from "@/i18n";
 import "./globals.css";
 
 const inter = Inter({ 
@@ -54,7 +55,9 @@ export default function RootLayout({
           fontFamily: 'var(--font-body)'
         }}
       >
-        {children}
+        <I18nProvider>
+          {children}
+        </I18nProvider>
       </body>
     </html>
   );

@@ -11,6 +11,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { ChangePasswordModal } from "./ChangePasswordModal";
+import { useI18n } from "@/i18n";
 
 interface QuickActionsProps {
   onActionComplete?: () => void;
@@ -26,6 +27,7 @@ interface ActionButton {
 }
 
 export function QuickActions({ onActionComplete }: QuickActionsProps) {
+  const { t } = useI18n();
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [notification, setNotification] = useState<{
@@ -40,7 +42,7 @@ export function QuickActions({ onActionComplete }: QuickActionsProps) {
 
   const handleRestartGateway = async () => {
     // Placeholder - would call openclaw gateway restart
-    showNotification("success", "Gateway restart command sent (placeholder)");
+    showNotification("success", t("settings.quick_actions.gateway_restart_sent"));
   };
 
   const handleClearActivityLog = async () => {
@@ -54,10 +56,10 @@ export function QuickActions({ onActionComplete }: QuickActionsProps) {
 
       if (!res.ok) throw new Error("Failed to clear logs");
 
-      showNotification("success", "Activity logs cleared");
+      showNotification("success", t("settings.quick_actions.activity_logs_cleared"));
       onActionComplete?.();
     } catch {
-      showNotification("error", "Failed to clear activity logs");
+      showNotification("error", t("settings.quick_actions.failed_clear_logs"));
     } finally {
       setLoadingAction(null);
     }
@@ -65,13 +67,13 @@ export function QuickActions({ onActionComplete }: QuickActionsProps) {
 
   const handleViewLogs = async () => {
     // Placeholder - would open gateway logs
-    showNotification("success", "Opening gateway logs... (placeholder)");
+    showNotification("success", t("settings.quick_actions.opening_logs"));
   };
 
   const actions: ActionButton[] = [
     {
       id: "restart",
-      label: "Restart Gateway",
+      label: t("settings.quick_actions.restart_gateway"),
       icon: RefreshCw,
       color: "blue",
       action: handleRestartGateway,
@@ -79,14 +81,14 @@ export function QuickActions({ onActionComplete }: QuickActionsProps) {
     },
     {
       id: "clear_log",
-      label: "Clear Activity Logs",
+      label: t("settings.quick_actions.clear_activity_logs"),
       icon: Trash2,
       color: "yellow",
       action: handleClearActivityLog,
     },
     {
       id: "view_logs",
-      label: "View Gateway Logs",
+      label: t("settings.quick_actions.view_gateway_logs"),
       icon: FileText,
       color: "emerald",
       action: handleViewLogs,
@@ -94,7 +96,7 @@ export function QuickActions({ onActionComplete }: QuickActionsProps) {
     },
     {
       id: "change_password",
-      label: "Change Password",
+      label: t("settings.quick_actions.change_password"),
       icon: Key,
       color: "red",
       action: () => setShowPasswordModal(true),
@@ -115,7 +117,7 @@ export function QuickActions({ onActionComplete }: QuickActionsProps) {
       <div className="bg-gray-900 rounded-xl p-6">
         <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
           <RefreshCw className="w-5 h-5 text-emerald-400" />
-          Quick Actions
+          {t("settings.quick_actions.title")}
         </h2>
 
         {/* Notification */}
@@ -157,7 +159,7 @@ export function QuickActions({ onActionComplete }: QuickActionsProps) {
                 )}
                 <span className="font-medium">{action.label}</span>
                 {action.placeholder && (
-                  <span className="text-xs opacity-50">(placeholder)</span>
+                  <span className="text-xs opacity-50">({t("settings.quick_actions.placeholder")})</span>
                 )}
               </button>
             );
@@ -169,7 +171,7 @@ export function QuickActions({ onActionComplete }: QuickActionsProps) {
         isOpen={showPasswordModal}
         onClose={() => setShowPasswordModal(false)}
         onSuccess={() => {
-          showNotification("success", "Password changed successfully");
+          showNotification("success", t("settings.quick_actions.password_changed"));
           setShowPasswordModal(false);
         }}
       />

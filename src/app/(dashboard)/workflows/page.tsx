@@ -1,6 +1,7 @@
 "use client";
 
 import { BRANDING } from "@/config/branding";
+import { useI18n } from "@/i18n";
 
 interface Workflow {
   id: string;
@@ -222,6 +223,7 @@ function TriggerBadge({ trigger }: { trigger: "cron" | "demand" }) {
 }
 
 export default function WorkflowsPage() {
+  const { t } = useI18n();
   return (
     <div style={{ padding: "24px" }}>
       {/* Header */}

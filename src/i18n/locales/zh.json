@@ -1,0 +1,719 @@
+{
+  "common": {
+    "search": "搜索...",
+    "loading": "加载中...",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "close": "关闭",
+    "confirm": "确认",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "submit": "提交",
+    "reset": "重置",
+    "select": "选择",
+    "all": "全部",
+    "none": "无",
+    "yes": "是",
+    "no": "否",
+    "success": "成功",
+    "error": "错误",
+    "warning": "警告",
+    "info": "信息",
+    "refresh": "刷新",
+    "openclaw": "OpenClaw"
+  },
+  "topbar": {
+    "version": "版本",
+    "search_placeholder": "搜索... ⌘K",
+    "notifications": "通知",
+    "user_profile": "用户资料",
+    "language": "语言"
+  },
+  "dock": {
+    "home": "首页",
+    "about": "关于",
+    "terminal": "终端",
+    "files": "文件",
+    "calendar": "日历",
+    "skills": "技能",
+    "workflows": "工作流",
+    "cron_jobs": "定时任务",
+    "actions": "操作",
+    "memory": "记忆",
+    "social": "社交",
+    "costs": "费用",
+    "reports": "报告",
+    "git": "Git",
+    "office": "办公室",
+    "settings": "设置",
+    "agents": "智能体"
+  },
+  "statusbar": {
+    "system_status": "系统状态",
+    "cpu_usage": "CPU 使用率",
+    "memory_usage": "内存使用率",
+    "disk_usage": "磁盘使用率",
+    "uptime": "运行时间",
+    "active_agents": "活跃的智能体"
+  },
+  "about": {
+    "title": "关于",
+    "agent_description": "AI 助手。由 OpenClaw 提供支持。",
+    "statistics": "统计数据",
+    "total_activities": "总活动数",
+    "success_rate": "成功率",
+    "skills_count": "技能数量",
+    "cron_jobs": "定时任务",
+    "core_skills": "核心技能",
+    "personality_traits": "性格特征",
+    "direct": "直接",
+    "gets_straight_to_point": "直奔主题",
+    "efficient": "高效",
+    "results_oriented": "结果导向",
+    "curious": "好奇",
+    "always_learning": "不断学习",
+    "loyal": "忠诚",
+    "your_success_is_my_success": "你的成功就是我的成功",
+    "philosophies": "理念",
+    "philosophy_1": "行动胜于言语。不要说'我能帮助你'——直接帮助。",
+    "philosophy_2": "有观点是好的。没有个性的助手只是一个多走几步的搜索引擎。",
+    "philosophy_3": "先尝试再询问。阅读文件、搜索、探索——只有在真正卡住时才提问。",
+    "philosophy_4": "隐私神圣不可侵犯。拥有访问权限 ≠ 允许分享。",
+    "days": "天",
+    "stats": {
+      "uptime": "运行时间",
+      "activities": "活动",
+      "success_rate": "成功率",
+      "skills": "技能"
+    },
+    "sections": {
+      "about": "关于",
+      "personality": "性格",
+      "philosophy": "工作理念",
+      "capabilities": "能力"
+    },
+    "intro": {
+      "i_am": "我是",
+      "running_on": ",一个运行在",
+      "with_claude": "上的 AI 代理,以 Claude 为大脑。",
+      "purpose": "我的目的是协助",
+      "tasks": "处理日常任务:管理通信、安排日程、研究、文件管理,并充当数字副驾驶。",
+      "access": "我可以访问工作区、日历和集成——我谨慎而尊重地处理这一特权。"
+    },
+    "born_label": "出生",
+    "skills": {
+      "telegram": "Telegram 机器人",
+      "twitter": "Twitter/X",
+      "web_search": "网络搜索",
+      "file_management": "文件管理",
+      "cron_scheduler": "定时调度器",
+      "memory_system": "记忆系统",
+      "youtube": "YouTube 研究",
+      "email": "电子邮件 (Gmail)"
+    },
+    "footer": {
+      "built_with": "用 ♥ 构建于",
+      "tagline": "— 你的 AI 副驾驶"
+    }
+  },
+  "actions": {
+    "title": "快速操作",
+    "run_action": "执行操作",
+    "action_name": "操作名称",
+    "parameters": "参数",
+    "result": "结果",
+    "history": "历史记录",
+    "no_actions": "暂无操作",
+    "execute": "执行",
+    "subtitle": "一键运行常见的维护和诊断任务",
+    "heartbeat": {
+      "label": "心跳检查",
+      "description": "检查所有服务是否在线且站点可访问"
+    },
+    "git_status": {
+      "label": "Git 状态 (所有仓库)",
+      "description": "检查工作区仓库中未提交的更改"
+    },
+    "usage_stats": {
+      "label": "收集使用统计",
+      "description": "获取磁盘、CPU 和内存使用情况概览"
+    },
+    "restart_gateway": {
+      "label": "重启网关",
+      "description": "重启 OpenClaw 网关服务"
+    },
+    "clear_temp": {
+      "label": "清理临时文件",
+      "description": "删除临时文件并修剪 PM2 日志"
+    },
+    "npm_audit": {
+      "label": "NPM 安全审计",
+      "description": "检查 mission-control 依赖项中的安全漏洞"
+    },
+    "button": {
+      "running": "运行中...",
+      "run": "运行"
+    },
+    "recent_results": "最近结果",
+    "confirm": {
+      "prefix": "确认:",
+      "message": "此操作可能影响正在运行的服务。确定要继续吗?",
+      "force_execute": "强制执行"
+    }
+  },
+  "calendar": {
+    "title": "日历",
+    "today": "今天",
+    "week": "周",
+    "month": "月",
+    "year": "年",
+    "add_event": "添加事件",
+    "event_title": "事件标题",
+    "start_time": "开始时间",
+    "end_time": "结束时间",
+    "description": "描述",
+    "location": "地点",
+    "no_events": "暂无事件",
+    "subtitle": "Google Calendar · Google Tasks",
+    "this_week": "本周",
+    "loading": "加载中...",
+    "pending": "待处理",
+    "total": "总计",
+    "completed": "已完成",
+    "no_tasks": "暂无 Google Tasks",
+    "no_task_data": "无任务数据可用",
+    "integration_available": "Google Tasks 集成可用。在",
+    "to_connect": "中配置",
+    "connection": "以连接。",
+    "all_completed": "🎉 所有任务已完成!",
+    "error": {
+      "fetch_events": "无法获取日历事件",
+      "fetch_tasks": "无法获取 Google Tasks",
+      "load_events": "加载日历事件失败",
+      "load_tasks": "加载 Google Tasks 失败",
+      "migrate_legacy": "无法迁移旧的事件完成状态",
+      "sync_tasks": "无法同步 Google Tasks",
+      "save_completion": "无法保存事件完成状态"
+    },
+    "task": {
+      "mark_incomplete": "点击标记为未完成",
+      "mark_complete": "点击标记为已完成",
+      "aria_mark_incomplete": "将 {title} 标记为未完成",
+      "aria_mark_complete": "将 {title} 标记为已完成"
+    },
+    "google_tasks": {
+      "title": "✅ Google Tasks",
+      "pending_total": "待处理 {count} / 总计 {count}",
+      "configure_message": "Google Tasks 集成可用。在 .env.local 中配置 GOOGLE_TASKS_SCRIPT 以连接。",
+      "all_completed": "🎉 所有任务已完成!",
+      "completed_count": "已完成 ({count})",
+      "no_tasks": "暂无 Google Tasks",
+      "no_data": "无任务数据可用"
+    },
+    "months": {
+      "january": "一月",
+      "february": "二月",
+      "march": "三月",
+      "april": "四月",
+      "may": "五月",
+      "june": "六月",
+      "july": "七月",
+      "august": "八月",
+      "september": "九月",
+      "october": "十月",
+      "november": "十一月",
+      "december": "十二月"
+    },
+    "weekdays": {
+      "mon": "周一",
+      "tue": "周二",
+      "wed": "周三",
+      "thu": "周四",
+      "fri": "周五",
+      "sat": "周六",
+      "sun": "周日"
+    }
+  },
+  "costs": {
+    "title": "费用",
+    "total_cost": "总费用",
+    "daily_average": "日均费用",
+    "this_month": "本月",
+    "last_month": "上月",
+    "cost_breakdown": "费用明细",
+    "no_data": "暂无数据",
+    "subtitle": "跨所有代理的令牌使用和成本跟踪",
+    "timeframe": {
+      "7d": "7天",
+      "30d": "30天",
+      "90d": "90天"
+    },
+    "kpi": {
+      "today": "今天",
+      "vs_yesterday": "vs ¥{amount} 昨天",
+      "this_month": "本月",
+      "vs_last_month": "vs ¥{amount} 上月",
+      "projected": "预计月度",
+      "projected_note": "基于当前速度",
+      "budget": "预算"
+    },
+    "chart": {
+      "daily_trend": "每日成本趋势",
+      "cost_label": "成本 ($)",
+      "by_agent": "按代理成本",
+      "by_model": "按模型成本",
+      "token_usage": "令牌使用 (每日)",
+      "input_tokens": "输入令牌",
+      "output_tokens": "输出令牌"
+    },
+    "table": {
+      "model_pricing_title": "模型定价 (每百万令牌)",
+      "model": "模型",
+      "input": "输入",
+      "output": "输出",
+      "cache_read": "缓存读取",
+      "cache_write": "缓存写入",
+      "breakdown_title": "按代理详细分解",
+      "tokens": "令牌",
+      "cost": "成本",
+      "percent_total": "占总数的 %"
+    },
+    "models": {
+      "claude_opus": "Claude Opus 4.6",
+      "claude_sonnet": "Claude Sonnet 4.6",
+      "claude_haiku": "Claude Haiku 4.5"
+    }
+  },
+  "cron": {
+    "title": "定时任务",
+    "schedule": "计划",
+    "expression": "表达式",
+    "next_run": "下次运行",
+    "last_run": "上次运行",
+    "status": "状态",
+    "enabled": "已启用",
+    "disabled": "已禁用",
+    "add_job": "添加任务",
+    "edit_job": "编辑任务",
+    "delete_job": "删除任务",
+    "job_name": "任务名称",
+    "command": "命令",
+    "no_jobs": "暂无定时任务",
+    "subtitle": "查看任务、下次运行时间、最近结果和问题概览。",
+    "page_title": "定时任务",
+    "sort": {
+      "updated_desc": "最新更新优先",
+      "next_run_asc": "下次运行最早优先",
+      "last_run_desc": "上次运行最新优先",
+      "label": "排序"
+    },
+    "view": {
+      "list": "列表",
+      "timeline": "时间线"
+    },
+    "sorted_by": "按 \"{label}\" 排序",
+    "stats": {
+      "total": "总任务",
+      "enabled": "已启用",
+      "issues": "最近问题"
+    },
+    "issues": {
+      "warning": "目前 <strong>{count}</strong> 个任务有最近失败。列表中显示红色错误指示器。"
+    },
+    "empty": {
+      "title": "无定时任务",
+      "description": "通过 OpenClaw CLI 创建任务后,任务将显示在此处。"
+    },
+    "timeline": {
+      "title": "未来 7 天时间线",
+      "timezone_note": "所有时间均以本地时区显示"
+    },
+    "delete": {
+      "confirm_title": "删除 \"{name}\"?",
+      "confirm_button": "确认删除"
+    },
+    "toast": {
+      "triggered_skipped": "✓ \"{name}\" 触发成功，今天的计划运行已跳过",
+      "triggered": "✓ \"{name}\" 已触发",
+      "failed": "✗ \"{name}\" 触发失败"
+    },
+    "actions": {
+      "sort": "排序",
+      "refresh": "刷新",
+      "close": "关闭",
+      "cancel": "取消"
+    }
+  },
+  "files": {
+    "title": "文件",
+    "upload": "上传",
+    "download": "下载",
+    "delete_file": "删除文件",
+    "new_folder": "新建文件夹",
+    "folder_name": "文件夹名称",
+    "file_name": "文件名",
+    "size": "大小",
+    "modified": "修改时间",
+    "confirm_delete": "确认删除",
+    "delete_confirm_message": "确定要删除此文件吗？",
+    "subtitle": "浏览代理工作区和文件",
+    "sidebar": {
+      "workspaces": "工作区"
+    },
+    "view": {
+      "list": "列表视图",
+      "grid": "图标视图"
+    },
+    "empty": {
+      "select_workspace": "选择一个工作区以浏览其文件"
+    }
+  },
+  "git": {
+    "title": "Git",
+    "branch": "分支",
+    "commit": "提交",
+    "push": "推送",
+    "pull": "拉取",
+    "status": "状态",
+    "changes": "更改",
+    "uncommitted": "未提交的更改",
+    "commit_message": "提交信息",
+    "no_changes": "没有更改",
+    "subtitle": "{count} 个仓库 · {count} 个有更改",
+    "empty": {
+      "no_repos": "工作区中未找到 Git 仓库"
+    },
+    "action": {
+      "status": "状态",
+      "log": "日志",
+      "diff": "差异",
+      "pull": "拉取"
+    }
+  },
+  "memory": {
+    "title": "记忆",
+    "search_memories": "搜索记忆",
+    "add_memory": "添加记忆",
+    "memory_content": "记忆内容",
+    "category": "分类",
+    "tags": "标签",
+    "created_at": "创建时间",
+    "no_memories": "暂无记忆",
+    "subtitle": "浏览和编辑代理记忆文档、规范和技能",
+    "sidebar": {
+      "workspaces": "工作区"
+    },
+    "unsaved_changes": {
+      "confirm": "您有未保存的更改。确定要放弃它们吗?"
+    },
+    "view": {
+      "preview": "预览",
+      "edit": "编辑"
+    },
+    "empty": {
+      "select_document": "选择要预览或编辑的文档",
+      "select_workspace": "请选择工作区"
+    }
+  },
+  "reports": {
+    "title": "报告",
+    "generate_report": "生成报告",
+    "report_type": "报告类型",
+    "date_range": "日期范围",
+    "export": "导出",
+    "no_reports": "暂无报告",
+    "subtitle": "分析报告和见解",
+    "refresh_tooltip": "刷新报告",
+    "count": "{count} 个报告",
+    "empty": {
+      "no_reports": "未找到报告",
+      "hint": "memory/ 中匹配 *-analysis-* 或 *-report-* 模式的报告将显示在此处",
+      "select_report": "选择报告进行预览"
+    },
+    "loading_report": "加载报告中..."
+  },
+  "skills": {
+    "title": "技能",
+    "search_skills": "搜索技能",
+    "skill_details": "技能详情",
+    "install_skill": "安装技能",
+    "uninstall_skill": "卸载技能",
+    "author": "作者",
+    "version": "版本",
+    "description": "描述",
+    "no_skills": "暂无技能",
+    "subtitle": "OpenClaw 系统中可用的技能",
+    "page_title": "技能管理器",
+    "page_subtitle": "OpenClaw 系统中可用的技能",
+    "stats": {
+      "total": "总技能",
+      "workspace": "工作区技能",
+      "system": "系统技能"
+    },
+    "search": {
+      "placeholder": "搜索技能..."
+    },
+    "filter": {
+      "all": "全部 ({count})",
+      "workspace": "工作区 ({count})",
+      "system": "系统 ({count})"
+    },
+    "empty": {
+      "no_skills": "未找到技能"
+    },
+    "section": {
+      "workspace": "工作区技能",
+      "system": "系统技能"
+    },
+    "card": {
+      "files": "{count} 个文件"
+    },
+    "detail": {
+      "homepage": "主页",
+      "files_count": "{count} 个文件",
+      "files_header": "文件 ({count})",
+      "archivos": "{count} 个文件"
+    }
+  },
+  "social": {
+    "title": "社交",
+    "connect_account": "连接账户",
+    "disconnect_account": "断开账户",
+    "post": "发布",
+    "message": "消息",
+    "followers": "关注者",
+    "following": "正在关注",
+    "no_accounts": "暂无连接的账户",
+    "subtitle": "管理您的社交媒体存在",
+    "today": "今天",
+    "stats": {
+      "title": "📊 本月统计",
+      "posts_count": "{count} 篇帖子",
+      "category_distribution": "类别分布",
+      "publish_status": "发布状态",
+      "published": "✅ 已发布",
+      "scheduled": "🕐 已计划"
+    },
+    "platform": {
+      "linkedin": "LinkedIn",
+      "xiaohongshu": "小红书"
+    },
+    "coming_soon": "即将推出",
+    "last_updated": "最后更新:",
+    "status": {
+      "published": "已发布",
+      "scheduled": "已计划"
+    }
+  },
+  "terminal": {
+    "title": "终端",
+    "connect": "连接",
+    "disconnect": "断开连接",
+    "clear": "清除",
+    "command_placeholder": "输入命令...",
+    "subtitle": "仅限只读命令 (ls, cat, df, ps, git status 等)",
+    "copy": "复制",
+    "empty": {
+      "type_command": "输入命令或点击上方快速命令",
+      "history_hint": "使用上/下箭头查看命令历史"
+    },
+    "running": "运行中...",
+    "input": {
+      "placeholder": "输入命令...",
+      "run": "运行"
+    }
+  },
+  "workflows": {
+    "title": "工作流",
+    "create_workflow": "创建工作流",
+    "workflow_name": "工作流名称",
+    "steps": "步骤",
+    "triggers": "触发器",
+    "run_workflow": "运行工作流",
+    "no_workflows": "暂无工作流",
+    "subtitle": "{count} 个活跃流程 · {count} 个自动化定时任务 · {count} 个按需",
+    "stats": {
+      "total": "总工作流",
+      "active_crons": "活跃定时任务",
+      "on_demand": "按需"
+    },
+    "status": {
+      "active": "活跃",
+      "inactive": "非活跃"
+    },
+    "trigger": {
+      "cron": "⏱ 定时",
+      "demand": "⚡ 按需"
+    },
+    "steps_header": "步骤",
+    "items": {
+      "social_radar": {
+        "name": "社交雷达",
+        "description": "监控提及、合作机会..."
+      },
+      "ai_news": {
+        "name": "AI 和网络新闻",
+        "description": "总结最相关的 AI 和 Web 开发新闻..."
+      },
+      "trend_monitor": {
+        "name": "趋势监控",
+        "description": "技术领域的紧急趋势雷达..."
+      },
+      "linkedin_brief": {
+        "name": "每日 LinkedIn 简报",
+        "description": "生成每日 LinkedIn 帖子..."
+      },
+      "newsletter_digest": {
+        "name": "通讯摘要",
+        "description": "精选的每日通讯摘要..."
+      },
+      "email_categorization": {
+        "name": "电子邮件分类",
+        "description": "分类和总结每日电子邮件..."
+      },
+      "weekly_newsletter": {
+        "name": "每周通讯",
+        "description": "自动每周推文和 LinkedIn 帖子回顾..."
+      },
+      "advisory_board": {
+        "name": "顾问委员会",
+        "description": "7 位具有自己个性和记忆的 AI 顾问..."
+      },
+      "git_backup": {
+        "name": "Git 备份",
+        "description": "每 4 小时自动提交并推送工作区..."
+      },
+      "nightly_evolution": {
+        "name": "夜间进化",
+        "description": "自主夜间会话,实施改进..."
+      }
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "mark_all_read": "全部标记为已读",
+    "no_notifications": "暂无通知",
+    "just_now": "刚刚",
+    "minutes_ago": "分钟前",
+    "hours_ago": "小时前",
+    "days_ago": "天前"
+  },
+  "global_search": {
+    "placeholder": "搜索页面、技能、操作...",
+    "pages": "页面",
+    "skills": "技能",
+    "actions": "操作",
+    "no_results": "未找到结果"
+  },
+  "login": {
+    "title": "登录",
+    "username": "用户名",
+    "password": "密码",
+    "login_button": "登录",
+    "invalid_credentials": "用户名或密码错误",
+    "subtitle": "请输入您的凭据以继续"
+  },
+  "dashboard": {
+    "system_health": "系统健康",
+    "agent_team": "代理团队",
+    "working": "工作中",
+    "standby": "待命",
+    "sleeping": "休眠中",
+    "idle": "空闲",
+    "cpu_usage": "CPU",
+    "memory_usage": "内存",
+    "disk_usage": "磁盘",
+    "gateway_status": "网关状态",
+    "online": "运行中",
+    "offline": "离线",
+    "latency": "延迟",
+    "activities": "活动记录",
+    "no_activities": "暂无活动",
+    "cron_jobs": "定时任务",
+    "next_run": "下次运行",
+    "skills": "可用技能",
+    "workspace": "工作区",
+    "system": "系统",
+    "recommended_skills": "推荐技能",
+    "installed_skills": "已安装技能 ({count})",
+    "show_all": "显示全部 ({count})",
+    "collapse": "收起",
+    "cron_executed": "今日执行 {ran}/{total}",
+    "cron_failures": "共 {count} 次失败，请检查",
+    "yesterday_summary_not_generated": "📭 昨日总结（{date}）尚未生成",
+    "areas_for_improvement": "🔍 待改进领域",
+    "new_gaps": "+{count} 新增",
+    "no_improvements_needed": "🎉 无需改进 — 完美！",
+    "recommended_skills_title": "💡 推荐技能",
+    "no_new_recommendations": "暂无新推荐",
+    "signal_collection": "🔎 信号收集",
+    "daily_review": "📋 每日回顾",
+    "no_evolution_data": "暂无自进化数据",
+    "heartbeat_tasks": "🫀 定时任务监控",
+    "yesterday_review": "📝 昨日回顾",
+    "daily_briefing_evolution": "🧬 每日简报 · 自进化"
+  },
+  "locale": {
+    "code": "zh-CN"
+  },
+  "greeting": {
+    "late_night": "夜深了，早点休息",
+    "early_morning": "早上好！新的一天开始了",
+    "morning": "上午好！保持高效",
+    "noon": "中午好！别忘了吃饭",
+    "afternoon": "下午好！继续加油",
+    "evening": "晚上好！今天辛苦了",
+    "night": "晚安！又是美好的一天"
+  },
+  "time": {
+    "just_now": "刚刚",
+    "min_ago": "{mins} 分钟前",
+    "hr_ago": "{hrs} 小时前",
+    "days_ago": "{days} 天前",
+    "never_run": "从未运行",
+    "failures_count": "{count} 次失败"
+  },
+  "settings": {
+    "page_title": "设置",
+    "page_subtitle": "系统状态、集成和配置",
+    "refresh": "刷新",
+    "last_updated": "最后更新",
+    "version_info": "Mission Control v1.0.0",
+    "dashboard_name": "OpenClaw 代理仪表板",
+    "system_info": {
+      "title": "系统信息",
+      "agent_name": "代理名称",
+      "uptime": "运行时间",
+      "node_version": "Node.js 版本",
+      "current_model": "当前模型",
+      "workspace": "工作区",
+      "memory": "内存",
+      "free": "可用"
+    },
+    "integrations": {
+      "title": "集成",
+      "connected": "已连接",
+      "disconnected": "未连接",
+      "configured": "已配置",
+      "not_configured": "未配置",
+      "last_activity": "最后活动"
+    },
+    "quick_actions": {
+      "title": "快速操作",
+      "restart_gateway": "重启网关",
+      "clear_activity_logs": "清除活动日志",
+      "view_gateway_logs": "查看网关日志",
+      "change_password": "更改密码",
+      "placeholder": "占位符",
+      "password_changed": "密码修改成功",
+      "gateway_restart_sent": "网关重启命令已发送（占位符）",
+      "activity_logs_cleared": "活动日志已清除",
+      "opening_logs": "正在打开网关日志...（占位符）",
+      "failed_clear_logs": "清除活动日志失败"
+    }
+  }
+}

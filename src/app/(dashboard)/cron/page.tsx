@@ -13,15 +13,22 @@ import {
 } from "lucide-react";
 import { CronJobCard, type CronJob } from "@/components/CronJobCard";
 import { CronWeeklyTimeline } from "@/components/CronWeeklyTimeline";
+import { useI18n } from "@/i18n";
 
 type ViewMode = "list" | "timeline";
 type SortMode = "updated-desc" | "next-run-asc" | "last-run-desc";
 
-const SORT_LABELS: Record<SortMode, string> = {
-  "updated-desc": "Latest updated first",
-  "next-run-asc": "Next run soonest first",
-  "last-run-desc": "Last run most recent first",
-};
+function useCronI18n() {
+  const { t } = useI18n();
+  
+  const sortLabels = useMemo(() => ({
+    "updated-desc": t("cron.sort.updated_desc"),
+    "next-run-asc": t("cron.sort.next_run_asc"),
+    "last-run-desc": t("cron.sort.last_run_desc"),
+  }), [t]);
+  
+  return { t, sortLabels };
+}
 
 function getSortableNumber(value?: number | null): number | null {
   return typeof value === "number" && !Number.isNaN(value) ? value : null;
@@ -122,6 +129,7 @@ function StatCard({
 }
 
 export default function CronJobsPage() {
+  const { t, sortLabels } = useCronI18n();
   const [jobs, setJobs] = useState<CronJob[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -136,7 +144,7 @@ export default function CronJobsPage() {
       const res = await fetch("/api/cron");
       if (!res.ok) {
         const errData = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(errData.error || "Failed to fetch scheduled tasks");
+        throw new Error(errData.error || t("common.error"));
       }
       const data = (await res.json()) as CronJob[];
       setJobs(Array.isArray(data) ? data : []);
@@ -279,10 +287,10 @@ export default function CronJobsPage() {
                 fontFamily: "var(--font-heading)",
               }}
             >
-              Scheduled Tasks
+              {t("cron.page_title")}
             </h1>
             <p className="text-sm md:text-base" style={{ color: "var(--text-secondary)" }}>
-              View tasks, next run times, recent results, and issues at a glance.
+              {t("cron.subtitle")}
             </p>
           </div>
 
@@ -313,7 +321,7 @@ export default function CronJobsPage() {
                 }}
               >
                 <List className="w-3.5 h-3.5" />
-                List
+                {t("cron.view.list")}
               </button>
               <button
                 onClick={() => setViewMode("timeline")}
@@ -332,7 +340,7 @@ export default function CronJobsPage() {
                 }}
               >
                 <CalendarDays className="w-3.5 h-3.5" />
-                Timeline
+                {t("cron.view.timeline")}
               </button>
             </div>
 
@@ -352,7 +360,7 @@ export default function CronJobsPage() {
                 }}
               >
                 <ArrowDownWideNarrow className="w-4 h-4" />
-                Sort
+                {t("cron.actions.sort")}
                 <select
                   value={sortMode}
                   onChange={(event) => setSortMode(event.target.value as SortMode)}
@@ -366,7 +374,7 @@ export default function CronJobsPage() {
                     cursor: "pointer",
                   }}
                 >
-                  {Object.entries(SORT_LABELS).map(([value, label]) => (
+                  {Object.entries(sortLabels).map(([value, label]) => (
                     <option key={value} value={value}>
                       {label}
                     </option>
@@ -394,7 +402,7 @@ export default function CronJobsPage() {
               }}
             >
               <RefreshCw className="w-4 h-4" />
-              Refresh
+              {t("cron.actions.refresh")}
             </button>
           </div>
         </div>
@@ -416,15 +424,15 @@ export default function CronJobsPage() {
               border: "1px solid var(--border)",
             }}
           >
-            Sorted by "{SORT_LABELS[sortMode]}"
+            {t("cron.sorted_by", { label: sortLabels[sortMode] })}
           </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-8">
-        <StatCard icon={<Clock className="w-6 h-6" />} value={jobs.length} label="Total Tasks" tone="info" />
-        <StatCard icon={<RefreshCw className="w-6 h-6" />} value={activeJobs} label="Enabled" tone="success" />
-        <StatCard icon={<Bug className="w-6 h-6" />} value={issueJobs} label="Recent Issues" tone="error" />
+        <StatCard icon={<Clock className="w-6 h-6" />} value={jobs.length} label={t("cron.stats.total")} tone="info" />
+        <StatCard icon={<RefreshCw className="w-6 h-6" />} value={activeJobs} label={t("cron.stats.enabled")} tone="success" />
+        <StatCard icon={<Bug className="w-6 h-6" />} value={issueJobs} label={t("cron.stats.issues")} tone="error" />
       </div>
 
       {issueJobs > 0 && (
@@ -467,7 +475,7 @@ export default function CronJobsPage() {
             onClick={() => setError(null)}
             style={{ marginLeft: "auto", color: "var(--error)", background: "none", border: "none", cursor: "pointer" }}
           >
-            Close
+            {t("cron.actions.close")}
           </button>
         </div>
       )}
@@ -489,9 +497,9 @@ export default function CronJobsPage() {
         <div style={{ textAlign: "center", padding: "4rem 0" }}>
           <Clock className="w-8 h-8 mx-auto mb-4" style={{ color: "var(--text-muted)" }} />
           <h3 style={{ fontSize: "1.125rem", fontWeight: 600, color: "var(--text-primary)", marginBottom: "0.5rem" }}>
-            No Scheduled Tasks
+            {t("cron.empty.title")}
           </h3>
-          <p style={{ color: "var(--text-secondary)" }}>Tasks will appear here once created via the OpenClaw CLI.</p>
+          <p style={{ color: "var(--text-secondary)" }}>{t("cron.empty.description")}</p>
         </div>
       ) : viewMode === "timeline" ? (
         <div
@@ -521,7 +529,7 @@ export default function CronJobsPage() {
                 fontFamily: "var(--font-heading)",
               }}
             >
-              Next 7 Days Timeline
+              {t("cron.timeline.title")}
             </h2>
             <span
               style={{
@@ -533,7 +541,7 @@ export default function CronJobsPage() {
                 borderRadius: "0.35rem",
               }}
             >
-              All times shown in local timezone
+              {t("cron.timeline.timezone_note")}
             </span>
           </div>
           <CronWeeklyTimeline jobs={jobs} />
@@ -566,7 +574,7 @@ export default function CronJobsPage() {
                 >
                   <div style={{ textAlign: "center", padding: "1rem" }}>
                     <p style={{ color: "var(--text-primary)", marginBottom: "1rem" }}>
-                      Delete "{job.name}"?
+                      {t("cron.delete.confirm_title", { name: job.name })}
                     </p>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
                       <button
@@ -580,7 +588,7 @@ export default function CronJobsPage() {
                           cursor: "pointer",
                         }}
                       >
-                        Cancel
+                        {t("cron.actions.cancel")}
                       </button>
                       <button
                         onClick={() => void handleDelete(job.id)}
@@ -594,7 +602,7 @@ export default function CronJobsPage() {
                           fontWeight: 700,
                         }}
                       >
-                        Confirm Delete
+                        {t("cron.delete.confirm_button")}
                       </button>
                     </div>
                   </div>
@@ -640,9 +648,9 @@ export default function CronJobsPage() {
           />
           {runToast.status === "success"
             ? runToast.skipped
-              ? `✓ "${runToast.name}" triggered successfully, today's scheduled run has been skipped`
-              : `✓ "${runToast.name}" triggered`
-            : `✗ "${runToast.name}" trigger failed`}
+              ? t("cron.toast.triggered_skipped", { name: runToast.name })
+              : t("cron.toast.triggered", { name: runToast.name })
+            : t("cron.toast.failed", { name: runToast.name })}
         </div>
       )}
 

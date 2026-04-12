@@ -17,35 +17,55 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useI18n } from "@/i18n";
 
-const dockItems = [
-  { href: "/", label: "Dashboard", icon: Home },
-  { href: "/calendar", label: "Calendar", icon: Calendar },
-  { href: "/social", label: "Social Media", icon: Share2 },
-  { href: "/files", label: "Files", icon: FolderOpen },
-  { href: "/memory", label: "Reports", icon: Brain },
-  { href: "/office", label: "3D Office", icon: Building2 },
-  { href: "/cron", label: "Cron Jobs", icon: Clock },
-  { href: "/skills", label: "Skills", icon: Puzzle },
-  { href: "/costs", label: "Cost Analysis", icon: DollarSign },
-  { href: "/settings", label: "Settings", icon: Settings },
-];
+const useDockItems = () => {
+  const { t } = useI18n();
+  
+  return [
+    { href: "/", label: t("dock.home"), icon: Home },
+    { href: "/calendar", label: t("dock.calendar"), icon: Calendar },
+    { href: "/social", label: t("dock.social"), icon: Share2 },
+    { href: "/files", label: t("dock.files"), icon: FolderOpen },
+    { href: "/memory", label: t("dock.reports"), icon: Brain },
+    { href: "/office", label: t("dock.office"), icon: Building2 },
+    { href: "/cron", label: t("dock.cron_jobs"), icon: Clock },
+    { href: "/skills", label: t("dock.skills"), icon: Puzzle },
+    { href: "/costs", label: t("dock.costs"), icon: DollarSign },
+    { href: "/settings", label: t("dock.settings") || "Settings", icon: Settings },
+  ];
+};
 
 // Mobile: show top 5 in tab bar, rest in "more" drawer
-const mobileTabItems = dockItems.slice(0, 4);
-const mobileMoreItems = dockItems.slice(4);
 
 export function Dock() {
   const pathname = usePathname();
   const isOffice = pathname === "/office";
   const isMobile = useIsMobile();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+  const { t } = useI18n();
+  const dockItems = useDockItems();
+  
+  // 确保组件只在客户端挂载后渲染，避免 hydration 不匹配
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  
+  // Mobile: show top 4 in tab bar, rest in "more" drawer
+  const mobileTabItems = dockItems.slice(0, 4);
+  const mobileMoreItems = dockItems.slice(4);
 
   // Check if current path is in "more" items
   const isMoreActive = mobileMoreItems.some(
     (item) => pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
   );
+
+  // SSR 时返回 null 或占位符，避免 hydration 不匹配
+  if (!isMounted) {
+    return null;
+  }
 
   if (isMobile) {
     return (
@@ -179,7 +199,7 @@ export function Dock() {
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-            <span style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>More</span>
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 700, color: "var(--text-primary)" }}>{t("common.all")}</span>
             <button onClick={() => setDrawerOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: "8px" }}>
               <X style={{ width: "20px", height: "20px", color: "var(--text-secondary)" }} />
             </button>

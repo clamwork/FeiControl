@@ -1,6 +1,7 @@
 "use client";
 
 import { Server, Clock, Cpu, Brain, FolderOpen, HardDrive } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 interface SystemInfoProps {
   data: {
@@ -32,6 +33,8 @@ function formatBytes(bytes: number): string {
 }
 
 export function SystemInfo({ data }: SystemInfoProps) {
+  const { t } = useI18n();
+
   if (!data) {
     return (
       <div 
@@ -54,39 +57,39 @@ export function SystemInfo({ data }: SystemInfoProps) {
   const infoItems = [
     {
       icon: Server,
-      label: "Agent Name",
+      label: t("settings.system_info.agent_name"),
       value: `${data.agent.emoji} ${data.agent.name}`,
       sublabel: data.agent.creature,
     },
     {
       icon: Clock,
-      label: "Uptime",
+      label: t("settings.system_info.uptime"),
       value: data.system.uptimeFormatted,
       sublabel: `${data.system.hostname}`,
     },
     {
       icon: Cpu,
-      label: "Node.js Version",
+      label: t("settings.system_info.node_version"),
       value: data.system.nodeVersion,
       sublabel: data.system.platform,
     },
     {
       icon: Brain,
-      label: "Current Model",
+      label: t("settings.system_info.current_model"),
       value: data.system.model.split("/").pop() || data.system.model,
       sublabel: data.system.model.includes("/") ? data.system.model.split("/")[0] : "provider",
     },
     {
       icon: FolderOpen,
-      label: "Workspace",
+      label: t("settings.system_info.workspace"),
       value: data.system.workspacePath.split("/").pop() || "workspace",
       sublabel: data.system.workspacePath,
     },
     {
       icon: HardDrive,
-      label: "Memory",
+      label: t("settings.system_info.memory"),
       value: `${formatBytes(data.system.memory.used)} / ${formatBytes(data.system.memory.total)}`,
-      sublabel: `${formatBytes(data.system.memory.free)} free`,
+      sublabel: `${formatBytes(data.system.memory.free)} ${t("settings.system_info.free")}`,
     },
   ];
 
@@ -100,7 +103,7 @@ export function SystemInfo({ data }: SystemInfoProps) {
         style={{ color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}
       >
         <Server className="w-5 h-5" style={{ color: "var(--accent)" }} />
-        System Information
+        {t("settings.system_info.title")}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -5,11 +5,20 @@ import { Search, Bell, User, Command } from "lucide-react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { GlobalSearch } from "@/components/GlobalSearch";
 import { NotificationDropdown } from "@/components/NotificationDropdown";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useI18n } from "@/i18n";
 import { BRANDING } from "@/config/branding";
 
 export function TopBar() {
   const [showSearch, setShowSearch] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const isMobile = useIsMobile();
+  const { t } = useI18n();
+
+  // 确保组件只在客户端挂载后渲染，避免 hydration 不匹配
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -26,6 +35,11 @@ export function TopBar() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [showSearch]);
+
+  // SSR 时返回 null，避免 hydration 不匹配
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <>
@@ -78,7 +92,7 @@ export function TopBar() {
                   letterSpacing: "1px",
                 }}
               >
-                v1.0
+                {t("topbar.version")}1.0
               </span>
             </div>
           )}
@@ -121,10 +135,13 @@ export function TopBar() {
                 style={{ width: "16px", height: "16px", color: "var(--text-muted)" }}
               />
               <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", color: "var(--text-muted)" }}>
-                Search... ⌘K
+                {t("topbar.search_placeholder")}
               </span>
             </button>
           )}
+
+          {/* Language Switcher */}
+          <LanguageSwitcher />
 
           {/* Notifications Dropdown */}
           <NotificationDropdown />

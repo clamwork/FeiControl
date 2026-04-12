@@ -1,0 +1,719 @@
+{
+  "common": {
+    "search": "Search...",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "reset": "Reset",
+    "select": "Select",
+    "all": "All",
+    "none": "None",
+    "yes": "Yes",
+    "no": "No",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "refresh": "Refresh",
+    "openclaw": "OpenClaw"
+  },
+  "topbar": {
+    "version": "v",
+    "search_placeholder": "Search... ⌘K",
+    "notifications": "Notifications",
+    "user_profile": "User Profile",
+    "language": "Language"
+  },
+  "dock": {
+    "home": "Home",
+    "about": "About",
+    "terminal": "Terminal",
+    "files": "Files",
+    "calendar": "Calendar",
+    "skills": "Skills",
+    "workflows": "Workflows",
+    "cron_jobs": "Cron Jobs",
+    "actions": "Actions",
+    "memory": "Memory",
+    "social": "Social",
+    "costs": "Costs",
+    "reports": "Reports",
+    "git": "Git",
+    "office": "Office",
+    "settings": "Settings",
+    "agents": "agents"
+  },
+  "statusbar": {
+    "system_status": "System Status",
+    "cpu_usage": "CPU Usage",
+    "memory_usage": "Memory Usage",
+    "disk_usage": "Disk Usage",
+    "uptime": "Uptime",
+    "active_agents": "Active Agents"
+  },
+  "about": {
+    "title": "About",
+    "agent_description": "AI assistant. Powered by OpenClaw.",
+    "statistics": "Statistics",
+    "total_activities": "Total Activities",
+    "success_rate": "Success Rate",
+    "skills_count": "Skills Count",
+    "cron_jobs": "Cron Jobs",
+    "core_skills": "Core Skills",
+    "personality_traits": "Personality Traits",
+    "direct": "Direct",
+    "gets_straight_to_point": "Gets straight to the point",
+    "efficient": "Efficient",
+    "results_oriented": "Results-oriented",
+    "curious": "Curious",
+    "always_learning": "Always learning",
+    "loyal": "Loyal",
+    "your_success_is_my_success": "Your success is my success",
+    "philosophies": "Philosophies",
+    "philosophy_1": "Actions speak louder than words. Don't say 'I can help you' — just help.",
+    "philosophy_2": "Having opinions is good. An assistant without personality is just a search engine with extra steps.",
+    "philosophy_3": "Try before asking. Read files, search, explore — only ask when truly stuck.",
+    "philosophy_4": "Privacy is sacred. Having access ≠ permission to share.",
+    "days": "d",
+    "stats": {
+      "uptime": "Uptime",
+      "activities": "Activities",
+      "success_rate": "Success Rate",
+      "skills": "Skills"
+    },
+    "sections": {
+      "about": "About",
+      "personality": "Personality",
+      "philosophy": "Working Philosophy",
+      "capabilities": "Capabilities"
+    },
+    "intro": {
+      "i_am": "I am",
+      "running_on": ", an AI agent running on",
+      "with_claude": "with Claude as my brain.",
+      "purpose": "My purpose is to assist",
+      "tasks": "with daily tasks: managing communications, scheduling, research, file management, and acting as a digital co-pilot.",
+      "access": "I have access to workspaces, calendars, and integrations — a privilege I handle with care and respect."
+    },
+    "born_label": "Born",
+    "skills": {
+      "telegram": "Telegram Bot",
+      "twitter": "Twitter/X",
+      "web_search": "Web Search",
+      "file_management": "File Management",
+      "cron_scheduler": "Cron Scheduler",
+      "memory_system": "Memory System",
+      "youtube": "YouTube Research",
+      "email": "Email (Gmail)"
+    },
+    "footer": {
+      "built_with": "Built with ♥ on",
+      "tagline": "— Your AI co-pilot"
+    }
+  },
+  "actions": {
+    "title": "Quick Actions",
+    "run_action": "Run Action",
+    "action_name": "Action Name",
+    "parameters": "Parameters",
+    "result": "Result",
+    "history": "History",
+    "no_actions": "No actions available",
+    "execute": "Execute",
+    "subtitle": "Run common maintenance and diagnostic tasks with one click",
+    "heartbeat": {
+      "label": "Heartbeat Check",
+      "description": "Check if all services are online and sites are reachable"
+    },
+    "git_status": {
+      "label": "Git Status (All Repos)",
+      "description": "Check uncommitted changes in all workspace repositories"
+    },
+    "usage_stats": {
+      "label": "Collect Usage Stats",
+      "description": "Get disk, CPU, and memory usage overview"
+    },
+    "restart_gateway": {
+      "label": "Restart Gateway",
+      "description": "Restart the OpenClaw gateway service"
+    },
+    "clear_temp": {
+      "label": "Clear Temp Files",
+      "description": "Delete temporary files and trim PM2 logs"
+    },
+    "npm_audit": {
+      "label": "NPM Security Audit",
+      "description": "Check for security vulnerabilities in mission-control dependencies"
+    },
+    "button": {
+      "running": "Running...",
+      "run": "Run"
+    },
+    "recent_results": "Recent Results",
+    "confirm": {
+      "prefix": "Confirm:",
+      "message": "This action may affect running services. Are you sure you want to proceed?",
+      "force_execute": "Force Execute"
+    }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "today": "Today",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "add_event": "Add Event",
+    "event_title": "Event Title",
+    "start_time": "Start Time",
+    "end_time": "End Time",
+    "description": "Description",
+    "location": "Location",
+    "no_events": "No events",
+    "subtitle": "Google Calendar · Google Tasks",
+    "this_week": "This Week",
+    "loading": "Loading...",
+    "pending": "Pending",
+    "total": "Total",
+    "completed": "Completed",
+    "no_tasks": "No Google Tasks",
+    "no_task_data": "No task data available",
+    "integration_available": "Google Tasks integration available. Configure",
+    "to_connect": "in",
+    "connection": "to connect.",
+    "all_completed": "🎉 All tasks completed!",
+    "error": {
+      "fetch_events": "Unable to fetch calendar events",
+      "fetch_tasks": "Unable to fetch Google Tasks",
+      "load_events": "Failed to load calendar events",
+      "load_tasks": "Failed to load Google Tasks",
+      "migrate_legacy": "Unable to migrate legacy event completion state",
+      "sync_tasks": "Unable to sync Google Tasks",
+      "save_completion": "Unable to save event completion state"
+    },
+    "task": {
+      "mark_incomplete": "Click to mark as incomplete",
+      "mark_complete": "Click to mark as completed",
+      "aria_mark_incomplete": "Mark {title} as incomplete",
+      "aria_mark_complete": "Mark {title} as completed"
+    },
+    "google_tasks": {
+      "title": "✅ Google Tasks",
+      "pending_total": "Pending {count} / Total {count}",
+      "configure_message": "Google Tasks integration available. Configure GOOGLE_TASKS_SCRIPT in .env.local to connect.",
+      "all_completed": "🎉 All tasks completed!",
+      "completed_count": "Completed ({count})",
+      "no_tasks": "No Google Tasks",
+      "no_data": "No task data available"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
+    "weekdays": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    }
+  },
+  "costs": {
+    "title": "Costs",
+    "total_cost": "Total Cost",
+    "daily_average": "Daily Average",
+    "this_month": "This Month",
+    "last_month": "Last Month",
+    "cost_breakdown": "Cost Breakdown",
+    "no_data": "No data",
+    "subtitle": "Token usage and cost tracking across all agents",
+    "timeframe": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days"
+    },
+    "kpi": {
+      "today": "Today",
+      "vs_yesterday": "vs ${amount} yesterday",
+      "this_month": "This Month",
+      "vs_last_month": "vs ${amount} last month",
+      "projected": "Projected Monthly",
+      "projected_note": "Based on current pace",
+      "budget": "Budget"
+    },
+    "chart": {
+      "daily_trend": "Daily Cost Trend",
+      "cost_label": "Cost ($)",
+      "by_agent": "Cost by Agent",
+      "by_model": "Cost by Model",
+      "token_usage": "Token Usage (Daily)",
+      "input_tokens": "Input Tokens",
+      "output_tokens": "Output Tokens"
+    },
+    "table": {
+      "model_pricing_title": "Model Pricing (per 1M tokens)",
+      "model": "Model",
+      "input": "Input",
+      "output": "Output",
+      "cache_read": "Cache Read",
+      "cache_write": "Cache Write",
+      "breakdown_title": "Detailed Breakdown by Agent",
+      "tokens": "Tokens",
+      "cost": "Cost",
+      "percent_total": "% of Total"
+    },
+    "models": {
+      "claude_opus": "Claude Opus 4.6",
+      "claude_sonnet": "Claude Sonnet 4.6",
+      "claude_haiku": "Claude Haiku 4.5"
+    }
+  },
+  "cron": {
+    "title": "Cron Jobs",
+    "schedule": "Schedule",
+    "expression": "Expression",
+    "next_run": "Next Run",
+    "last_run": "Last Run",
+    "status": "Status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "add_job": "Add Job",
+    "edit_job": "Edit Job",
+    "delete_job": "Delete Job",
+    "job_name": "Job Name",
+    "command": "Command",
+    "no_jobs": "No cron jobs",
+    "subtitle": "View tasks, next run times, recent results, and issues at a glance.",
+    "page_title": "Scheduled Tasks",
+    "sort": {
+      "updated_desc": "Latest updated first",
+      "next_run_asc": "Next run soonest first",
+      "last_run_desc": "Last run most recent first",
+      "label": "Sort"
+    },
+    "view": {
+      "list": "List",
+      "timeline": "Timeline"
+    },
+    "sorted_by": "Sorted by \"{label}\"",
+    "stats": {
+      "total": "Total Tasks",
+      "enabled": "Enabled",
+      "issues": "Recent Issues"
+    },
+    "issues": {
+      "warning": "Currently <strong>{count}</strong> tasks have recent failures. Red bug indicators are shown in the list."
+    },
+    "empty": {
+      "title": "No Scheduled Tasks",
+      "description": "Tasks will appear here once created via the OpenClaw CLI."
+    },
+    "timeline": {
+      "title": "Next 7 Days Timeline",
+      "timezone_note": "All times shown in local timezone"
+    },
+    "delete": {
+      "confirm_title": "Delete \"{name}\"?",
+      "confirm_button": "Confirm Delete"
+    },
+    "toast": {
+      "triggered_skipped": "✓ \"{name}\" triggered successfully, today's scheduled run has been skipped",
+      "triggered": "✓ \"{name}\" triggered",
+      "failed": "✗ \"{name}\" trigger failed"
+    },
+    "actions": {
+      "sort": "Sort",
+      "refresh": "Refresh",
+      "close": "Close",
+      "cancel": "Cancel"
+    }
+  },
+  "files": {
+    "title": "Files",
+    "upload": "Upload",
+    "download": "Download",
+    "delete_file": "Delete File",
+    "new_folder": "New Folder",
+    "folder_name": "Folder Name",
+    "file_name": "File Name",
+    "size": "Size",
+    "modified": "Modified",
+    "confirm_delete": "Confirm Delete",
+    "delete_confirm_message": "Are you sure you want to delete this file?",
+    "subtitle": "Browse agent workspaces and files",
+    "sidebar": {
+      "workspaces": "Workspaces"
+    },
+    "view": {
+      "list": "List View",
+      "grid": "Icon View"
+    },
+    "empty": {
+      "select_workspace": "Select a workspace to explore its files"
+    }
+  },
+  "git": {
+    "title": "Git",
+    "branch": "Branch",
+    "commit": "Commit",
+    "push": "Push",
+    "pull": "Pull",
+    "status": "Status",
+    "changes": "Changes",
+    "uncommitted": "Uncommitted Changes",
+    "commit_message": "Commit Message",
+    "no_changes": "No changes",
+    "subtitle": "{count} repositories · {count} with changes",
+    "empty": {
+      "no_repos": "No Git repositories found in workspace"
+    },
+    "action": {
+      "status": "status",
+      "log": "log",
+      "diff": "diff",
+      "pull": "pull"
+    }
+  },
+  "memory": {
+    "title": "Memory",
+    "search_memories": "Search Memories",
+    "add_memory": "Add Memory",
+    "memory_content": "Memory Content",
+    "category": "Category",
+    "tags": "Tags",
+    "created_at": "Created At",
+    "no_memories": "No memories",
+    "subtitle": "Browse and edit agent memory documents, specs, and skills",
+    "sidebar": {
+      "workspaces": "Workspaces"
+    },
+    "unsaved_changes": {
+      "confirm": "You have unsaved changes. Are you sure you want to discard them?"
+    },
+    "view": {
+      "preview": "Preview",
+      "edit": "Edit"
+    },
+    "empty": {
+      "select_document": "Select a document to preview or edit",
+      "select_workspace": "Please select a workspace"
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "generate_report": "Generate Report",
+    "report_type": "Report Type",
+    "date_range": "Date Range",
+    "export": "Export",
+    "no_reports": "No reports",
+    "subtitle": "Analytics reports and insights",
+    "refresh_tooltip": "Refresh reports",
+    "count": "{count} Reports",
+    "empty": {
+      "no_reports": "No reports found",
+      "hint": "Reports matching *-analysis-* or *-report-* patterns in memory/ will appear here",
+      "select_report": "Select a report to preview"
+    },
+    "loading_report": "Loading report..."
+  },
+  "skills": {
+    "title": "Skills",
+    "search_skills": "Search Skills",
+    "skill_details": "Skill Details",
+    "install_skill": "Install Skill",
+    "uninstall_skill": "Uninstall Skill",
+    "author": "Author",
+    "version": "Version",
+    "description": "Description",
+    "no_skills": "No skills",
+    "subtitle": "Skills available in the OpenClaw system",
+    "page_title": "Skills Manager",
+    "page_subtitle": "Skills available in the OpenClaw system",
+    "stats": {
+      "total": "Total Skills",
+      "workspace": "Workspace Skills",
+      "system": "System Skills"
+    },
+    "search": {
+      "placeholder": "Search skills..."
+    },
+    "filter": {
+      "all": "All ({count})",
+      "workspace": "Workspace ({count})",
+      "system": "System ({count})"
+    },
+    "empty": {
+      "no_skills": "No skills found"
+    },
+    "section": {
+      "workspace": "WORKSPACE SKILLS",
+      "system": "SYSTEM SKILLS"
+    },
+    "card": {
+      "files": "{count} files"
+    },
+    "detail": {
+      "homepage": "Homepage",
+      "files_count": "{count} files",
+      "files_header": "Files ({count})",
+      "archivos": "{count} files"
+    }
+  },
+  "social": {
+    "title": "Social",
+    "connect_account": "Connect Account",
+    "disconnect_account": "Disconnect Account",
+    "post": "Post",
+    "message": "Message",
+    "followers": "Followers",
+    "following": "Following",
+    "no_accounts": "No connected accounts",
+    "subtitle": "Manage your social media presence",
+    "today": "Today",
+    "stats": {
+      "title": "📊 This Month's Stats",
+      "posts_count": "{count} posts",
+      "category_distribution": "Category Distribution",
+      "publish_status": "Publish Status",
+      "published": "✅ Published",
+      "scheduled": "🕐 Scheduled"
+    },
+    "platform": {
+      "linkedin": "LinkedIn",
+      "xiaohongshu": "Xiaohongshu"
+    },
+    "coming_soon": "Coming Soon",
+    "last_updated": "Last updated:",
+    "status": {
+      "published": "Published",
+      "scheduled": "Scheduled"
+    }
+  },
+  "terminal": {
+    "title": "Terminal",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "clear": "Clear",
+    "command_placeholder": "Enter command...",
+    "subtitle": "Read-only commands only (ls, cat, df, ps, git status, etc.)",
+    "copy": "Copy",
+    "empty": {
+      "type_command": "Type a command or click a quick command above",
+      "history_hint": "Arrow Up/Down for command history"
+    },
+    "running": "Running...",
+    "input": {
+      "placeholder": "Enter command...",
+      "run": "Run"
+    }
+  },
+  "workflows": {
+    "title": "Workflows",
+    "create_workflow": "Create Workflow",
+    "workflow_name": "Workflow Name",
+    "steps": "Steps",
+    "triggers": "Triggers",
+    "run_workflow": "Run Workflow",
+    "no_workflows": "No workflows",
+    "subtitle": "{count} active flows · {count} automated crons · {count} on-demand",
+    "stats": {
+      "total": "Total workflows",
+      "active_crons": "Active crons",
+      "on_demand": "On-demand"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "trigger": {
+      "cron": "⏱ Cron",
+      "demand": "⚡ On-demand"
+    },
+    "steps_header": "Steps",
+    "items": {
+      "social_radar": {
+        "name": "Social Radar",
+        "description": "Monitors mentions, collaboration opportunities..."
+      },
+      "ai_news": {
+        "name": "AI & Web News",
+        "description": "Summarizes the most relevant AI and web development news..."
+      },
+      "trend_monitor": {
+        "name": "Trend Monitor",
+        "description": "Urgent trend radar for the tech niche..."
+      },
+      "linkedin_brief": {
+        "name": "Daily LinkedIn Brief",
+        "description": "Generates the daily LinkedIn post..."
+      },
+      "newsletter_digest": {
+        "name": "Newsletter Digest",
+        "description": "Curated digest of the day's newsletters..."
+      },
+      "email_categorization": {
+        "name": "Email Categorization",
+        "description": "Categorizes and summarizes daily emails..."
+      },
+      "weekly_newsletter": {
+        "name": "Weekly Newsletter",
+        "description": "Automatic weekly recap of tweets and LinkedIn posts..."
+      },
+      "advisory_board": {
+        "name": "Advisory Board",
+        "description": "7 AI advisors with their own personalities and memories..."
+      },
+      "git_backup": {
+        "name": "Git Backup",
+        "description": "Auto-commit and push the workspace every 4 hours..."
+      },
+      "nightly_evolution": {
+        "name": "Nightly Evolution",
+        "description": "Autonomous nightly session that implements improvements..."
+      }
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "mark_all_read": "Mark All as Read",
+    "no_notifications": "No notifications",
+    "just_now": "Just now",
+    "minutes_ago": "m ago",
+    "hours_ago": "h ago",
+    "days_ago": "d ago"
+  },
+  "global_search": {
+    "placeholder": "Search pages, skills, actions...",
+    "pages": "Pages",
+    "skills": "Skills",
+    "actions": "Actions",
+    "no_results": "No results found"
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "login_button": "Login",
+    "invalid_credentials": "Invalid username or password",
+    "subtitle": "Please enter your credentials to continue"
+  },
+  "dashboard": {
+    "system_health": "System Health",
+    "agent_team": "Agent Team",
+    "working": "Working",
+    "standby": "Standby",
+    "sleeping": "Sleeping",
+    "idle": "Idle",
+    "cpu_usage": "CPU",
+    "memory_usage": "Memory",
+    "disk_usage": "Disk",
+    "gateway_status": "Gateway Status",
+    "online": "Running",
+    "offline": "Offline",
+    "latency": "Latency",
+    "activities": "Activities",
+    "no_activities": "No activities",
+    "cron_jobs": "Cron Jobs",
+    "next_run": "Next Run",
+    "skills": "Available Skills",
+    "workspace": "Workspace",
+    "system": "System",
+    "recommended_skills": "Recommended Skills",
+    "installed_skills": "Installed Skills ({count})",
+    "show_all": "Show all ({count})",
+    "collapse": "Collapse",
+    "cron_executed": "Today {ran}/{total} executed",
+    "cron_failures": "⚠️ {count} total task failures, please check",
+    "yesterday_summary_not_generated": "📭 Yesterday's summary ({date}) has not been generated yet",
+    "areas_for_improvement": "🔍 Areas for Improvement",
+    "new_gaps": "+{count} new",
+    "no_improvements_needed": "🎉 No improvements needed — perfect!",
+    "recommended_skills_title": "💡 Recommended Skills",
+    "no_new_recommendations": "No new recommendations",
+    "signal_collection": "🔎 Signal collection",
+    "daily_review": "📋 Daily review",
+    "no_evolution_data": "No self-evolution data",
+    "heartbeat_tasks": "🫀 Heartbeat Tasks",
+    "yesterday_review": "📝 Yesterday's Review",
+    "daily_briefing_evolution": "🧬 Daily Briefing · Self-Evolution"
+  },
+  "locale": {
+    "code": "en-US"
+  },
+  "greeting": {
+    "late_night": "It's late, get some rest",
+    "early_morning": "Good morning! A new day begins",
+    "morning": "Good morning! Stay productive",
+    "noon": "Good afternoon! Don't forget to eat",
+    "afternoon": "Good afternoon! Keep it up",
+    "evening": "Good evening! Great work today",
+    "night": "Good night! Another great day"
+  },
+  "time": {
+    "just_now": "just now",
+    "min_ago": "{mins} min ago",
+    "hr_ago": "{hrs} hr ago",
+    "days_ago": "{days} days ago",
+    "never_run": "Never run",
+    "failures_count": "{count} failures"
+  },
+  "settings": {
+    "page_title": "Settings",
+    "page_subtitle": "System status, integrations, and configuration",
+    "refresh": "Refresh",
+    "last_updated": "Last updated",
+    "version_info": "Mission Control v1.0.0",
+    "dashboard_name": "OpenClaw Agent Dashboard",
+    "system_info": {
+      "title": "System Information",
+      "agent_name": "Agent Name",
+      "uptime": "Uptime",
+      "node_version": "Node.js Version",
+      "current_model": "Current Model",
+      "workspace": "Workspace",
+      "memory": "Memory",
+      "free": "Free"
+    },
+    "integrations": {
+      "title": "Integrations",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "configured": "Configured",
+      "not_configured": "Not Configured",
+      "last_activity": "Last activity"
+    },
+    "quick_actions": {
+      "title": "Quick Actions",
+      "restart_gateway": "Restart Gateway",
+      "clear_activity_logs": "Clear Activity Logs",
+      "view_gateway_logs": "View Gateway Logs",
+      "change_password": "Change Password",
+      "placeholder": "placeholder",
+      "password_changed": "Password changed successfully",
+      "gateway_restart_sent": "Gateway restart command sent (placeholder)",
+      "activity_logs_cleared": "Activity logs cleared",
+      "opening_logs": "Opening gateway logs... (placeholder)",
+      "failed_clear_logs": "Failed to clear activity logs"
+    }
+  }
+}

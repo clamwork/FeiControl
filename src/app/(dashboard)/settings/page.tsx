@@ -5,6 +5,7 @@ import { Settings, RefreshCw } from "lucide-react";
 import { SystemInfo } from "@/components/SystemInfo";
 import { IntegrationStatus } from "@/components/IntegrationStatus";
 import { QuickActions } from "@/components/QuickActions";
+import { useI18n } from "@/i18n";
 
 interface SystemData {
   agent: {
@@ -37,6 +38,7 @@ interface SystemData {
 }
 
 export default function SettingsPage() {
+  const { t } = useI18n();
   const [systemData, setSystemData] = useState<SystemData | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
@@ -75,10 +77,10 @@ export default function SettingsPage() {
             style={{ color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}
           >
             <Settings className="w-6 h-6 md:w-8 md:h-8" style={{ color: "var(--accent)" }} />
-            Settings
+            {t("settings.page_title")}
           </h1>
           <p className="text-sm md:text-base" style={{ color: "var(--text-secondary)" }}>
-            System status, integrations, and configuration
+            {t("settings.page_subtitle")}
           </p>
         </div>
 
@@ -93,7 +95,7 @@ export default function SettingsPage() {
           }}
         >
           <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
-          Refresh
+          {t("settings.refresh")}
         </button>
       </div>
 
@@ -131,8 +133,8 @@ export default function SettingsPage() {
         }}
       >
         <div className="flex items-center justify-between text-sm" style={{ color: "var(--text-muted)" }}>
-          <span>Mission Control v1.0.0</span>
-          <span>OpenClaw Agent Dashboard</span>
+          <span>{t("settings.version_info")}</span>
+          <span>{t("settings.dashboard_name")}</span>
         </div>
       </div>
     </div>

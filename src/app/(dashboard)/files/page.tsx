@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { List, Grid3X3 } from "lucide-react";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { FileBrowser } from "@/components/FileBrowser";
+import { useI18n } from "@/i18n";
 
 interface Workspace {
   id: string;
@@ -181,7 +182,7 @@ export default function FilesPage() {
                 <div style={{ display: "flex", gap: "4px", flexShrink: 0 }}>
                   <button
                     onClick={() => setViewMode("list")}
-                    title="Vista lista"
+                    title={t("files.view.list")}
                     style={{
                       padding: "5px 7px",
                       borderRadius: "6px",
@@ -199,7 +200,7 @@ export default function FilesPage() {
                   </button>
                   <button
                     onClick={() => setViewMode("grid")}
-                    title="Vista iconos"
+                    title={t("files.view.grid")}
                     style={{
                       padding: "5px 7px",
                       borderRadius: "6px",
