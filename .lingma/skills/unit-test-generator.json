@@ -1,0 +1,13 @@
+{
+  "name": "单元测试生成",
+  "description": "根据方法自动生成高覆盖单元测试",
+  "version": "1.0.0",
+  "location": "workspace",
+  "emoji": "🧪",
+  "triggers": [
+    "生成单元测试",
+    "写单测", 
+    "生成测试用例",
+    "junit测试"
+  ]
+}

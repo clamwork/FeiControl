@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "indentation": "4 spaces",
+    "maxLineLength": 100,
+    "namingConvention": "camelCase"
+  }
+}

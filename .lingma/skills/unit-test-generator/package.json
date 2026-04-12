@@ -1,0 +1,22 @@
+{
+  "name": "unit-test-generator",
+  "version": "1.0.0",
+  "description": "Generates comprehensive unit tests for code methods",
+  "main": "index.js",
+  "bin": {
+    "unit-test-generator": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "testing",
+    "unit-test",
+    "jest",
+    "junit",
+    "test-generation",
+    "mocking"
+  ],
+  "author": "FeiControl Team",
+  "license": "MIT"
+}

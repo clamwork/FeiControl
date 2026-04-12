@@ -1,0 +1,7 @@
+{
+  "name": "code-standard-checker",
+  "description": "Checks code against defined coding standards and best practices",
+  "version": "1.0.0",
+  "location": "workspace",
+  "emoji": "🔍"
+}

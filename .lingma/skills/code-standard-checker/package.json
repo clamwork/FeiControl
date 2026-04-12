@@ -1,0 +1,20 @@
+{
+  "name": "code-standard-checker",
+  "version": "1.0.0",
+  "description": "Checks code against defined coding standards and best practices",
+  "main": "index.js",
+  "bin": {
+    "code-standard-checker": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "code-quality",
+    "standards",
+    "linting",
+    "best-practices"
+  ],
+  "author": "FeiControl Team",
+  "license": "MIT"
+}

@@ -1,0 +1,8 @@
+{
+  "testFramework": "jest",
+  "mockLibrary": "jest-mock",
+  "coverageTarget": 80,
+  "includeEdgeCases": true,
+  "includeErrorCases": true,
+  "language": "auto-detect"
+}
