@@ -52,13 +52,64 @@
     "settings": "Settings",
     "agents": "agents"
   },
+  "office": {
+    "loading": "3D Office is loading...",
+    "retrying": "3D Office failed to load, retrying automatically ({current}/{max})...",
+    "timeout": "3D Office timed out after automatic retries.",
+    "reload_button": "Reload 3D Office",
+    "status": {
+      "working": "Working",
+      "idle": "Idle",
+      "sleeping": "Sleeping",
+      "thinking": "Thinking",
+      "error": "Error"
+    },
+    "panel": {
+      "current_task": "Current Task",
+      "stats": "Stats",
+      "model": "Model",
+      "sessions": "Sessions",
+      "total_tokens": "Total Tokens",
+      "last_active": "Last Active",
+      "recent_sessions": "Recent Sessions",
+      "no_session_history": "No session history",
+      "just_now": "Just now",
+      "min_ago": "{count} min ago",
+      "hr_ago": "{count} hr ago",
+      "days_ago": "{count} days ago"
+    },
+    "activity": {
+      "title": "Live Activity",
+      "entries": "{count} entries",
+      "no_activity": "No activity yet",
+      "seconds_ago": "{count}s ago",
+      "minutes_ago": "{count}m ago",
+      "hours_ago": "{count}h ago"
+    },
+    "agent_list": {
+      "title": "Agents"
+    },
+    "whiteboard": {
+      "click_to_view": "📋 Click to view",
+      "roadmap": "ROADMAP"
+    }
+  },
   "statusbar": {
     "system_status": "System Status",
     "cpu_usage": "CPU Usage",
     "memory_usage": "Memory Usage",
     "disk_usage": "Disk Usage",
     "uptime": "Uptime",
-    "active_agents": "Active Agents"
+    "active_agents": "Active Agents",
+    "labels": {
+      "cpu": "CPU",
+      "ram": "RAM",
+      "disk": "DISK",
+      "vpn": "VPN",
+      "ufw": "UFW",
+      "services": "SVC",
+      "uptime_label": "Uptime"
+    }
   },
   "about": {
     "title": "About",
@@ -507,7 +558,8 @@
     "status": {
       "published": "Published",
       "scheduled": "Scheduled"
-    }
+    },
+    "post_purpose": "📌 Post Purpose"
   },
   "terminal": {
     "title": "Terminal",

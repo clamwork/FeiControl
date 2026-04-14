@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Box, Text } from '@react-three/drei';
+import { useI18n } from '@/i18n';
 
 interface WhiteboardProps {
   position: [number, number, number];
@@ -10,6 +11,7 @@ interface WhiteboardProps {
 }
 
 export default function Whiteboard({ position, rotation = [0, 0, 0], onClick }: WhiteboardProps) {
+  const { t } = useI18n();
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -64,7 +66,7 @@ export default function Whiteboard({ position, rotation = [0, 0, 0], onClick }: 
         anchorX="center"
         anchorY="middle"
       >
-        ROADMAP
+        {t('office.whiteboard.roadmap')}
       </Text>
 
       {/* Hover label */}
@@ -76,7 +78,7 @@ export default function Whiteboard({ position, rotation = [0, 0, 0], onClick }: 
           anchorX="center"
           anchorY="middle"
         >
-          📋 Click to view
+          {t('office.whiteboard.click_to_view')}
         </Text>
       )}
     </group>

@@ -42,7 +42,7 @@ const DEFAULT_AGENT_CONFIG: Record<string, { emoji: string; color: string; name?
   codev: {
     emoji: "💻",
     color: "#f97316",
-    name: "Developer",
+    name: "developer",
     role: "Coding",
   },
   linkedin: {

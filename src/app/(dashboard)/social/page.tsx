@@ -79,11 +79,15 @@ function fmtDate(d: Date) {
 }
 
 const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "calendar.months.january", "calendar.months.february", "calendar.months.march", 
+  "calendar.months.april", "calendar.months.may", "calendar.months.june",
+  "calendar.months.july", "calendar.months.august", "calendar.months.september", 
+  "calendar.months.october", "calendar.months.november", "calendar.months.december",
 ];
 
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const WEEKDAYS = ["calendar.weekdays.mon", "calendar.weekdays.tue", "calendar.weekdays.wed", 
+                  "calendar.weekdays.thu", "calendar.weekdays.fri", "calendar.weekdays.sat", 
+                  "calendar.weekdays.sun"];
 
 /* ─── Post Detail Modal ─── */
 function PostModal({
@@ -93,9 +97,10 @@ function PostModal({
   post: SocialPost;
   onClose: () => void;
 }) {
+  const { t } = useI18n();
   const isLinkedin = post.platform === "linkedin";
-  const platformLabel = isLinkedin ? "LinkedIn" : "Xiaohongshu";
-  const statusLabel = post.status === "published" ? "✅ Published" : "🕐 Scheduled";
+  const platformLabel = isLinkedin ? t("social.platform.linkedin") : t("social.platform.xiaohongshu");
+  const statusLabel = post.status === "published" ? t("social.stats.published") : t("social.stats.scheduled");
   const catStyle = CAT_COLORS[post.purpose?.category || ""] || {
     bg: "rgba(255,255,255,0.06)",
     color: "var(--text-secondary)",
@@ -239,7 +244,7 @@ function PostModal({
                 letterSpacing: ".3px",
               }}
             >
-              📌 Post Purpose
+              {t("social.post_purpose")}
             </h4>
             {post.purpose.category && (
               <span
@@ -324,6 +329,10 @@ export default function SocialPage() {
   const [loading, setLoading] = useState(true);
   const [monthOffset, setMonthOffset] = useState(0);
   const [selectedPost, setSelectedPost] = useState<SocialPost | null>(null);
+
+  // 翻译月份和星期名称
+  const translatedMonths = MONTH_NAMES.map(key => t(key));
+  const translatedWeekdays = WEEKDAYS.map(key => t(key));
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -436,7 +445,7 @@ export default function SocialPage() {
                   textAlign: "center",
                 }}
               >
-                {year} · {MONTH_NAMES[month]}
+                {year} · {translatedMonths[month]}
               </span>
               <button
                 onClick={() => setMonthOffset((o) => o + 1)}
@@ -469,7 +478,7 @@ export default function SocialPage() {
                   color: "var(--text-secondary)",
                 }}
               >
-                Today
+                {t("social.today")}
               </button>
             </div>
           </div>
@@ -488,7 +497,7 @@ export default function SocialPage() {
               textTransform: "uppercase",
             }}
           >
-            {WEEKDAYS.map((d) => (
+            {translatedWeekdays.map((d) => (
               <div key={d}>{d}</div>
             ))}
           </div>
@@ -617,7 +626,7 @@ export default function SocialPage() {
                 color: "var(--text-primary)",
               }}
             >
-              📊 This Month's Stats
+              {t("social.stats.title")}
             </h3>
             {/* Platform counts */}
             <div
@@ -647,7 +656,7 @@ export default function SocialPage() {
                     display: "inline-block",
                   }}
                 />
-                LinkedIn
+                {t("social.platform.linkedin")}
               </div>
               <span
                 style={{
@@ -656,7 +665,7 @@ export default function SocialPage() {
                   color: "var(--text-primary)",
                 }}
               >
-                {linkedinCount} posts
+                {t("social.stats.posts_count", { count: linkedinCount })}
               </span>
             </div>
             <div
@@ -686,7 +695,7 @@ export default function SocialPage() {
                     display: "inline-block",
                   }}
                 />
-                Xiaohongshu
+                {t("social.platform.xiaohongshu")}
               </div>
               <span
                 style={{
@@ -695,7 +704,7 @@ export default function SocialPage() {
                   color: "var(--text-primary)",
                 }}
               >
-                {xhsCount} posts
+                {t("social.stats.posts_count", { count: xhsCount })}
               </span>
             </div>
 
@@ -715,7 +724,7 @@ export default function SocialPage() {
                   fontWeight: 600,
                 }}
               >
-                Category Distribution
+                {t("social.stats.category_distribution")}
               </div>
               {Object.entries(cats).map(([cat, count]) => {
                 const style = CAT_COLORS[cat] || {
@@ -767,7 +776,7 @@ export default function SocialPage() {
                   fontWeight: 600,
                 }}
               >
-                Publish Status
+                {t("social.stats.publish_status")}
               </div>
               <div
                 style={{
@@ -778,7 +787,7 @@ export default function SocialPage() {
                   color: "var(--text-secondary)",
                 }}
               >
-                <span>✅ Published</span>
+                <span>{t("social.stats.published")}</span>
                 <span>{publishedCount}</span>
               </div>
               <div
@@ -790,7 +799,7 @@ export default function SocialPage() {
                   color: "var(--text-secondary)",
                 }}
               >
-                <span>🕐 Scheduled</span>
+                <span>{t("social.stats.scheduled")}</span>
                 <span>{plannedCount}</span>
               </div>
             </div>
@@ -813,7 +822,7 @@ export default function SocialPage() {
                 color: "var(--text-primary)",
               }}
             >
-              📕 Xiaohongshu
+              📕 {t("social.platform.xiaohongshu")}
             </h3>
             <div style={{ textAlign: "center", padding: "20px 0" }}>
               <span style={{ fontSize: 36, display: "block", marginBottom: 8 }}>
@@ -825,7 +834,7 @@ export default function SocialPage() {
                   fontSize: 13,
                 }}
               >
-                Coming Soon
+                {t("social.coming_soon")}
               </p>
             </div>
           </div>
@@ -843,7 +852,7 @@ export default function SocialPage() {
             color: "var(--text-muted)",
           }}
         >
-          Last updated: {new Date(data.lastUpdated).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })}
+          {t("social.last_updated")} {new Date(data.lastUpdated).toLocaleString("en-US", { timeZone: "America/Los_Angeles" })}
         </p>
       )}
     </div>

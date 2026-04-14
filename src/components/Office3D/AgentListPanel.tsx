@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/i18n';
 import type { AgentConfig, AgentState } from './agentsConfig';
 
 interface AgentListPanelProps {
@@ -10,6 +11,8 @@ interface AgentListPanelProps {
 }
 
 export default function AgentListPanel({ agents, agentStates, selectedAgent, onSelectAgent }: AgentListPanelProps) {
+  const { t } = useI18n();
+  
   const getStatusDot = (status: string) => {
     switch (status) {
       case 'working': return 'bg-yellow-400 animate-pulse';
@@ -25,7 +28,7 @@ export default function AgentListPanel({ agents, agentStates, selectedAgent, onS
     <div className="absolute top-0 left-0 z-10 w-40 h-full flex flex-col">
       {/* Header */}
       <div className="bg-black/40 backdrop-blur-xl border-b border-white/[0.06] px-3 py-3">
-        <span className="text-sm font-bold text-white">Agents</span>
+        <span className="text-sm font-bold text-white">{t('office.agent_list.title')}</span>
       </div>
 
       {/* Agent list */}

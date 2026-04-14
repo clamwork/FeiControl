@@ -52,13 +52,64 @@
     "settings": "设置",
     "agents": "智能体"
   },
+  "office": {
+    "loading": "3D 办公室正在加载...",
+    "retrying": "3D 办公室加载失败，正在自动重试 ({current}/{max})...",
+    "timeout": "3D 办公室在自动重试后超时。",
+    "reload_button": "重新加载 3D 办公室",
+    "status": {
+      "working": "工作中",
+      "idle": "空闲",
+      "sleeping": "休眠",
+      "thinking": "思考中",
+      "error": "错误"
+    },
+    "panel": {
+      "current_task": "当前任务",
+      "stats": "统计信息",
+      "model": "模型",
+      "sessions": "会话数",
+      "total_tokens": "总 Token 数",
+      "last_active": "最后活跃",
+      "recent_sessions": "最近会话",
+      "no_session_history": "暂无会话历史",
+      "just_now": "刚刚",
+      "min_ago": "{count} 分钟前",
+      "hr_ago": "{count} 小时前",
+      "days_ago": "{count} 天前"
+    },
+    "activity": {
+      "title": "实时活动",
+      "entries": "{count} 条记录",
+      "no_activity": "暂无活动",
+      "seconds_ago": "{count} 秒前",
+      "minutes_ago": "{count} 分钟前",
+      "hours_ago": "{count} 小时前"
+    },
+    "agent_list": {
+      "title": "智能体列表"
+    },
+    "whiteboard": {
+      "click_to_view": "📋 点击查看",
+      "roadmap": "路线图"
+    }
+  },
   "statusbar": {
     "system_status": "系统状态",
     "cpu_usage": "CPU 使用率",
     "memory_usage": "内存使用率",
     "disk_usage": "磁盘使用率",
     "uptime": "运行时间",
-    "active_agents": "活跃的智能体"
+    "active_agents": "活跃的智能体",
+    "labels": {
+      "cpu": "CPU",
+      "ram": "内存",
+      "disk": "磁盘",
+      "vpn": "VPN",
+      "ufw": "防火墙",
+      "services": "服务",
+      "uptime_label": "运行"
+    }
   },
   "about": {
     "title": "关于",
@@ -507,7 +558,8 @@
     "status": {
       "published": "已发布",
       "scheduled": "已计划"
-    }
+    },
+    "post_purpose": "📌 发布目的"
   },
   "terminal": {
     "title": "终端",

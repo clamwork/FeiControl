@@ -198,35 +198,64 @@ export async function GET() {
     
     const config = JSON.parse(readFileSync(configPath, "utf-8"));
 
-    // 验证配置结构
-    if (!config.agents || !Array.isArray(config.agents.list)) {
-      console.warn("OpenClaw 配置中缺少 agents.list 数组");
-      return NextResponse.json({ 
-        agents: [], 
-        timestamp: Date.now(),
-        warning: "配置格式不正确：缺少 agents.list 数组"
-      });
+    // 从 agents 目录扫描所有 agent（新版本的 OpenClaw 使用目录结构）
+    const agentsDir = join(OPENCLAW_DIR, "agents");
+    let agentIds: string[] = [];
+    
+    if (existsSync(agentsDir)) {
+      agentIds = readdirSync(agentsDir)
+        .filter((name: string) => {
+          const fullPath = join(agentsDir, name);
+          const stat = statSync(fullPath);
+          return stat.isDirectory();
+        });
+    }
+    
+    // 如果也没有找到 agent 目录，尝试从配置文件读取
+    if (agentIds.length === 0 && config.agents && Array.isArray(config.agents.list)) {
+      agentIds = config.agents.list.map((agent: any) => agent.id);
+    }
+    
+    // 如果仍然没有 agent，使用默认配置创建默认 agent
+    if (agentIds.length === 0) {
+      console.log("未找到任何 Agent，使用默认配置");
+      agentIds = ["main"];
     }
 
-    const agents = config.agents.list.map((agent: any) => {
-      try {
-        const state = getAgentStatusFromSessions(agent.id);
-        const stats = getAgentSessionStats(agent.id);
+    // 获取默认模型配置
+    const defaultModel = typeof config.agents?.defaults?.model === "string"
+      ? config.agents.defaults.model
+      : config.agents?.defaults?.model?.primary;
 
-        // Get model from config
-        const agentModel = typeof agent.model === "string"
-          ? agent.model
-          : agent.model?.primary;
-        const defaultModel = typeof config.agents.defaults.model === "string"
-          ? config.agents.defaults.model
-          : config.agents.defaults.model?.primary;
-        const model = (agentModel || defaultModel || "unknown")
-          .replace("github-copilot/", "");
+    const agents = agentIds.map((agentId: string) => {
+      try {
+        const state = getAgentStatusFromSessions(agentId);
+        const stats = getAgentSessionStats(agentId);
+
+        // 尝试从 agent 目录读取配置
+        const agentConfigPath = join(OPENCLAW_DIR, "agents", agentId, "agent.json");
+        let agentName = agentId;
+        let agentModel = defaultModel;
+        
+        if (existsSync(agentConfigPath)) {
+          try {
+            const agentConfig = JSON.parse(readFileSync(agentConfigPath, "utf-8"));
+            agentName = agentConfig.name || agentId;
+            const model = typeof agentConfig.model === "string"
+              ? agentConfig.model
+              : agentConfig.model?.primary;
+            if (model) agentModel = model;
+          } catch {
+            // 忽略 agent 配置文件读取错误
+          }
+        }
+
+        const model = (agentModel || "unknown").replace("github-copilot/", "");
 
         // Get task hint from latest session if active
         let taskHint: string | null = null;
         if (state.isActive) {
-          const sessionsDir = join(OPENCLAW_DIR, "agents", agent.id, "sessions");
+          const sessionsDir = join(OPENCLAW_DIR, "agents", agentId, "sessions");
           if (existsSync(sessionsDir)) {
             const files = readdirSync(sessionsDir)
               .filter((f: string) => f.endsWith(".jsonl"))
@@ -239,8 +268,8 @@ export async function GET() {
         }
 
         return {
-          id: agent.id,
-          name: agent.name || agent.id,
+          id: agentId,
+          name: agentName,
           model,
           currentTask: taskHint || state.currentTask,
           isActive: state.isActive,
@@ -251,11 +280,11 @@ export async function GET() {
           recentSessions: stats.recentSessions,
         };
       } catch (agentError) {
-        console.error(`处理 Agent "${agent.id}" 时出错:`, agentError);
+        console.error(`处理 Agent "${agentId}" 时出错:`, agentError);
         // 返回该 agent 的基本信息，即使获取详细状态失败
         return {
-          id: agent.id,
-          name: agent.name || agent.id,
+          id: agentId,
+          name: agentId,
           model: "unknown",
           currentTask: null,
           isActive: false,

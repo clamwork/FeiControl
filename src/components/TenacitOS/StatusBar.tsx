@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Cpu, HardDrive, MemoryStick, Shield, ShieldCheck, Clock } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 interface SystemStats {
   cpu: number;
@@ -15,6 +16,7 @@ interface SystemStats {
 }
 
 export function StatusBar() {
+  const { t } = useI18n();
   const [stats, setStats] = useState<SystemStats>({
     cpu: 0,
     ram: { used: 0, total: 4 },
@@ -118,12 +120,12 @@ export function StatusBar() {
       }}
     >
       {/* CPU */}
-      <StatusMetric icon={Cpu} label="CPU" value={`${stats.cpu}%`} barPercent={stats.cpu} color={cpuColor} />
+      <StatusMetric icon={Cpu} label={t('statusbar.labels.cpu')} value={`${stats.cpu}%`} barPercent={stats.cpu} color={cpuColor} />
 
       {/* RAM */}
       <StatusMetric
         icon={MemoryStick}
-        label="RAM"
+        label={t('statusbar.labels.ram')}
         value={`${stats.ram.used.toFixed(1)}/${stats.ram.total}GB`}
         barPercent={ramPercent}
         color={ramColor}
@@ -132,7 +134,7 @@ export function StatusBar() {
       {/* Disk */}
       <StatusMetric
         icon={HardDrive}
-        label="DISK"
+        label={t('statusbar.labels.disk')}
         value={`${diskPercent.toFixed(0)}%`}
         barPercent={diskPercent}
         color={diskColor}
@@ -160,7 +162,7 @@ export function StatusBar() {
             color: "var(--text-muted)",
           }}
         >
-          VPN
+          {t('statusbar.labels.vpn')}
         </span>
       </div>
 
@@ -182,7 +184,7 @@ export function StatusBar() {
             color: "var(--text-muted)",
           }}
         >
-          UFW
+          {t('statusbar.labels.ufw')}
         </span>
       </div>
 
@@ -199,7 +201,7 @@ export function StatusBar() {
             color: "var(--text-muted)",
           }}
         >
-          SVC: {stats.activeServices}/{stats.totalServices}
+          {t('statusbar.labels.services')}: {stats.activeServices}/{stats.totalServices}
         </span>
       </div>
 
@@ -217,7 +219,7 @@ export function StatusBar() {
             color: "var(--text-muted)",
           }}
         >
-          Uptime: {stats.uptime}
+          {t('statusbar.labels.uptime_label')}: {stats.uptime}
         </span>
       </div>
     </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useI18n } from '@/i18n';
 import type { AgentConfig, AgentState } from './agentsConfig';
 
 interface AgentStatusBarProps {
@@ -10,6 +11,8 @@ interface AgentStatusBarProps {
 }
 
 export default function AgentStatusBar({ agents, agentStates, selectedAgent, onSelectAgent }: AgentStatusBarProps) {
+  const { t } = useI18n();
+  
   const getStatusDot = (status: string) => {
     switch (status) {
       case 'working': return 'bg-yellow-400 animate-pulse';
@@ -23,12 +26,12 @@ export default function AgentStatusBar({ agents, agentStates, selectedAgent, onS
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'working': return 'Working';
-      case 'thinking': return 'Thinking';
-      case 'error': return 'Error';
-      case 'sleeping': return 'Sleeping';
+      case 'working': return t('office.status.working');
+      case 'thinking': return t('office.status.thinking');
+      case 'error': return t('office.status.error');
+      case 'sleeping': return t('office.status.sleeping');
       case 'idle':
-      default: return 'Idle';
+      default: return t('office.status.idle');
     }
   };
 
@@ -71,7 +74,7 @@ export default function AgentStatusBar({ agents, agentStates, selectedAgent, onS
           <span className="text-blue-400 font-medium">
             {agents.find(a => a.id === selectedAgent)?.name}
           </span>
-          {agentStates[selectedAgent]?.status === 'working' ? ' Working on it  ' : ' '}
+          {agentStates[selectedAgent]?.status === 'working' ? ` ${t('office.status.working')}  ` : ' '}
           <span className="text-gray-500">
             {agentStates[selectedAgent]?.currentTask || ''}
           </span>

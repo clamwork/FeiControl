@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useI18n } from '@/i18n';
 
 interface LiveEvent {
   id: string;
@@ -13,18 +14,19 @@ interface LiveEvent {
   timestamp: number;
 }
 
-function relativeTime(ts: number): string {
+function relativeTime(ts: number, t: (key: string, params?: Record<string, any>) => string): string {
   const diff = Date.now() - ts;
   const seconds = Math.floor(diff / 1000);
-  if (seconds < 30) return 'Just now';
-  if (seconds < 60) return `${seconds}s ago`;
+  if (seconds < 30) return t('office.activity.seconds_ago', { count: seconds });
+  if (seconds < 60) return t('office.activity.seconds_ago', { count: seconds });
   const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 60) return t('office.activity.minutes_ago', { count: minutes });
   const hours = Math.floor(minutes / 60);
-  return `${hours}h ago`;
+  return t('office.activity.hours_ago', { count: hours });
 }
 
 export default function LiveActivityPanel() {
+  const { t } = useI18n();
   const [events, setEvents] = useState<LiveEvent[]>([]);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -56,9 +58,9 @@ export default function LiveActivityPanel() {
       >
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-green-500 rounded-full" />
-          <span className="text-sm font-bold">Live Activity</span>
+          <span className="text-sm font-bold">{t('office.activity.title')}</span>
           <span className="ml-auto text-xs text-gray-400">
-            {events.length} entries
+            {t('office.activity.entries', { count: events.length })}
           </span>
         </div>
         <span className="text-xs text-gray-400">{collapsed ? '▼' : '▲'}</span>
@@ -69,7 +71,7 @@ export default function LiveActivityPanel() {
         <div className="bg-black/40 backdrop-blur-xl rounded-b-xl border border-t-0 border-white/[0.06] max-h-[50vh] overflow-y-auto">
           {events.length === 0 ? (
             <div className="px-4 py-6 text-center text-gray-500 text-sm">
-              No activity yet
+              {t('office.activity.no_activity')}
             </div>
           ) : (
             <div className="divide-y divide-white/5">
@@ -87,7 +89,7 @@ export default function LiveActivityPanel() {
                       <div className="flex items-center gap-1.5 mt-0.5">
                         <span className="text-[10px] text-gray-500">{event.agentName}</span>
                         <span className="text-[10px] text-gray-600">·</span>
-                        <span className="text-[10px] text-gray-500">{relativeTime(event.timestamp)}</span>
+                        <span className="text-[10px] text-gray-500">{relativeTime(event.timestamp, t)}</span>
                       </div>
                     </div>
                   </div>

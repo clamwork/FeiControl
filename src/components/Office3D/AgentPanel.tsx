@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { useI18n } from '@/i18n';
 import type { AgentConfig, AgentState } from './agentsConfig';
 
 interface AgentPanelProps {
@@ -16,19 +17,20 @@ function formatTokens(n?: number): string {
   return String(n);
 }
 
-function timeAgo(ts: string | number | undefined): string {
+function timeAgo(ts: string | number | undefined, t: (key: string, params?: Record<string, any>) => string): string {
   if (!ts) return '—';
   const ms = typeof ts === 'number' ? ts : new Date(ts).getTime();
   const diff = Date.now() - ms;
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'Just now';
-  if (mins < 60) return `${mins} min ago`;
+  if (mins < 1) return t('office.panel.just_now');
+  if (mins < 60) return t('office.panel.min_ago', { count: mins });
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs} hr ago`;
-  return `${Math.floor(hrs / 24)} days ago`;
+  if (hrs < 24) return t('office.panel.hr_ago', { count: hrs });
+  return t('office.panel.days_ago', { count: Math.floor(hrs / 24) });
 }
 
 export default function AgentPanel({ agent, state, onClose }: AgentPanelProps) {
+  const { t } = useI18n();
   const status = state?.status ?? 'idle';
 
   const getStatusColor = () => {
@@ -64,7 +66,18 @@ export default function AgentPanel({ agent, state, onClose }: AgentPanelProps) {
     }
   };
 
-  const statusLabel = status === 'working' ? 'Working' : status === 'thinking' ? 'Thinking' : status === 'error' ? 'Error' : status === 'sleeping' ? 'Sleeping' : 'Idle';
+  const getStatusLabel = () => {
+    switch (status) {
+      case 'working': return t('office.status.working');
+      case 'thinking': return t('dashboard.thinking') || 'Thinking';
+      case 'error': return t('dashboard.error') || 'Error';
+      case 'sleeping': return t('office.status.sleeping');
+      case 'idle':
+      default: return t('office.status.idle');
+    }
+  };
+
+  const statusLabel = getStatusLabel();
 
   return (
     <div className="absolute right-0 top-0 h-full w-full sm:w-96 bg-black/90 backdrop-blur-md text-white p-4 sm:p-6 shadow-2xl border-l border-white/10 overflow-y-auto z-20">
@@ -99,51 +112,51 @@ export default function AgentPanel({ agent, state, onClose }: AgentPanelProps) {
       {/* Current task */}
       {state?.currentTask && (
         <div className="mb-6">
-          <h3 className="text-sm font-semibold text-gray-400 mb-2">Current Task</h3>
+          <h3 className="text-sm font-semibold text-gray-400 mb-2">{t('office.panel.current_task')}</h3>
           <p className="text-base">{state.currentTask}</p>
         </div>
       )}
 
       {/* Stats */}
       <div className="space-y-4 mb-6">
-        <h3 className="text-sm font-semibold text-gray-400">Stats</h3>
+        <h3 className="text-sm font-semibold text-gray-400">{t('office.panel.stats')}</h3>
         
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white/5 p-3 rounded-lg">
-            <p className="text-xs text-gray-400 mb-1">Model</p>
+            <p className="text-xs text-gray-400 mb-1">{t('office.panel.model')}</p>
             <p className="text-sm font-bold">{state?.model || 'N/A'}</p>
           </div>
 
           <div className="bg-white/5 p-3 rounded-lg">
-            <p className="text-xs text-gray-400 mb-1">Sessions</p>
+            <p className="text-xs text-gray-400 mb-1">{t('office.panel.sessions')}</p>
             <p className="text-lg font-bold">{state?.sessionCount ?? 0}</p>
           </div>
 
           <div className="bg-white/5 p-3 rounded-lg">
-            <p className="text-xs text-gray-400 mb-1">Total Tokens</p>
+            <p className="text-xs text-gray-400 mb-1">{t('office.panel.total_tokens')}</p>
             <p className="text-lg font-bold">{formatTokens(state?.totalTokens)}</p>
           </div>
 
           <div className="bg-white/5 p-3 rounded-lg">
-            <p className="text-xs text-gray-400 mb-1">Last Active</p>
-            <p className="text-sm font-bold">{timeAgo(state?.lastActivity)}</p>
+            <p className="text-xs text-gray-400 mb-1">{t('office.panel.last_active')}</p>
+            <p className="text-sm font-bold">{timeAgo(state?.lastActivity, t)}</p>
           </div>
         </div>
       </div>
 
       {/* Recent Sessions */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-400 mb-3">Recent Sessions</h3>
+        <h3 className="text-sm font-semibold text-gray-400 mb-3">{t('office.panel.recent_sessions')}</h3>
         <div className="space-y-2">
           {state?.recentSessions && state.recentSessions.length > 0 ? (
             state.recentSessions.map((sess, i) => (
               <div key={i} className="bg-white/5 p-3 rounded-lg text-sm">
-                <p className="text-gray-400 text-xs mb-1">{timeAgo(sess.time)}</p>
+                <p className="text-gray-400 text-xs mb-1">{timeAgo(sess.time, t)}</p>
                 <p className="truncate">{sess.task}</p>
               </div>
             ))
           ) : (
-            <div className="bg-white/5 p-3 rounded-lg text-sm text-gray-500">No session history</div>
+            <div className="bg-white/5 p-3 rounded-lg text-sm text-gray-500">{t('office.panel.no_session_history')}</div>
           )}
         </div>
       </div>

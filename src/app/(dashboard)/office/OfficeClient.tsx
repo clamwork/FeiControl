@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { useI18n } from '@/i18n';
 import Office3D from '@/components/Office3D/Office3D';
 
 const CANVAS_CHECK_INTERVAL_MS = 500;
@@ -19,6 +20,7 @@ export default function OfficeClient() {
   const [retryCount, setRetryCount] = useState(0);
   const [status, setStatus] = useState<'booting' | 'retrying' | 'ready' | 'failed'>('booting');
   const isMobile = useIsMobile();
+  const { t } = useI18n();
 
   const remountOffice = useCallback((manual = false) => {
     if (manual) {
@@ -93,20 +95,20 @@ export default function OfficeClient() {
           <div className="rounded-xl border border-white/10 bg-slate-950/70 px-5 py-4 text-center text-sm text-slate-100 shadow-2xl backdrop-blur">
             {status === 'failed' ? (
               <div className="pointer-events-auto space-y-3">
-                <p>3D Office timed out after automatic retries.</p>
+                <p>{t("office.timeout")}</p>
                 <button
                   type="button"
                   onClick={() => remountOffice(true)}
                   className="rounded-lg bg-amber-400 px-4 py-2 font-medium text-slate-950 transition hover:bg-amber-300"
                 >
-                  Reload 3D Office
+                  {t("office.reload_button")}
                 </button>
               </div>
             ) : (
               <p>
                 {retryCount === 0
-                  ? '3D Office is loading...'
-                  : `3D Office failed to load, retrying automatically (${retryCount}/${MAX_AUTO_RETRIES})...`}
+                  ? t("office.loading")
+                  : t("office.retrying", { current: retryCount, max: MAX_AUTO_RETRIES })}
               </p>
             )}
           </div>
