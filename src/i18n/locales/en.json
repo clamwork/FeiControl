@@ -24,7 +24,11 @@
     "warning": "Warning",
     "info": "Info",
     "refresh": "Refresh",
-    "openclaw": "OpenClaw"
+    "openclaw": "OpenClaw",
+    "more": "More",
+    "collapse": "Collapse",
+    "no_data": "No data",
+    "unable_to_fetch": "Unable to fetch data"
   },
   "topbar": {
     "version": "v",
@@ -169,7 +173,8 @@
     "footer": {
       "built_with": "Built with ♥ on",
       "tagline": "— Your AI co-pilot"
-    }
+    },
+    "tech_stack": "OpenClaw + Claude"
   },
   "actions": {
     "title": "Quick Actions",
@@ -667,12 +672,14 @@
     "password": "Password",
     "login_button": "Login",
     "invalid_credentials": "Invalid username or password",
+    "connection_error": "Connection error",
     "subtitle": "Please enter your credentials to continue"
   },
   "dashboard": {
     "system_health": "System Health",
     "agent_team": "Agent Team",
     "working": "Working",
+    "running": "Running...",
     "standby": "Standby",
     "sleeping": "Sleeping",
     "idle": "Idle",
@@ -767,5 +774,9 @@
       "opening_logs": "Opening gateway logs... (placeholder)",
       "failed_clear_logs": "Failed to clear activity logs"
     }
+  },
+  "language": {
+    "zh": "Chinese",
+    "en": "English"
   }
 }

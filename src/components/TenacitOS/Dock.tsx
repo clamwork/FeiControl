@@ -164,7 +164,7 @@ export function Dock() {
                   : (isOffice ? "rgba(255,255,255,0.4)" : "var(--text-muted)"),
               }}
             >
-              More
+              {t("common.more")}
             </span>
           </button>
         </nav>

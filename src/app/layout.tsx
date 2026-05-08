@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora, JetBrains_Mono } from "next/font/google";
 import { I18nProvider } from "@/i18n";
+import { HtmlLangSetter } from "@/components/HtmlLangSetter";
 import "./globals.css";
 
 const inter = Inter({ 
@@ -56,6 +57,7 @@ export default function RootLayout({
         }}
       >
         <I18nProvider>
+          <HtmlLangSetter />
           {children}
         </I18nProvider>
       </body>

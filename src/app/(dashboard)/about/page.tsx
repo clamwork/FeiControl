@@ -51,18 +51,18 @@ export default function AboutPage() {
 
   // Personality traits with i18n
   const personality = [
-    { trait: t("about.personality.direct") || "Direct", desc: t("about.personality.direct_desc") || "Gets straight to the point" },
-    { trait: t("about.personality.efficient") || "Efficient", desc: t("about.personality.efficient_desc") || "Results-oriented" },
-    { trait: t("about.personality.curious") || "Curious", desc: t("about.personality.curious_desc") || "Always learning" },
-    { trait: t("about.personality.loyal") || "Loyal", desc: t("about.personality.loyal_desc") || "Your success is my success" },
+    { trait: t("about.direct"), desc: t("about.gets_straight_to_point") },
+    { trait: t("about.efficient"), desc: t("about.results_oriented") },
+    { trait: t("about.curious"), desc: t("about.always_learning") },
+    { trait: t("about.loyal"), desc: t("about.your_success_is_my_success") },
   ];
 
   // Philosophies with i18n
   const philosophies = [
-    t("about.philosophy.actions"),
-    t("about.philosophy.opinions"),
-    t("about.philosophy.try_first"),
-    t("about.philosophy.privacy"),
+    t("about.philosophy_1"),
+    t("about.philosophy_2"),
+    t("about.philosophy_3"),
+    t("about.philosophy_4"),
   ];
 
   useEffect(() => {
@@ -170,7 +170,7 @@ export default function AboutPage() {
               {BRANDING.birthDate && (
                 <span className="flex items-center justify-center sm:justify-start gap-1.5">
                   <Calendar className="w-4 h-4" />
-                  {t("about.born_label")} {new Date(BRANDING.birthDate).toLocaleDateString("en-US", {
+                  {t("about.born_label")} {new Date(BRANDING.birthDate).toLocaleDateString(t("locale.code"), {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -188,7 +188,7 @@ export default function AboutPage() {
                   className="w-4 h-4"
                   style={{ color: "var(--accent)" }}
                 />
-                OpenClaw + Claude
+                {t("about.tech_stack")}
               </span>
             </div>
           </div>
@@ -326,26 +326,22 @@ export default function AboutPage() {
             style={{ color: "var(--text-secondary)", lineHeight: 1.7 }}
           >
             <p>
-              I am{" "}
+              {t("about.intro.i_am")}{" "}
               <strong style={{ color: "var(--text-primary)" }}>
                 {agentName} {agentEmoji}
               </strong>
-              , an AI agent running on{" "}
-              <span style={{ color: "var(--accent)" }}>OpenClaw</span> with
-              Claude as my brain.
+              {t("about.intro.running_on")}{" "}
+              <span style={{ color: "var(--accent)" }}>OpenClaw</span>
+              {t("about.intro.with_claude")}
             </p>
             <p>
-              My purpose is to assist{" "}
+              {t("about.intro.purpose")}{" "}
               <strong style={{ color: "var(--text-primary)" }}>
                 {ownerUsername}
               </strong>{" "}
-              with daily tasks: managing communications, scheduling, research,
-              file management, and acting as a digital co-pilot.
+              {t("about.intro.tasks")}
             </p>
-            <p>
-              I have access to workspaces, calendars, and integrations — a
-              privilege I handle with care and respect.
-            </p>
+            <p>{t("about.intro.access")}</p>
           </div>
         </div>
 

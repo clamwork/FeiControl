@@ -3,8 +3,10 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Terminal, Lock, AlertCircle } from "lucide-react";
+import { useI18n } from "@/i18n";
 
 function LoginForm() {
+  const { t } = useI18n();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,10 +32,10 @@ function LoginForm() {
         router.push(from);
         router.refresh();
       } else {
-        setError("Incorrect password");
+        setError(t("login.invalid_credentials"));
       }
     } catch {
-      setError("Connection error");
+      setError(t("login.connection_error"));
     }
 
     setLoading(false);
@@ -70,7 +72,7 @@ function LoginForm() {
           className="text-sm"
           style={{ color: 'var(--text-secondary)' }}
         >
-          Enter your password
+          {t("login.subtitle")}
         </p>
       </div>
 
@@ -91,7 +93,7 @@ function LoginForm() {
               border: '1px solid var(--border)',
               color: 'var(--text-primary)',
             }}
-            placeholder="Password"
+            placeholder={t("login.password")}
             required
           />
         </div>
@@ -118,7 +120,7 @@ function LoginForm() {
             color: 'white',
           }}
         >
-          {loading ? "Verifying..." : "Sign In"}
+          {loading ? t("common.loading") : t("login.login_button")}
         </button>
       </form>
 

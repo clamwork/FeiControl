@@ -311,7 +311,7 @@ export default function DashboardPage() {
                   <div className="min-w-0 flex-1">
                     <div className="text-xs sm:text-xs font-bold truncate" style={{ color: "var(--text-primary)" }}>{agent.name}</div>
                     <div className="text-[11px] sm:text-[10px] truncate" style={{ color: dot.textColor }}>
-                      {status === "working" ? (office?.currentTask || "Running...") : dot.label}
+                      {status === "working" ? (office?.currentTask || t("dashboard.running")) : dot.label}
                     </div>
                     <div className="text-[11px] sm:text-[10px] truncate" style={{ color: "var(--text-muted)" }}>{model}</div>
                   </div>
