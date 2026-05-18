@@ -1,161 +1,61 @@
-# FeiControl — Roadmap
+# FeiControl — 产品迭代路线图
 
-This document describes the planned feature development for FeiControl. Items are organized by theme and priority tier. Checked items are already implemented in the current release.
-
----
-
-## ✅ Already Implemented
-
-### Core Dashboard
-- [x] Real-time host metrics (CPU, RAM, Disk, Network) + PM2/Docker status
-- [x] Agent dashboard with status, model, session count, and token usage
-- [x] Cost tracking with daily trends and per-agent breakdown (SQLite)
-- [x] Activity feed with heatmap and chart views
-
-### Cron Manager
-- [x] List all scheduled jobs with status
-- [x] Enable / disable individual jobs
-- [x] Delete jobs with confirmation
-- [x] Manually trigger a job ("Run Now")
-- [x] Inline run history per job
-- [x] Weekly timeline view — 7-day calendar with jobs positioned by time, interval jobs shown as recurring
-
-### Session History
-- [x] List all OpenClaw sessions (main, cron, sub-agent, direct)
-- [x] Visual type badges and filter tabs
-- [x] Token usage with context-window progress bar and color coding
-- [x] Model badge display
-- [x] Relative timestamps ("2 hours ago")
-- [x] Transcript viewer with message bubbles (user / assistant / tool calls)
-- [x] Search and filter by key / model
-- [x] Stats summary cards
-
-### Notifications
-- [x] REST API for notification CRUD (`GET / POST / PATCH / DELETE /api/notifications`)
-- [x] Bell icon with unread badge in top bar
-- [x] Notification types: info, success, warning, error
-- [x] Mark as read / mark all read / delete
-- [x] Internal link support
-- [x] Auto-refresh polling
-- [x] Cron "Run Now" generates a notification
-
-### 3D Office
-- [x] 3D office environment with one desk per agent (React Three Fiber)
-- [x] Colored voxel avatars, custom GLB support
-- [x] Click desk → agent activity panel
-- [x] Status indicator per desk (Working / Idle / Error)
-
-### Auth & Security
-- [x] Password-protected with rate-limited login (5 attempts → 15-min lockout)
-- [x] Auth middleware on all routes
-- [x] `httpOnly` + `secure` cookie in production
-- [x] Terminal with strict command allowlist
+> 版本: v0.1.0 → 目标 v1.0.0
+> 本路线图根据项目代码分析、现有功能完整度和最佳实践推导得出。
 
 ---
 
-## 🔜 Near-term (next release)
+## Phase 1: 基础设施与稳定性（当前 → v0.2.0）
 
-### Cron Manager — remaining items
-- [ ] Visual cron builder: frequency selector, next-5-runs preview, timezone picker
-- [ ] Pre-built job templates
-- [ ] Filter run history by date and status
-- [ ] Full output log for each run
+| 优先级 | 任务 | 说明 | 文件/范围 |
+|--------|------|------|-----------|
+| 🔴 P0 | 添加 Error Boundary | 全局 + 页面级错误捕获，优雅降级 | `src/components/ErrorBoundary.tsx` |
+| 🔴 P0 | 添加加载骨架屏 | 每个页面路由的 loading.tsx + Suspense fallback | `src/app/**/loading.tsx` |
+| 🔴 P0 | 完善 TypeScript 严格模式 | 修复隐式 any，补充缺失的类型定义 | `tsconfig.json`, 各组件 |
+| 🟡 P1 | 添加单元测试框架 | Vitest + React Testing Library | 配置文件 + 首批测试 |
+| 🟡 P1 | 添加健康检查自愈 | 定时轮询 API 端点的可用性 | `src/app/api/health/` |
+| 🟡 P1 | 环境变量校验 | 启动时校验必需的环境变量 | `src/lib/env.ts` |
+| 🟢 P2 | 完善 i18n 文案覆盖 | 补齐缺失的翻译键 | `src/i18n/locales/` |
 
-### Memory Browser
-- [ ] File tree view of `memory/*.md` and workspace files
-- [ ] Markdown editor with live preview
-- [ ] Create / rename / delete files
-- [ ] Full-text search within files
+## Phase 2: 功能增强（v0.2.0 → v0.4.0）
 
-### File Browser
-- [ ] Full workspace file explorer
-- [ ] File preview (code, markdown, JSON)
-- [ ] Download and upload
+| 优先级 | 任务 | 说明 |
+|--------|------|------|
+| 🔴 P0 | 完善国际化翻译 | 所有 UI 文案中英文双覆盖 |
+| 🔴 P0 | 数据导出功能 | CSV/JSON 导出成本、活动日志 |
+| 🟡 P1 | 通知系统增强 | 通知历史、已读/未读标记、通知偏好 |
+| 🟡 P1 | 数据备份与恢复 | SQLite 数据库导出/导入 |
+| 🟡 P1 | 批量文件操作 | 多选、批量删除/移动/下载 |
+| 🟢 P2 | 搜索增强 | 全文搜索、搜索结果高亮、模糊匹配 |
+| 🟢 P2 | 日历增强 | 月视图、年视图、事件拖拽 |
 
-### Activity Logger Integration
-- [ ] `POST /api/activities` endpoint for agent-side event emission
-- [ ] Structured fields: timestamp, type, description, status, duration, tokens used
-- [ ] 30-day rolling retention
+## Phase 3: 体验与工程化（v0.4.0 → v0.6.0）
 
----
+| 优先级 | 任务 | 说明 |
+|--------|------|------|
+| 🔴 P0 | PWA 支持 | Service Worker、离线缓存、桌面图标 |
+| 🔴 P0 | Docker 一键部署 | Dockerfile + docker-compose.yml |
+| 🟡 P1 | 代码分割 + 懒加载 | 按路由分割、3D 组件动态导入 |
+| 🟡 P1 | 多主题系统 | 亮色/暗色/自定义主题切换 |
+| 🟡 P1 | 键盘快捷键 | 全局快捷键导航 |
+| 🟢 P2 | 性能监控 | Web Vitals 采集 + 展示 |
+| 🟢 P2 | CI/CD 流水线 | GitHub Actions 自动构建/测试/部署 |
 
-## 🗓️ Medium-term
+## Phase 4: 生态与高级功能（v0.6.0 → v1.0.0）
 
-### Analytics
-- [ ] Token consumption charts per model (input / output / cache breakdown)
-- [ ] Hourly activity heatmap (24 × 7 grid)
-- [ ] Period-over-period comparison ("this week vs last week")
-- [ ] Monthly cost projection
-
-### Quick Actions Hub
-- [ ] One-click buttons for common operations: workspace backup, dependency audit, integration test, gateway restart
-- [ ] Last-run timestamp and next scheduled time per action
-- [ ] Confirmation dialog before destructive actions
-
-### Sub-Agent Dashboard
-- [ ] Live list of active sub-agents with status (running / waiting / completed / failed)
-- [ ] Per-agent task description and token consumption
-- [ ] Spawn / completion timeline
-
----
-
-## 🔭 Longer-term
-
-### Real-time Updates
-- [ ] Server-Sent Events (SSE) or WebSocket connection for live activity feed
-- [ ] "Agent is working…" indicator
-- [ ] Live toast notifications
-
-### Knowledge Graph Viewer
-- [ ] Visual graph of concepts and entities from agent memory files
-- [ ] Interactive node/link exploration with topic clustering
-- [ ] Full-text search within graph
-
-### Model Playground
-- [ ] Side-by-side prompt comparison across multiple models
-- [ ] Token count and cost display per response
-- [ ] Save and share experiment results
-
-### Smart Suggestions
-- [ ] Usage pattern analysis to surface optimization recommendations
-- [ ] Dismissible suggestion cards with "apply" actions
-
-### 3D Office — extensions
-- [ ] Animated avatar states (typing, thinking, error)
-- [ ] Sub-agent "visitor" appearances with parent–child trail
-- [ ] Ambient sound (toggleable)
-- [ ] Multi-floor building: main office, server room, archive, control tower
-- [ ] Visual themes (modern, retro, cyberpunk)
-
-### Collaboration (future)
-- [ ] Shareable activity reports (PDF export, read-only link)
-- [ ] Multi-user support with per-user permissions
+| 优先级 | 任务 | 说明 |
+|--------|------|------|
+| 🔴 P0 | 多 Agent 远程管理 | 通过 ClawTeam API 管理远程 Agent |
+| 🟡 P1 | WebSocket 实时推送 | 实时活动流、通知、Agent 状态 |
+| 🟡 P1 | Agent 聊天界面 | 与 Agent 直接对话的 UI |
+| 🟡 P1 | 插件系统 | 第三方插件热加载机制 |
+| 🟢 P2 | 移动端 App | React Native 或 PWA 包装 |
+| 🟢 P2 | 数据仪表盘自定义 | 用户可拖拽布局的小部件系统 |
+| 🟢 P2 | 多语言扩展 | 日语、韩语、西班牙语等 |
 
 ---
 
-## Tech Stack Direction
+## 当前执行: Phase 1
 
-| Layer | Current | Future |
-|---|---|---|
-| Frontend | Next.js 15 + React 19 + Tailwind v4 | — |
-| Charts | Recharts | + D3.js for advanced viz |
-| 3D | React Three Fiber | — |
-| Real-time | Polling | SSE → WebSocket |
-| Storage | JSON files + SQLite | → PostgreSQL (multi-user) |
-| Editor | — | Monaco (code) + TipTap (markdown) |
-| PDF | — | jsPDF or Puppeteer |
-
----
-
-## Priority Summary
-
-| Tier | Focus |
-|---|---|
-| **Now** | Cron builder, Memory Browser, Activity Logger integration |
-| **Next** | Analytics, Quick Actions, Sub-agent visibility |
-| **Later** | Real-time, Knowledge Graph, 3D extensions |
-| **Future** | Collaboration, multi-user |
-
----
-
-*Have an idea or want to help? Open an issue or see [CONTRIBUTING.md](./CONTRIBUTING.md).*
+开始日期: 今日
+目标: 建立稳定的基础设施，确保所有页面有错误处理和加载状态。

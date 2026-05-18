@@ -98,9 +98,9 @@ export function CronJobModal({ isOpen, onClose, onSave, editingJob }: CronJobMod
     if (isOpen) {
       if (editingJob) {
         setName(editingJob.name);
-        setDescription(editingJob.description);
+        setDescription(editingJob.description ?? "");
         setSchedule(typeof editingJob.schedule === "string" ? editingJob.schedule : String(editingJob.schedule));
-        setTimezone(editingJob.timezone);
+        setTimezone(editingJob.timezone ?? DEFAULT_TIMEZONE);
         setFrequencyMode("custom");
       } else {
         setName("");

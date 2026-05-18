@@ -302,6 +302,7 @@ export default function SkillsPage() {
 
 // Skill Card Component
 function SkillCard({ skill, onClick }: { skill: Skill; onClick: () => void }) {
+  const { t } = useI18n();
   return (
     <div
       style={{
@@ -427,6 +428,7 @@ function SkillCard({ skill, onClick }: { skill: Skill; onClick: () => void }) {
 
 // Skill Detail Modal Component
 function SkillDetailModal({ skill, onClose }: { skill: Skill; onClose: () => void }) {
+  const { t } = useI18n();
   return (
     <div
       style={{
