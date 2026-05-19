@@ -82,6 +82,74 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
 }
 
+/* ============================================
+   Light Theme
+   ============================================ */
+[data-theme="light"] {
+  /* Core Colors */
+  --bg: #F5F5F7;
+  --background: #F5F5F7;
+  --foreground: #1D1D1F;
+
+  /* Surface Colors */
+  --surface: #FFFFFF;
+  --surface-elevated: #F0F0F2;
+  --surface-hover: #E8E8ED;
+  --card: #FFFFFF;
+  --card-elevated: #F0F0F2;
+
+  /* Borders */
+  --border: #D2D2D7;
+  --border-strong: #B8B8BE;
+
+  /* Accent */
+  --accent: #FF3B30;
+  --accent-soft: rgba(255, 59, 48, 0.08);
+  --accent-hover: #E6352B;
+  --accent-muted: rgba(255, 59, 48, 0.06);
+
+  /* Text Colors */
+  --text-primary: #1D1D1F;
+  --text-secondary: #6E6E73;
+  --text-muted: #A1A1A6;
+
+  /* Semantic Colors */
+  --positive: #30D158;
+  --positive-soft: rgba(48, 209, 88, 0.08);
+  --negative: #FF453A;
+  --negative-soft: rgba(255, 69, 58, 0.08);
+  --warning: #FF9F0A;
+  --warning-soft: rgba(255, 159, 10, 0.08);
+  --info: #007AFF;
+  --info-soft: rgba(0, 122, 255, 0.08);
+
+  /* Legacy aliases */
+  --success: #30D158;
+  --success-bg: rgba(48, 209, 88, 0.1);
+  --error: #FF453A;
+  --error-bg: rgba(255, 69, 58, 0.1);
+
+  /* Activity Type Colors */
+  --type-file: #007AFF;
+  --type-file-bg: rgba(0, 122, 255, 0.08);
+  --type-search: #FF9F0A;
+  --type-search-bg: rgba(255, 159, 10, 0.08);
+  --type-message: #30D158;
+  --type-message-bg: rgba(48, 209, 88, 0.08);
+  --type-command: #AF52DE;
+  --type-command-bg: rgba(175, 82, 222, 0.08);
+  --type-cron: #FF375F;
+  --type-cron-bg: rgba(255, 55, 95, 0.08);
+  --type-security: #FF453A;
+  --type-security-bg: rgba(255, 69, 58, 0.08);
+  --type-build: #FF9F0A;
+  --type-build-bg: rgba(255, 159, 10, 0.08);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
 /* Glass Panel Utility */
 .glass-panel {
   background-color: rgba(0, 0, 0, 0.4);

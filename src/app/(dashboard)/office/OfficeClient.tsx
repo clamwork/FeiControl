@@ -1,9 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useI18n } from '@/i18n';
-import Office3D from '@/components/Office3D/Office3D';
+
+// Lazy-load the 3D office scene (~300KB Three.js bundle)
+const Office3D = dynamic(() => import('@/components/Office3D/Office3D'), { ssr: false });
 
 const CANVAS_CHECK_INTERVAL_MS = 500;
 const CANVAS_BOOT_TIMEOUT_MS = 5000;

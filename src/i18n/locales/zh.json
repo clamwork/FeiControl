@@ -808,6 +808,13 @@
     "last_updated": "最后更新",
     "version_info": "Mission Control v1.0.0",
     "dashboard_name": "OpenClaw 代理仪表板",
+    "appearance": {
+      "title": "外观",
+      "theme": "主题",
+      "theme_dark": "深色",
+      "theme_light": "浅色",
+      "theme_system": "跟随系统"
+    },
     "system_info": {
       "title": "系统信息",
       "agent_name": "代理名称",
@@ -843,5 +850,15 @@
   "language": {
     "zh": "中文",
     "en": "English"
+  },
+  "keyboard_shortcuts": {
+    "title": "键盘快捷键",
+    "show_help": "显示键盘快捷键",
+    "search": "搜索",
+    "close": "关闭面板",
+    "navigate": "上下导航",
+    "select": "选择项目",
+    "focus_search": "聚焦搜索栏",
+    "footer": "按 ? 切换此面板"
   }
 }

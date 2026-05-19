@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import ReactMarkdown from "react-markdown";
+import dynamic from "next/dynamic";
 import {
   CheckCircle,
   XCircle,
@@ -19,6 +19,9 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { useI18n } from "@/i18n";
+
+// Lazy-load react-markdown (~80KB) since it's only used for yesterday's summary
+const ReactMarkdown = dynamic(() => import("react-markdown"), { ssr: false });
 
 interface Agent {
   id: string;

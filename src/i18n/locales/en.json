@@ -808,6 +808,13 @@
     "last_updated": "Last updated",
     "version_info": "Mission Control v1.0.0",
     "dashboard_name": "OpenClaw Agent Dashboard",
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "theme_dark": "Dark",
+      "theme_light": "Light",
+      "theme_system": "System"
+    },
     "system_info": {
       "title": "System Information",
       "agent_name": "Agent Name",
@@ -843,5 +850,15 @@
   "language": {
     "zh": "Chinese",
     "en": "English"
+  },
+  "keyboard_shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "show_help": "Show keyboard shortcuts",
+    "search": "Search",
+    "close": "Close panel",
+    "navigate": "Navigate up/down",
+    "select": "Select item",
+    "focus_search": "Focus search bar",
+    "footer": "Press ? to toggle this panel"
   }
 }

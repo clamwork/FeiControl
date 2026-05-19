@@ -6,6 +6,7 @@ import { SystemInfo } from "@/components/SystemInfo";
 import { IntegrationStatus } from "@/components/IntegrationStatus";
 import { QuickActions } from "@/components/QuickActions";
 import { useI18n } from "@/i18n";
+import { useTheme } from "@/components/ThemeProvider";
 
 interface SystemData {
   agent: {
@@ -39,6 +40,7 @@ interface SystemData {
 
 export default function SettingsPage() {
   const { t } = useI18n();
+  const { theme, setTheme } = useTheme();
   const [systemData, setSystemData] = useState<SystemData | null>(null);
   const [loading, setLoading] = useState(true);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
@@ -155,6 +157,64 @@ export default function SettingsPage() {
         {/* Quick Actions */}
         <div>
           <QuickActions onActionComplete={handleRefresh} />
+        </div>
+      </div>
+
+      {/* ── Appearance / Theme ────────────────────────────── */}
+      <div
+        className="mt-6 md:mt-8 rounded-xl"
+        style={{
+          backgroundColor: "var(--card)",
+          border: "1px solid var(--border)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          className="flex items-center justify-between px-5 py-4"
+          style={{ borderBottom: "1px solid var(--border)" }}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="p-2 rounded-lg"
+              style={{ backgroundColor: "var(--card-elevated)" }}
+            >
+              <svg className="w-5 h-5" style={{ color: "var(--accent)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            <h3
+              className="text-base font-semibold"
+              style={{ color: "var(--text-primary)" }}
+            >
+              {t("settings.appearance.title")}
+            </h3>
+          </div>
+        </div>
+
+        <div className="px-5 py-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>
+                {t("settings.appearance.theme")}
+              </div>
+            </div>
+            <div className="flex gap-1 p-1 rounded-lg" style={{ backgroundColor: "var(--surface-elevated)", border: "1px solid var(--border)" }}>
+              {(["dark", "light", "system"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setTheme(mode)}
+                  className="px-3 py-1.5 rounded-md text-xs font-medium transition-all"
+                  style={{
+                    backgroundColor: theme === mode ? "var(--accent)" : "transparent",
+                    color: theme === mode ? "#fff" : "var(--text-secondary)",
+                  }}
+                >
+                  {mode === "dark" ? "🌙" : mode === "light" ? "☀️" : "🖥️"}{" "}
+                  {t(`settings.appearance.theme_${mode}`)}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

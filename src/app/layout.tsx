@@ -3,6 +3,10 @@ import { Inter, Sora, JetBrains_Mono } from "next/font/google";
 import { I18nProvider } from "@/i18n";
 import { HtmlLangSetter } from "@/components/HtmlLangSetter";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { PWARegister } from "@/components/PWARegister";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
+import { WebVitals } from "@/components/WebVitals";
 import "./globals.css";
 
 const inter = Inter({ 
@@ -59,9 +63,14 @@ export default function RootLayout({
       >
         <I18nProvider>
           <HtmlLangSetter />
-          <ErrorBoundary>
-            {children}
-          </ErrorBoundary>
+          <PWARegister />
+          <ThemeProvider>
+            <KeyboardShortcuts />
+            <WebVitals />
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+          </ThemeProvider>
         </I18nProvider>
       </body>
     </html>

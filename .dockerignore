@@ -1,0 +1,16 @@
+.next
+.git
+node_modules
+*.md
+.DS_Store
+*.local
+*.test.*
+__pycache__
+.vscode
+.idea
+coverage
+docs
+scripts
+qa-artifacts
+public/office-concepts
+public/models

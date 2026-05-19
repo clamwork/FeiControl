@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { DollarSign, TrendingUp, TrendingDown, AlertTriangle, Calendar, PieChart, Download } from "lucide-react";
-import { LineChart, Line, BarChart, Bar, PieChart as RePieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useI18n } from "@/i18n";
 import { downloadCSV, downloadJSON, dateStamp } from "@/lib/export-data";
+
+// Lazy-load recharts (~300KB) — heavy charting library
+const Charts = lazy(() => import("./Charts"));
 
 interface CostData {
   today: number;
@@ -282,107 +284,9 @@ export default function CostsPage() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Daily Trend */}
-        <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
-          <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-            {t("costs.chart.daily_trend")}
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={costData.daily}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="date" stroke="var(--text-muted)" style={{ fontSize: "12px" }} />
-              <YAxis stroke="var(--text-muted)" style={{ fontSize: "12px" }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "var(--card-elevated)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                }}
-              />
-              <Legend />
-              <Line type="monotone" dataKey="cost" stroke="var(--accent)" strokeWidth={2} name={t("costs.chart.cost_label")} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Cost by Agent */}
-        <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
-          <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-            {t("costs.chart.by_agent")}
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={costData.byAgent}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="agent" stroke="var(--text-muted)" style={{ fontSize: "12px" }} />
-              <YAxis stroke="var(--text-muted)" style={{ fontSize: "12px" }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "var(--card-elevated)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                }}
-              />
-              <Bar dataKey="cost" fill="var(--accent)" name={t("costs.chart.cost_label")} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Cost by Model */}
-        <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
-          <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-            {t("costs.chart.by_model")}
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <RePieChart>
-              <Pie
-                data={costData.byModel}
-                dataKey="cost"
-                nameKey="model"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                label={(entry) => `${entry.model}: $${(entry.cost ?? 0).toFixed(2)}`}
-              >
-                {costData.byModel.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "var(--card-elevated)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                }}
-              />
-            </RePieChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Token Usage */}
-        <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
-          <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--text-primary)" }}>
-            {t("costs.chart.token_usage")}
-          </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={costData.daily}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="date" stroke="var(--text-muted)" style={{ fontSize: "12px" }} />
-              <YAxis stroke="var(--text-muted)" style={{ fontSize: "12px" }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "var(--card-elevated)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                }}
-              />
-              <Legend />
-              <Bar dataKey="input" stackId="a" fill="#60A5FA" name={t("costs.chart.input_tokens")} />
-              <Bar dataKey="output" stackId="a" fill="#F59E0B" name={t("costs.chart.output_tokens")} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      <Suspense fallback={<div className="grid grid-cols-1 lg:grid-cols-2 gap-6"><div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}><div className="animate-pulse h-[300px] rounded-lg" style={{ backgroundColor: "var(--card-elevated)" }} /></div><div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}><div className="animate-pulse h-[300px] rounded-lg" style={{ backgroundColor: "var(--card-elevated)" }} /></div><div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}><div className="animate-pulse h-[300px] rounded-lg" style={{ backgroundColor: "var(--card-elevated)" }} /></div><div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}><div className="animate-pulse h-[300px] rounded-lg" style={{ backgroundColor: "var(--card-elevated)" }} /></div></div>}>
+        <Charts costData={costData} />
+      </Suspense>
 
       {/* Model Pricing Table */}
       <div className="p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>

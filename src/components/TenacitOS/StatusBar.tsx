@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Cpu, HardDrive, MemoryStick, Shield, ShieldCheck, Clock } from "lucide-react";
 import { useI18n } from "@/i18n";
+import { PWAInstallButton } from "@/components/PWAInstallButton";
 
 interface SystemStats {
   cpu: number;
@@ -222,6 +223,12 @@ export function StatusBar() {
           {t('statusbar.labels.uptime_label')}: {stats.uptime}
         </span>
       </div>
+
+      {/* Spacer */}
+      <div style={{ flex: 1 }} />
+
+      {/* PWA Install */}
+      <PWAInstallButton />
     </div>
   );
 }

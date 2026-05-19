@@ -1,0 +1,53 @@
+# ==============================================================
+# FeiControl — docker-compose
+# ==============================================================
+
+version: "3.9"
+
+services:
+  feicontrol:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_APP_TITLE: "${NEXT_PUBLIC_APP_TITLE:-FeiControl}"
+        NEXT_PUBLIC_AGENT_NAME: "${NEXT_PUBLIC_AGENT_NAME:-FeiControl}"
+        NEXT_PUBLIC_AGENT_EMOJI: "${NEXT_PUBLIC_AGENT_EMOJI:-🤖}"
+        NEXT_PUBLIC_AGENT_DESCRIPTION: "${NEXT_PUBLIC_AGENT_DESCRIPTION:-Your AI co-pilot}"
+    container_name: feicontrol
+    restart: unless-stopped
+    ports:
+      - "${PORT:-4730}:4730"
+    volumes:
+      # Persist SQLite database and JSON data files
+      - feicontrol_data:/app/data
+      # Mount config from host (optional)
+      - ./data/activities.example.json:/app/data/activities.example.json:ro
+      - ./data/tasks.example.json:/app/data/tasks.example.json:ro
+      - ./data/notifications.example.json:/app/data/notifications.example.json:ro
+    environment:
+      - NODE_ENV=production
+      - PORT=4730
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-change-me}
+      - AUTH_SECRET=${AUTH_SECRET:-change-me-change-me-change-me-change-me!}
+      - NEXT_PUBLIC_APP_TITLE=${NEXT_PUBLIC_APP_TITLE:-FeiControl}
+      - NEXT_PUBLIC_AGENT_NAME=${NEXT_PUBLIC_AGENT_NAME:-FeiControl}
+      - NEXT_PUBLIC_AGENT_EMOJI=${NEXT_PUBLIC_AGENT_EMOJI:-🤖}
+      - NEXT_PUBLIC_AGENT_DESCRIPTION=${NEXT_PUBLIC_AGENT_DESCRIPTION:-Your AI co-pilot}
+      - NEXT_PUBLIC_OWNER_USERNAME=${NEXT_PUBLIC_OWNER_USERNAME:-admin}
+      - NEXT_PUBLIC_OWNER_EMAIL=${NEXT_PUBLIC_OWNER_EMAIL:-admin@example.com}
+      - NEXT_TELEMETRY_DISABLED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4730/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  feicontrol_data:
