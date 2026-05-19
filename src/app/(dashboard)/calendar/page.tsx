@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { RefreshCw, CheckSquare, Square, ChevronLeft, ChevronRight } from "lucide-react";
 import { useI18n } from "@/i18n";
 
+type ViewMode = "week" | "month" | "year";
+
 interface CalendarEvent {
   key: string;
   date: string;
@@ -80,6 +82,76 @@ function getWeekDays(offset: number): { dates: string[]; label: string } {
 function shortDate(iso: string): string {
   const [, m, d] = iso.split("-");
   return `${parseInt(m)}/${parseInt(d)}`;
+}
+
+/** Get all dates in a month, with weekday offsets for the grid */
+function getMonthDays(offset: number): { dates: string[]; label: string } {
+  const now = getPSTNow();
+  const targetMonth = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+  const year = targetMonth.getFullYear();
+  const month = targetMonth.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startDay = new Date(year, month, 1).getDay(); // 0=Sun, 1=Mon, ...
+  const adjustedStartDay = startDay === 0 ? 6 : startDay - 1; // Convert to Mon=0
+
+  const dates: string[] = [];
+
+  // Add empty slots for days before the 1st
+  for (let i = 0; i < adjustedStartDay; i++) {
+    dates.push("");
+  }
+
+  // Add each day of the month
+  for (let d = 1; d <= daysInMonth; d++) {
+    dates.push(
+      `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`
+    );
+  }
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+  const label = `${monthNames[month]} ${year}`;
+
+  return { dates, label };
+}
+
+/** Get a year block (12 months) */
+function getYearDates(yearOffset: number): { months: { month: number; year: number; label: string; dates: string[] }[]; label: string } {
+  const now = getPSTNow();
+  const targetYear = now.getFullYear() + yearOffset;
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ];
+
+  const months = monthNames.map((_, i) => {
+    const month = i;
+    const daysInMonth = new Date(targetYear, month + 1, 0).getDate();
+    const startDay = new Date(targetYear, month, 1).getDay();
+    const adjustedStartDay = startDay === 0 ? 6 : startDay - 1;
+
+    const dates: string[] = [];
+    for (let j = 0; j < adjustedStartDay; j++) {
+      dates.push("");
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      dates.push(
+        `${targetYear}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`
+      );
+    }
+
+    return {
+      month,
+      year: targetYear,
+      label: monthNames[i],
+      dates,
+    };
+  });
+
+  return { months, label: `${targetYear}` };
 }
 
 function getEventKey(event: Omit<CalendarEvent, "key">): string {
@@ -225,6 +297,9 @@ export default function CalendarPage() {
   const [tasks, setTasks] = useState<TasksData | null>(null);
   const [loading, setLoading] = useState(true);
   const [weekOffset, setWeekOffset] = useState(0);
+  const [viewMode, setViewMode] = useState<ViewMode>("week");
+  const [monthOffset, setMonthOffset] = useState(0);
+  const [yearOffset, setYearOffset] = useState(0);
   const [calendarError, setCalendarError] = useState("");
   const [tasksError, setTasksError] = useState("");
   const [eventCompletionError, setEventCompletionError] = useState("");
@@ -233,6 +308,8 @@ export default function CalendarPage() {
   const [togglingTaskIds, setTogglingTaskIds] = useState<Record<string, boolean>>({});
 
   const week = useMemo(() => getWeekDays(weekOffset), [weekOffset]);
+  const month = useMemo(() => getMonthDays(monthOffset), [monthOffset]);
+  const yearData = useMemo(() => getYearDates(yearOffset), [yearOffset]);
 
   const maybeMigrateLegacyEventCompletions = useCallback(async (serverState: EventCompletionState) => {
     if (typeof window === "undefined") {
@@ -524,26 +601,54 @@ export default function CalendarPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {/* View Mode Tabs */}
+          <div className="flex items-center gap-1 mr-1" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: "10px", padding: "2px" }}>
+            {(["week", "month", "year"] as const).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setViewMode(mode)}
+                className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all capitalize"
+                style={{
+                  backgroundColor: viewMode === mode ? "var(--accent)" : "transparent",
+                  color: viewMode === mode ? "#fff" : "var(--text-primary)",
+                }}
+              >
+                {mode === "week" ? t("calendar.week_view") : mode === "month" ? t("calendar.month_view") : t("calendar.year_view")}
+              </button>
+            ))}
+          </div>
+          {/* Navigation */}
           <div className="flex items-center gap-1" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: "10px", padding: "2px" }}>
             <button
-              onClick={() => setWeekOffset((offset) => offset - 1)}
+              onClick={() => {
+                if (viewMode === "week") setWeekOffset((o) => o - 1);
+                else if (viewMode === "month") setMonthOffset((o) => o - 1);
+                else setYearOffset((o) => o - 1);
+              }}
               className="p-2 rounded-lg transition-all hover:opacity-80"
               style={{ color: "var(--text-primary)" }}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
-              onClick={() => setWeekOffset(0)}
+              onClick={() => {
+                setWeekOffset(0);
+                setMonthOffset(0);
+                setYearOffset(0);
+              }}
               className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
               style={{
-                backgroundColor: weekOffset === 0 ? "var(--accent)" : "transparent",
                 color: "var(--text-primary)",
               }}
             >
-              {t("calendar.this_week")}
+              {t("calendar.today")}
             </button>
             <button
-              onClick={() => setWeekOffset((offset) => offset + 1)}
+              onClick={() => {
+                if (viewMode === "week") setWeekOffset((o) => o + 1);
+                else if (viewMode === "month") setMonthOffset((o) => o + 1);
+                else setYearOffset((o) => o + 1);
+              }}
               className="p-2 rounded-lg transition-all hover:opacity-80"
               style={{ color: "var(--text-primary)" }}
             >
@@ -552,7 +657,7 @@ export default function CalendarPage() {
           </div>
           <button
             onClick={() => {
-              void fetchData(weekOffset);
+              void fetchData(viewMode === "week" ? weekOffset : 0);
             }}
             disabled={loading}
             className="p-2 rounded-lg transition-all"
@@ -563,9 +668,9 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      {/* Week label */}
+      {/* View label */}
       <div className="mb-4 text-sm font-mono" style={{ color: "var(--text-muted)" }}>
-        {week.label}
+        {viewMode === "week" ? week.label : viewMode === "month" ? month.label : yearData.label}
       </div>
 
       {(calendarError || eventCompletionError) && (
@@ -583,127 +688,280 @@ export default function CalendarPage() {
         </div>
       )}
 
-      {/* ===== 7-Day Grid ===== */}
-      <div className="grid grid-cols-7 gap-2 mb-8">
-        {week.dates.map((date, i) => {
-          const isToday = date === todayStr;
-          const dayEvents = eventsByDate[date] || [];
-          const hasEvents = dayEvents.length > 0;
+      {/* ===== View Content ===== */}
+      {viewMode === "week" && (
+        <div className="grid grid-cols-7 gap-2 mb-8">
+          {week.dates.map((date, i) => {
+            const isToday = date === todayStr;
+            const dayEvents = eventsByDate[date] || [];
+            const hasEvents = dayEvents.length > 0;
 
-          return (
-            <div
-              key={date}
-              className="rounded-xl flex flex-col min-h-[200px] overflow-hidden transition-all"
-              style={{
-                backgroundColor: "var(--card)",
-                border: isToday ? "2px solid #34C759" : "1px solid var(--border)",
-                boxShadow: isToday ? "0 0 12px rgba(52,199,89,0.15)" : "none",
-              }}
-            >
-              {/* Day header */}
+            return (
               <div
-                className="px-3 py-2 text-center"
+                key={date}
+                className="rounded-xl flex flex-col min-h-[200px] overflow-hidden transition-all"
                 style={{
-                  backgroundColor: isToday ? "rgba(52,199,89,0.12)" : "var(--card-elevated)",
-                  borderBottom: "1px solid var(--border)",
+                  backgroundColor: "var(--card)",
+                  border: isToday ? "2px solid #34C759" : "1px solid var(--border)",
+                  boxShadow: isToday ? "0 0 12px rgba(52,199,89,0.15)" : "none",
                 }}
               >
-                <div className="text-base font-medium" style={{ color: isToday ? "#34C759" : "var(--text-muted)" }}>
-                  {dayLabels[i]}
-                </div>
+                {/* Day header */}
                 <div
-                  className="text-2xl font-bold"
-                  style={{ color: isToday ? "#34C759" : "var(--text-primary)", fontFamily: "var(--font-heading)" }}
+                  className="px-3 py-2 text-center"
+                  style={{
+                    backgroundColor: isToday ? "rgba(52,199,89,0.12)" : "var(--card-elevated)",
+                    borderBottom: "1px solid var(--border)",
+                  }}
                 >
-                  {shortDate(date)}
-                </div>
-              </div>
-
-              {/* Events */}
-              <div className="flex-1 p-2 space-y-1.5">
-                {loading ? (
-                  <div className="flex items-center justify-center h-full">
-                    <div className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: "var(--border)" }} />
+                  <div className="text-base font-medium" style={{ color: isToday ? "#34C759" : "var(--text-muted)" }}>
+                    {dayLabels[i]}
                   </div>
-                ) : hasEvents ? (
-                  dayEvents.map((event) => {
-                    const eventKey = event.key;
-                    const isEventCompleted = Boolean(eventCompletions[eventKey]);
-                    const isEventToggling = Boolean(togglingEventKeys[eventKey]);
+                  <div
+                    className="text-2xl font-bold"
+                    style={{ color: isToday ? "#34C759" : "var(--text-primary)", fontFamily: "var(--font-heading)" }}
+                  >
+                    {shortDate(date)}
+                  </div>
+                </div>
 
-                    return (
-                      <div
-                        key={eventKey}
-                        onClick={() => {
-                          if (!isEventToggling) {
-                            void toggleEventCompletion(event);
-                          }
-                        }}
-                        className={`group p-2 rounded-lg text-xs transition-all duration-200 ease-out hover:scale-[1.06] hover:shadow-xl hover:shadow-black/10 hover:-translate-y-1 hover:brightness-110 ${
-                          isEventToggling ? "cursor-not-allowed" : "cursor-pointer"
-                        }`}
-                        style={{
-                          backgroundColor: isToday ? "rgba(52,199,89,0.08)" : "var(--card-elevated)",
-                          border: `1px solid ${isToday ? "rgba(52,199,89,0.2)" : "var(--border)"}`,
-                          opacity: isEventToggling ? 0.6 : isEventCompleted ? 0.72 : 1,
-                          ...(isToday ? { boxShadow: "0 0 8px rgba(52,199,89,0.25)" } : {}),
-                        }}
-                      >
-                        <div className="flex items-start gap-2">
-                          <button
-                            type="button"
-                            title={isEventCompleted ? t("calendar.task.mark_incomplete") : t("calendar.task.mark_complete")}
-                            aria-label={isEventCompleted ? t("calendar.task.aria_mark_incomplete", { title: event.title }) : t("calendar.task.aria_mark_complete", { title: event.title })}
-                            className="mt-0.5 rounded-md transition-all hover:opacity-80 pointer-events-none"
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: isEventCompleted ? "var(--positive)" : "var(--text-muted)",
-                              cursor: "pointer",
-                              padding: 0,
-                            }}
-                          >
-                            {isEventToggling ? (
-                              <RefreshCw className="w-4 h-4 animate-spin" />
-                            ) : isEventCompleted ? (
-                              <CheckSquare className="w-4 h-4" />
-                            ) : (
-                              <Square className="w-4 h-4" />
-                            )}
-                          </button>
-                          <div className="min-w-0 flex-1">
-                            <div
-                              className="font-mono font-semibold mb-0.5"
+                {/* Events */}
+                <div className="flex-1 p-2 space-y-1.5">
+                  {loading ? (
+                    <div className="flex items-center justify-center h-full">
+                      <div className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: "var(--border)" }} />
+                    </div>
+                  ) : hasEvents ? (
+                    dayEvents.map((event) => {
+                      const eventKey = event.key;
+                      const isEventCompleted = Boolean(eventCompletions[eventKey]);
+                      const isEventToggling = Boolean(togglingEventKeys[eventKey]);
+
+                      return (
+                        <div
+                          key={eventKey}
+                          onClick={() => {
+                            if (!isEventToggling) {
+                              void toggleEventCompletion(event);
+                            }
+                          }}
+                          className={`group p-2 rounded-lg text-xs transition-all duration-200 ease-out hover:scale-[1.06] hover:shadow-xl hover:shadow-black/10 hover:-translate-y-1 hover:brightness-110 ${
+                            isEventToggling ? "cursor-not-allowed" : "cursor-pointer"
+                          }`}
+                          style={{
+                            backgroundColor: isToday ? "rgba(52,199,89,0.08)" : "var(--card-elevated)",
+                            border: `1px solid ${isToday ? "rgba(52,199,89,0.2)" : "var(--border)"}`,
+                            opacity: isEventToggling ? 0.6 : isEventCompleted ? 0.72 : 1,
+                            ...(isToday ? { boxShadow: "0 0 8px rgba(52,199,89,0.25)" } : {}),
+                          }}
+                        >
+                          <div className="flex items-start gap-2">
+                            <button
+                              type="button"
+                              title={isEventCompleted ? t("calendar.task.mark_incomplete") : t("calendar.task.mark_complete")}
+                              aria-label={isEventCompleted ? t("calendar.task.aria_mark_incomplete", { title: event.title }) : t("calendar.task.aria_mark_complete", { title: event.title })}
+                              className="mt-0.5 rounded-md transition-all hover:opacity-80 pointer-events-none"
                               style={{
-                                color: isToday ? "#34C759" : "var(--accent)",
-                                fontSize: "12px",
-                                opacity: isEventCompleted ? 0.7 : 1,
+                                background: "none",
+                                border: "none",
+                                color: isEventCompleted ? "var(--positive)" : "var(--text-muted)",
+                                cursor: "pointer",
+                                padding: 0,
                               }}
                             >
-                              {event.time}
-                            </div>
-                            <div
-                              className={`font-medium leading-snug ${isEventCompleted ? "line-through" : ""}`}
-                              style={{ color: isEventCompleted ? "var(--text-muted)" : "var(--text-primary)", fontSize: "13px" }}
-                              title={event.title}
-                            >
-                              {extractDisplayTitle(event.title)}
+                              {isEventToggling ? (
+                                <RefreshCw className="w-4 h-4 animate-spin" />
+                              ) : isEventCompleted ? (
+                                <CheckSquare className="w-4 h-4" />
+                              ) : (
+                                <Square className="w-4 h-4" />
+                              )}
+                            </button>
+                            <div className="min-w-0 flex-1">
+                              <div
+                                className="font-mono font-semibold mb-0.5"
+                                style={{
+                                  color: isToday ? "#34C759" : "var(--accent)",
+                                  fontSize: "12px",
+                                  opacity: isEventCompleted ? 0.7 : 1,
+                                }}
+                              >
+                                {event.time}
+                              </div>
+                              <div
+                                className={`font-medium leading-snug ${isEventCompleted ? "line-through" : ""}`}
+                                style={{ color: isEventCompleted ? "var(--text-muted)" : "var(--text-primary)", fontSize: "13px" }}
+                                title={event.title}
+                              >
+                                {extractDisplayTitle(event.title)}
+                              </div>
                             </div>
                           </div>
                         </div>
+                      );
+                    })
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <span className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ===== Month View ===== */}
+      {viewMode === "month" && (
+        <div className="grid grid-cols-7 gap-1.5 mb-8">
+          {/* Day labels */}
+          {dayLabels.map((label, i) => (
+            <div
+              key={i}
+              className="text-center text-xs font-semibold py-2"
+              style={{ color: "var(--text-muted)" }}
+            >
+              {label}
+            </div>
+          ))}
+          {/* Date cells */}
+          {month.dates.map((date, i) => {
+            const isEmpty = !date;
+            const isToday = date === todayStr;
+            const dayEvents = date ? eventsByDate[date] || [] : [];
+            const hasEvents = dayEvents.length > 0;
+            const completedCount = dayEvents.filter(e => eventCompletions[e.key]).length;
+
+            return (
+              <div
+                key={date || `empty-${i}`}
+                className="rounded-lg min-h-[80px] p-1.5 transition-all"
+                style={{
+                  backgroundColor: isEmpty ? "transparent" : isToday ? "rgba(52,199,89,0.08)" : "var(--card)",
+                  border: isToday ? "2px solid #34C759" : isEmpty ? "none" : "1px solid var(--border)",
+                  cursor: isEmpty ? "default" : "pointer",
+                }}
+                onClick={() => {
+                  if (!isEmpty) {
+                    setViewMode("week");
+                    // Navigate to the week containing this date
+                    const d = new Date(date);
+                    const dayOfWeek = d.getDay();
+                    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+                    const monday = new Date(d);
+                    monday.setDate(d.getDate() + diffToMonday);
+                    const now = getPSTNow();
+                    const todayMonday = new Date(now);
+                    const td = todayMonday.getDay();
+                    const todayDiff = td === 0 ? -6 : 1 - td;
+                    todayMonday.setDate(now.getDate() + todayDiff);
+                    const weekDiff = Math.round((monday.getTime() - todayMonday.getTime()) / (7 * 86400000));
+                    setWeekOffset(weekDiff);
+                  }
+                }}
+              >
+                {!isEmpty && (
+                  <>
+                    <div
+                      className={`text-xs font-bold mb-1 ${isToday ? "" : ""}`}
+                      style={{
+                        color: isToday ? "#34C759" : "var(--text-primary)",
+                        fontSize: "13px",
+                      }}
+                    >
+                      {parseInt(date.split("-")[2])}
+                    </div>
+                    {hasEvents && (
+                      <div className="space-y-0.5">
+                        {dayEvents.slice(0, 3).map((evt) => (
+                          <div
+                            key={evt.key}
+                            className="text-[10px] truncate rounded-sm px-1 py-0.5"
+                            style={{
+                              backgroundColor: eventCompletions[evt.key]
+                                ? "rgba(52,199,89,0.15)"
+                                : "var(--accent)",
+                              color: eventCompletions[evt.key]
+                                ? "var(--text-muted)"
+                                : "#fff",
+                              textDecoration: eventCompletions[evt.key] ? "line-through" : "none",
+                              opacity: eventCompletions[evt.key] ? 0.6 : 1,
+                            }}
+                          >
+                            {extractDisplayTitle(evt.title)}
+                          </div>
+                        ))}
+                        {dayEvents.length > 3 && (
+                          <div className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                            +{dayEvents.length - 3} more
+                          </div>
+                        )}
                       </div>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ===== Year View ===== */}
+      {viewMode === "year" && (
+        <div className="grid grid-cols-4 gap-4 mb-8">
+          {yearData.months.map((monthItem) => {
+            // Count events in this month
+            const monthDates = monthItem.dates.filter(Boolean);
+            let monthEventCount = 0;
+            for (const d of monthDates) {
+              monthEventCount += (eventsByDate[d] || []).length;
+            }
+            return (
+              <div
+                key={monthItem.month}
+                className="rounded-xl p-4 transition-all hover:shadow-lg hover:shadow-black/10 cursor-pointer"
+                style={{
+                  backgroundColor: "var(--card)",
+                  border: "1px solid var(--border)",
+                }}
+                onClick={() => {
+                  setMonthOffset(monthItem.month - new Date().getMonth() + (monthItem.year - new Date().getFullYear()) * 12);
+                  setViewMode("month");
+                }}
+              >
+                <div className="text-base font-bold mb-2" style={{ color: "var(--text-primary)", fontFamily: "var(--font-heading)" }}>
+                  {monthItem.label}
+                </div>
+                {/* Mini calendar grid */}
+                <div className="grid grid-cols-7 gap-0.5 mb-2">
+                  {monthItem.dates.map((d, idx) => {
+                    const isDayWithEvent = d && (eventsByDate[d] || []).length > 0;
+                    return (
+                      <div
+                        key={d || `e-${idx}`}
+                        className="rounded-sm"
+                        style={{
+                          aspectRatio: "1",
+                          backgroundColor: isDayWithEvent ? "var(--accent)" : "transparent",
+                          opacity: d ? 0.8 : 0,
+                          borderRadius: "2px",
+                          fontSize: "6px",
+                        }}
+                      />
                     );
-                  })
-                ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <span className="text-xs" style={{ color: "var(--text-muted)", opacity: 0.4 }}>—</span>
+                  })}
+                </div>
+                {monthEventCount > 0 && (
+                  <div className="text-xs" style={{ color: "var(--text-muted)" }}>
+                    {monthEventCount} event{monthEventCount !== 1 ? "s" : ""}
                   </div>
                 )}
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* ===== Google Tasks ===== */}
       <div
