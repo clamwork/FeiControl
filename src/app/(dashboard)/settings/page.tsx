@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Settings, RefreshCw } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { Settings, RefreshCw, Bell, Info, CheckCircle, AlertTriangle, XCircle, Check } from "lucide-react";
 import { SystemInfo } from "@/components/SystemInfo";
 import { IntegrationStatus } from "@/components/IntegrationStatus";
 import { QuickActions } from "@/components/QuickActions";
@@ -67,6 +67,40 @@ export default function SettingsPage() {
     fetchSystemData();
   };
 
+  // ── Notification Preferences ─────────────────────────
+  const [notifPrefs, setNotifPrefs] = useState<{
+    push: boolean;
+    types: { info: boolean; success: boolean; warning: boolean; error: boolean };
+  }>(() => {
+    if (typeof window === "undefined") {
+      return { push: false, types: { info: true, success: true, warning: true, error: true } };
+    }
+    const saved = localStorage.getItem("notification-preferences");
+    if (saved) {
+      try { return JSON.parse(saved); } catch { /* fall through */ }
+    }
+    return { push: false, types: { info: true, success: true, warning: true, error: true } };
+  });
+
+  const [prefsSaved, setPrefsSaved] = useState(false);
+
+  const saveNotifPrefs = useCallback((newPrefs: typeof notifPrefs) => {
+    setNotifPrefs(newPrefs);
+    localStorage.setItem("notification-preferences", JSON.stringify(newPrefs));
+    setPrefsSaved(true);
+    setTimeout(() => setPrefsSaved(false), 2000);
+  }, []);
+
+  const togglePush = () => {
+    const next = { ...notifPrefs, push: !notifPrefs.push };
+    saveNotifPrefs(next);
+  };
+
+  const toggleType = (type: keyof typeof notifPrefs.types) => {
+    const next = { ...notifPrefs, types: { ...notifPrefs.types, [type]: !notifPrefs.types[type] } };
+    saveNotifPrefs(next);
+  };
+
   return (
     <div className="p-4 md:p-8">
       {/* Header */}
@@ -121,6 +155,141 @@ export default function SettingsPage() {
         {/* Quick Actions */}
         <div>
           <QuickActions onActionComplete={handleRefresh} />
+        </div>
+      </div>
+
+      {/* ── Notification Preferences ──────────────────────────── */}
+      <div
+        className="mt-6 md:mt-8 rounded-xl"
+        style={{
+          border: "1px solid var(--border)",
+          backgroundColor: "var(--card)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          className="flex items-center gap-3 p-4 md:p-5"
+          style={{ borderBottom: "1px solid var(--border)" }}
+        >
+          <Bell className="w-5 h-5 md:w-6 md:h-6" style={{ color: "var(--accent)" }} />
+          <div>
+            <h3
+              className="font-semibold"
+              style={{
+                fontFamily: "var(--font-heading)",
+                fontSize: "16px",
+                color: "var(--text-primary)",
+              }}
+            >
+              {t("notifications.preferences")}
+            </h3>
+          </div>
+          {prefsSaved && (
+            <span
+              className="flex items-center gap-1 ml-auto text-xs"
+              style={{ color: "#4ade80" }}
+            >
+              <Check className="w-3.5 h-3.5" /> {t("notifications.saved")}
+            </span>
+          )}
+        </div>
+
+        <div className="p-4 md:p-5 space-y-4">
+          {/* Push toggle */}
+          <div
+            className="flex items-center justify-between py-2"
+            style={{ borderBottom: "1px solid var(--border)" }}
+          >
+            <div>
+              <div className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>
+                {t("notifications.push_enabled")}
+              </div>
+              <div className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+                {t("notifications.push_description")}
+              </div>
+            </div>
+            <button
+              onClick={togglePush}
+              style={{
+                width: "44px", height: "24px", borderRadius: "12px",
+                border: "none", cursor: "pointer", position: "relative",
+                backgroundColor: notifPrefs.push ? "#4ade80" : "var(--border)",
+                transition: "background-color 0.2s",
+              }}
+            >
+              <div
+                style={{
+                  width: "20px", height: "20px", borderRadius: "50%",
+                  backgroundColor: "#fff", position: "absolute",
+                  top: "2px", left: notifPrefs.push ? "22px" : "2px",
+                  transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                }}
+              />
+            </button>
+          </div>
+
+          {/* Type toggles */}
+          {([
+            ["info", "type_info", "type_info_desc"],
+            ["success", "type_success", "type_success_desc"],
+            ["warning", "type_warning", "type_warning_desc"],
+            ["error", "type_error", "type_error_desc"],
+          ] as const).map(([typeKey, labelKey, descKey]) => {
+            const type = typeKey as keyof typeof notifPrefs.types;
+            const TypeIcon =
+              type === "info"
+                ? Info
+                : type === "success"
+                ? CheckCircle
+                : type === "warning"
+                ? AlertTriangle
+                : XCircle;
+            const iconColor =
+              type === "info"
+                ? "#60a5fa"
+                : type === "success"
+                ? "#4ade80"
+                : type === "warning"
+                ? "#fbbf24"
+                : "#f87171";
+            return (
+              <div
+                key={type}
+                className="flex items-center justify-between py-2"
+                style={{ borderBottom: "1px solid var(--border)" }}
+              >
+                <div className="flex items-center gap-3">
+                  <TypeIcon className="w-4 h-4" style={{ color: iconColor, flexShrink: 0 }} />
+                  <div>
+                    <div className="font-medium text-sm" style={{ color: "var(--text-primary)" }}>
+                      {t(`notifications.${labelKey}`)}
+                    </div>
+                    <div className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+                      {t(`notifications.${descKey}`)}
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => toggleType(type)}
+                  style={{
+                    width: "44px", height: "24px", borderRadius: "12px",
+                    border: "none", cursor: "pointer", position: "relative",
+                    backgroundColor: notifPrefs.types[type] ? "#4ade80" : "var(--border)",
+                    transition: "background-color 0.2s",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "20px", height: "20px", borderRadius: "50%",
+                      backgroundColor: "#fff", position: "absolute",
+                      top: "2px", left: notifPrefs.types[type] ? "22px" : "2px",
+                      transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                    }}
+                  />
+                </button>
+              </div>
+            );
+          })}
         </div>
       </div>
 

@@ -24,6 +24,7 @@ import {
   Code2,
   RefreshCw,
   MoreVertical,
+  CheckSquare,
 } from "lucide-react";
 import { FilePreview } from "./FilePreview";
 
@@ -287,6 +288,9 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
   const [newFileName, setNewFileName] = useState("");
   const [showNewFile, setShowNewFile] = useState(false);
   const [actionMenu, setActionMenu] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const [batchDeleting, setBatchDeleting] = useState(false);
+  const [confirmBatchDelete, setConfirmBatchDelete] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadItems = useCallback(() => {
@@ -375,6 +379,52 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
       alert("Delete failed");
     } finally {
       setConfirmDelete(null);
+    }
+  };
+
+  // Toggle item selection
+  const toggleItem = (name: string) => {
+    setSelectedItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) {
+        next.delete(name);
+      } else {
+        next.add(name);
+      }
+      return next;
+    });
+  };
+
+  const toggleAll = () => {
+    if (selectedItems.size === items.length) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(new Set(items.map((i) => i.name)));
+    }
+  };
+
+  // Batch delete
+  const handleBatchDelete = async () => {
+    const filePaths = Array.from(selectedItems);
+    setBatchDeleting(true);
+    try {
+      const res = await fetch("/api/files/batch-delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ workspace, files: filePaths.map((name) => path ? `${path}/${name}` : name) }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.error || "Batch delete failed");
+      } else {
+        setSelectedItems(new Set());
+        loadItems();
+      }
+    } catch {
+      alert("Batch delete failed");
+    } finally {
+      setBatchDeleting(false);
+      setConfirmBatchDelete(false);
     }
   };
 
@@ -549,6 +599,81 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
         </div>
       )}
 
+      {/* Batch selection toolbar */}
+      {selectedItems.size > 0 && (
+        <div style={{
+          display: "flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.5rem 1rem",
+          borderBottom: "1px solid var(--border)",
+          backgroundColor: "rgba(96, 165, 250, 0.08)",
+        }}>
+          <CheckSquare className="w-4 h-4" style={{ color: "#60a5fa" }} />
+          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginRight: "0.5rem" }}>
+            {selectedItems.size} selected
+          </span>
+          <button
+            onClick={() => setConfirmBatchDelete(true)}
+            disabled={batchDeleting}
+            style={{
+              display: "flex", alignItems: "center", gap: "0.25rem",
+              padding: "0.25rem 0.5rem", borderRadius: "0.375rem",
+              backgroundColor: "rgba(248, 113, 113, 0.15)", color: "#f87171",
+              border: "none", cursor: "pointer", fontSize: "0.75rem",
+            }}
+          >
+            {batchDeleting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+            Delete All
+          </button>
+          <button
+            onClick={() => setSelectedItems(new Set())}
+            style={{
+              display: "flex", alignItems: "center",
+              padding: "0.25rem 0.5rem", borderRadius: "0.375rem",
+              backgroundColor: "transparent", color: "var(--text-muted)",
+              border: "none", cursor: "pointer", fontSize: "0.75rem",
+            }}
+          >
+            <X className="w-3 h-3" /> Clear
+          </button>
+        </div>
+      )}
+
+      {/* Batch delete confirmation */}
+      {confirmBatchDelete && (
+        <div style={{
+          display: "flex", alignItems: "center", gap: "0.5rem",
+          padding: "0.75rem 1rem",
+          borderBottom: "1px solid var(--border)",
+          backgroundColor: "rgba(248, 113, 113, 0.1)",
+        }}>
+          <AlertCircle className="w-4 h-4" style={{ color: "#f87171", flexShrink: 0 }} />
+          <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", flex: 1 }}>
+            Delete {selectedItems.size} item{selectedItems.size !== 1 ? "s" : ""}? This cannot be undone.
+          </span>
+          <button
+            onClick={handleBatchDelete}
+            disabled={batchDeleting}
+            style={{
+              padding: "0.25rem 0.75rem", borderRadius: "0.375rem",
+              backgroundColor: "#f87171", color: "#fff",
+              border: "none", cursor: "pointer", fontSize: "0.75rem",
+            }}
+          >
+            {batchDeleting ? "Deleting..." : "Delete"}
+          </button>
+          <button
+            onClick={() => setConfirmBatchDelete(false)}
+            style={{
+              padding: "0.25rem 0.75rem", borderRadius: "0.375rem",
+              backgroundColor: "transparent", color: "var(--text-muted)",
+              border: "1px solid var(--border)", cursor: "pointer", fontSize: "0.75rem",
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+
       {/* Drop zone */}
       <div
         onDragOver={handleDragOver}
@@ -584,7 +709,16 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
               className="hidden md:grid grid-cols-12 gap-4 px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium"
               style={{ backgroundColor: "var(--background)", color: "var(--text-secondary)" }}
             >
-              <div className="col-span-6">Name</div>
+              <div className="col-span-1 flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedItems.size === items.length && items.length > 0}
+                  onChange={toggleAll}
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+              <div className="col-span-5">Name</div>
               <div className="col-span-2">Size</div>
               <div className="col-span-3">Modified</div>
               <div className="col-span-1"></div>
@@ -603,9 +737,23 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
                   onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--background)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; setActionMenu(null); }}
                 >
+                  {/* Checkbox (desktop) */}
+                  <div
+                    className="hidden md:flex col-span-1 items-center"
+                    onClick={(e) => { e.stopPropagation(); toggleItem(item.name); }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.has(item.name)}
+                      onChange={() => toggleItem(item.name)}
+                      style={{ cursor: "pointer" }}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+
                   {/* Name */}
                   <div
-                    className="md:col-span-6 flex items-center gap-2 md:gap-3 min-w-0 flex-1"
+                    className="md:col-span-5 flex items-center gap-2 md:gap-3 min-w-0 flex-1"
                     onClick={() => handleItemClick(item)}
                   >
                     <Icon className="w-4 h-4 md:w-5 md:h-5 shrink-0" style={{ color: iconColor }} />
@@ -676,6 +824,38 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
                   onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--background)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "var(--card)"; }}
                 >
+                  {/* Checkbox (top-left corner) */}
+                  <div
+                    style={{
+                      position: "absolute", top: "0.25rem", left: "0.25rem", zIndex: 5,
+                      opacity: 0,
+                    }}
+                    className="group-hover:!opacity-100"
+                    onClick={(e) => { e.stopPropagation(); toggleItem(item.name); }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedItems.has(item.name)}
+                      onChange={() => toggleItem(item.name)}
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ cursor: "pointer", width: "16px", height: "16px" }}
+                    />
+                  </div>
+                  {selectedItems.has(item.name) && (
+                    <div
+                      style={{
+                        position: "absolute", top: "0.25rem", left: "0.25rem", zIndex: 6,
+                      }}
+                      onClick={(e) => { e.stopPropagation(); toggleItem(item.name); }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={true}
+                        readOnly
+                        style={{ cursor: "pointer", width: "16px", height: "16px" }}
+                      />
+                    </div>
+                  )}
                   <Icon className="w-10 h-10 md:w-12 md:h-12 mb-2 md:mb-3 group-hover:scale-110 transition-transform" style={{ color: iconColor }} />
                   <span className="text-xs md:text-sm text-center truncate w-full" style={{ color: "var(--text-primary)" }} title={item.name}>
                     {item.name}
