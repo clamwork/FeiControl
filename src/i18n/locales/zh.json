@@ -333,6 +333,7 @@
       "output": "输出",
       "cache_read": "缓存读取",
       "cache_write": "缓存写入",
+      "agent": "代理",
       "breakdown_title": "按代理详细分解",
       "tokens": "令牌",
       "cost": "成本",
@@ -735,6 +736,27 @@
     "days_ago": "{days} 天前",
     "never_run": "从未运行",
     "failures_count": "{count} 次失败"
+  },
+  "error": {
+    "dashboard_title": "仪表盘出错了",
+    "generic_message": "发生了意外的错误，请重试。",
+    "error_id": "错误 ID",
+    "retry": "重试",
+    "go_home": "返回首页"
+  },
+  "error_boundary": {
+    "title": "页面出错了",
+    "message": "发生了意外的错误，请尝试刷新页面。",
+    "retry": "重试",
+    "refresh": "刷新页面",
+    "technical_details": "技术详情"
+  },
+  "export": {
+    "download_csv": "下载 CSV",
+    "download_json": "下载 JSON",
+    "export_data": "导出数据",
+    "costs_filename": "费用-{date}",
+    "activities_filename": "活动-{date}"
   },
   "settings": {
     "page_title": "设置",

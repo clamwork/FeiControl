@@ -333,6 +333,7 @@
       "output": "Output",
       "cache_read": "Cache Read",
       "cache_write": "Cache Write",
+      "agent": "Agent",
       "breakdown_title": "Detailed Breakdown by Agent",
       "tokens": "Tokens",
       "cost": "Cost",
@@ -735,6 +736,27 @@
     "days_ago": "{days} days ago",
     "never_run": "Never run",
     "failures_count": "{count} failures"
+  },
+  "error": {
+    "dashboard_title": "Dashboard Error",
+    "generic_message": "An unexpected error occurred. Please try again.",
+    "error_id": "Error ID",
+    "retry": "Retry",
+    "go_home": "Back to Home"
+  },
+  "error_boundary": {
+    "title": "Something went wrong",
+    "message": "An unexpected error occurred. Please try refreshing the page.",
+    "retry": "Retry",
+    "refresh": "Refresh Page",
+    "technical_details": "Technical Details"
+  },
+  "export": {
+    "download_csv": "Download CSV",
+    "download_json": "Download JSON",
+    "export_data": "Export Data",
+    "costs_filename": "costs-{date}",
+    "activities_filename": "activities-{date}"
   },
   "settings": {
     "page_title": "Settings",

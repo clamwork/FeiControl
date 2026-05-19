@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { FileBarChart, FileText, RefreshCw, Clock, HardDrive } from "lucide-react";
+import { FileBarChart, FileText, RefreshCw, Clock, HardDrive, Download } from "lucide-react";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
 import { useI18n } from "@/i18n";
 
@@ -76,6 +76,15 @@ export default function ReportsPage() {
     [loadContent]
   );
 
+  const handleExportActivities = () => {
+    const a = document.createElement("a");
+    a.href = `/api/activities?format=csv&limit=10000`;
+    a.download = `activities-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   useEffect(() => {
     loadReports();
   }, [loadReports]);
@@ -107,21 +116,31 @@ export default function ReportsPage() {
                 fontFamily: "var(--font-heading)",
               }}
             >
-              Reports
+              {t("reports.title")}
             </h1>
             <p className="text-xs md:text-sm hidden sm:block" style={{ color: "var(--text-secondary)" }}>
               {t("reports.subtitle")}
             </p>
           </div>
         </div>
-        <button
-          onClick={loadReports}
-          className="p-2 rounded-lg transition-colors hover:opacity-80"
-          style={{ color: "var(--text-secondary)" }}
-          title="Refresh reports"
-        >
-          <RefreshCw className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExportActivities}
+            className="p-2 rounded-lg transition-colors hover:opacity-80"
+            style={{ color: "var(--text-secondary)" }}
+            title={t("export.download_csv")}
+          >
+            <Download className="w-5 h-5" />
+          </button>
+          <button
+            onClick={loadReports}
+            className="p-2 rounded-lg transition-colors hover:opacity-80"
+            style={{ color: "var(--text-secondary)" }}
+            title={t("reports.refresh_tooltip")}
+          >
+            <RefreshCw className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {/* Main content - split layout */}

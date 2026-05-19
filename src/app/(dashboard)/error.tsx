@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { AlertTriangle, RefreshCw, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useI18n } from "@/i18n";
 
 export default function DashboardError({
   error,
@@ -11,6 +12,7 @@ export default function DashboardError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { t } = useI18n();
   useEffect(() => {
     console.error("[DashboardError]", error);
   }, [error]);
@@ -36,7 +38,7 @@ export default function DashboardError({
           className="text-xl font-bold mb-3"
           style={{ color: "var(--text-primary)" }}
         >
-          仪表盘出错了
+          {t("error.dashboard_title")}
         </h2>
 
         {/* Error Message */}
@@ -44,7 +46,7 @@ export default function DashboardError({
           className="text-sm mb-2"
           style={{ color: "var(--text-secondary)" }}
         >
-          {error.message || "发生了意外的错误，请重试。"}
+          {error.message || t("error.generic_message")}
         </p>
 
         {error.digest && (
@@ -52,7 +54,7 @@ export default function DashboardError({
             className="text-xs mb-6"
             style={{ color: "var(--text-muted)" }}
           >
-            错误 ID: {error.digest}
+            {t("error.error_id")}: {error.digest}
           </p>
         )}
 
@@ -67,7 +69,7 @@ export default function DashboardError({
             }}
           >
             <RefreshCw className="w-4 h-4" />
-            重试
+            {t("error.retry")}
           </button>
           <Link
             href="/"
@@ -79,7 +81,7 @@ export default function DashboardError({
             }}
           >
             <ArrowLeft className="w-4 h-4" />
-            返回首页
+            {t("error.go_home")}
           </Link>
         </div>
       </div>

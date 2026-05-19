@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DollarSign, TrendingUp, TrendingDown, AlertTriangle, Calendar, PieChart } from "lucide-react";
+import { DollarSign, TrendingUp, TrendingDown, AlertTriangle, Calendar, PieChart, Download } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, PieChart as RePieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useI18n } from "@/i18n";
+import { downloadCSV, downloadJSON, dateStamp } from "@/lib/export-data";
 
 interface CostData {
   today: number;
@@ -57,6 +58,42 @@ export default function CostsPage() {
     }
   };
 
+  const handleExportCSV = () => {
+    if (!costData) return;
+    const date = dateStamp();
+    const rows = costData.byAgent.map((a) => ({
+      agent: a.agent,
+      tokens: a.tokens ?? 0,
+      cost: a.cost ?? 0,
+      percent: ((a.cost / (costData.thisMonth || 1)) * 100).toFixed(1),
+    }));
+    downloadCSV(rows, `${t("export.costs_filename", { date })}.csv`, [
+      { key: "agent", label: t("costs.table.agent") },
+      { key: "tokens", label: t("costs.table.tokens") },
+      { key: "cost", label: t("costs.table.cost") },
+      { key: "percent", label: t("costs.table.percent_total") },
+    ]);
+  };
+
+  const handleExportJSON = () => {
+    if (!costData) return;
+    const date = dateStamp();
+    const exportData = {
+      summary: {
+        today: costData.today,
+        yesterday: costData.yesterday,
+        thisMonth: costData.thisMonth,
+        lastMonth: costData.lastMonth,
+        projected: costData.projected,
+        budget: costData.budget,
+      },
+      byAgent: costData.byAgent,
+      byModel: costData.byModel,
+      daily: costData.daily,
+    };
+    downloadJSON([exportData], `${t("export.costs_filename", { date })}.json`);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -103,21 +140,42 @@ export default function CostsPage() {
           </p>
         </div>
 
-        {/* Timeframe selector */}
-        <div className="flex gap-2 p-1 rounded-lg" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
-          {(["7d", "30d", "90d"] as const).map((tf) => (
+        {/* Timeframe selector + Export buttons */}
+        <div className="flex items-center gap-2">
+          <div className="flex gap-2 p-1 rounded-lg" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
+            {(["7d", "30d", "90d"] as const).map((tf) => (
+              <button
+                key={tf}
+                onClick={() => setTimeframe(tf)}
+                className="px-4 py-2 rounded-md text-sm font-medium transition-all"
+                style={{
+                  backgroundColor: timeframe === tf ? "var(--accent)" : "transparent",
+                  color: timeframe === tf ? "white" : "var(--text-secondary)",
+                }}
+              >
+                {t(`costs.timeframe.${tf}`)}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-1">
             <button
-              key={tf}
-              onClick={() => setTimeframe(tf)}
-              className="px-4 py-2 rounded-md text-sm font-medium transition-all"
-              style={{
-                backgroundColor: timeframe === tf ? "var(--accent)" : "transparent",
-                color: timeframe === tf ? "white" : "var(--text-secondary)",
-              }}
+              onClick={handleExportCSV}
+              title={t("export.download_csv")}
+              className="p-2 rounded-lg transition-all hover:opacity-80"
+              style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", color: "var(--text-secondary)" }}
             >
-              {t(`costs.timeframe.${tf}`)}
+              <Download className="w-4 h-4" />
             </button>
-          ))}
+            <button
+              onClick={handleExportJSON}
+              title={t("export.download_json")}
+              className="p-2 rounded-lg transition-all hover:opacity-80"
+              style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", color: "var(--text-secondary)" }}
+            >
+              <Download className="w-4 h-4" />
+              <span className="text-xs ml-1">JSON</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -368,7 +426,7 @@ export default function CostsPage() {
           <table className="w-full">
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                <th className="text-left py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Agent</th>
+                <th className="text-left py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.agent")}</th>
                 <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.tokens")}</th>
                 <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.cost")}</th>
                 <th className="text-right py-3 px-4 text-sm font-medium" style={{ color: "var(--text-secondary)" }}>{t("costs.table.percent_total")}</th>

@@ -1,4 +1,9 @@
+"use client";
+
+import { useI18n } from "@/i18n";
+
 export default function Loading() {
+  const { t } = useI18n();
   return (
     <div
       className="flex items-center justify-center min-h-[60vh]"
@@ -13,7 +18,7 @@ export default function Loading() {
           }}
         />
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-          加载中...
+          {t("common.loading")}
         </p>
       </div>
     </div>

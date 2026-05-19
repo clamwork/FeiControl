@@ -54,10 +54,10 @@ export default function FilesPage() {
             marginBottom: "4px",
           }}
         >
-          File Browser
+          {t("files.title")}
         </h1>
         <p style={{ fontFamily: "var(--font-body)", fontSize: "13px", color: "var(--text-secondary)" }}>
-          Browse agent workspaces and files
+          {t("files.subtitle")}
         </p>
       </div>
 
@@ -91,7 +91,7 @@ export default function FilesPage() {
               textTransform: "uppercase",
             }}
           >
-            Workspaces
+            {t("files.sidebar.workspaces")}
           </p>
 
           {workspaces.map((workspace) => {
@@ -241,7 +241,7 @@ export default function FilesPage() {
                 fontSize: "14px",
               }}
             >
-              Selecciona un workspace para explorar sus archivos
+              {t("files.empty.select_workspace")}
             </div>
           )}
         </main>

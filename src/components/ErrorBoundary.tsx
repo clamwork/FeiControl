@@ -2,6 +2,7 @@
 
 import { Component, ReactNode } from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { I18nContext } from "@/i18n";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -15,6 +16,9 @@ interface ErrorBoundaryState {
 }
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  static contextType = I18nContext;
+  declare context: React.ContextType<typeof I18nContext>;
+
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -38,6 +42,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   };
 
   render() {
+    const t = this.context?.t || ((key: string) => key);
+
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;
@@ -64,7 +70,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               className="text-xl font-bold mb-3"
               style={{ color: "var(--text-primary)" }}
             >
-              页面出错了
+              {t("error_boundary.title")}
             </h2>
 
             {/* Error Message */}
@@ -72,7 +78,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
               className="text-sm mb-6"
               style={{ color: "var(--text-secondary)" }}
             >
-              {this.state.error?.message || "发生了意外的错误，请尝试刷新页面。"}
+              {this.state.error?.message || t("error_boundary.message")}
             </p>
 
             {/* Actions */}
@@ -86,7 +92,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 }}
               >
                 <RefreshCw className="w-4 h-4" />
-                重试
+                {t("error_boundary.retry")}
               </button>
               <button
                 onClick={this.handleReload}
@@ -98,7 +104,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 }}
               >
                 <Home className="w-4 h-4" />
-                刷新页面
+                {t("error_boundary.refresh")}
               </button>
             </div>
 
@@ -109,7 +115,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                   className="text-sm cursor-pointer mb-2"
                   style={{ color: "var(--text-muted)" }}
                 >
-                  技术详情
+                  {t("error_boundary.technical_details")}
                 </summary>
                 <pre
                   className="text-xs p-3 rounded-lg overflow-auto max-h-48"

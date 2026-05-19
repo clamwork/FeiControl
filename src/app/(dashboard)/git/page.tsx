@@ -234,7 +234,7 @@ export default function GitPage() {
                   {repo.unstaged.length > 0 && (
                     <div>
                       <div className="text-xs font-semibold mb-1" style={{ color: "#fbbf24" }}>
-                        Modified ({repo.unstaged.length})
+                        {t("git.changes")} ({repo.unstaged.length})
                       </div>
                       <div className="space-y-0.5">
                         {repo.unstaged.slice(0, 5).map((f) => (
