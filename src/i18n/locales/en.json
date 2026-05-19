@@ -849,7 +849,10 @@
   },
   "language": {
     "zh": "Chinese",
-    "en": "English"
+    "en": "English",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "es": "Spanish"
   },
   "keyboard_shortcuts": {
     "title": "Keyboard Shortcuts",
@@ -860,5 +863,71 @@
     "select": "Select item",
     "focus_search": "Focus search bar",
     "footer": "Press ? to toggle this panel"
+  },
+  "agents": {
+    "title": "Agents",
+    "local_title": "Local Agents",
+    "remote_title": "Remote Teams",
+    "status_online": "Online",
+    "status_offline": "Offline",
+    "status_working": "Working",
+    "model": "Model",
+    "workspace": "Workspace",
+    "last_activity": "Last Activity",
+    "no_agents": "No agents configured",
+    "no_teams": "No remote teams found",
+    "refresh": "Refresh",
+    "agent_detail": "Agent Details",
+    "sessions": "Sessions",
+    "memory": "Memory",
+    "logs": "Activity Log",
+    "send_task": "Send Task",
+    "task_placeholder": "Describe the task for this agent...",
+    "task_sent": "Task sent successfully",
+    "task_failed": "Failed to send task"
+  },
+  "chat": {
+    "title": "Agent Chat",
+    "placeholder": "Type a message...",
+    "send": "Send",
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "error_send": "Failed to send message",
+    "clear": "Clear Chat",
+    "agent_select": "Select Agent",
+    "thinking": "Agent is thinking...",
+    "no_messages": "Start a conversation with an agent",
+    "today": "Today",
+    "yesterday": "Yesterday"
+  },
+  "plugins": {
+    "title": "Plugins",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "no_plugins": "No plugins installed",
+    "install": "Install Plugin",
+    "uninstall": "Uninstall",
+    "settings": "Plugin Settings",
+    "version": "Version",
+    "author": "Author",
+    "description": "Description",
+    "reload": "Reload All",
+    "reloaded": "Plugins reloaded",
+    "install_from": "Install from URL"
+  },
+  "widgets": {
+    "title": "Dashboard Widgets",
+    "customize": "Customize Dashboard",
+    "save": "Save Layout",
+    "reset": "Reset Layout",
+    "add_widget": "Add Widget",
+    "remove_widget": "Remove Widget",
+    "system_health": "System Health",
+    "agent_status": "Agent Status",
+    "recent_activities": "Recent Activities",
+    "cost_summary": "Cost Summary",
+    "cron_summary": "Cron Summary",
+    "memory_summary": "Memory Summary"
   }
 }

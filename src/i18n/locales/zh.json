@@ -849,7 +849,10 @@
   },
   "language": {
     "zh": "中文",
-    "en": "English"
+    "en": "English",
+    "ja": "日语",
+    "ko": "韩语",
+    "es": "西班牙语"
   },
   "keyboard_shortcuts": {
     "title": "键盘快捷键",
@@ -860,5 +863,71 @@
     "select": "选择项目",
     "focus_search": "聚焦搜索栏",
     "footer": "按 ? 切换此面板"
+  },
+  "agents": {
+    "title": "Agent 管理",
+    "local_title": "本地 Agent",
+    "remote_title": "远程团队",
+    "status_online": "在线",
+    "status_offline": "离线",
+    "status_working": "工作中",
+    "model": "模型",
+    "workspace": "工作区",
+    "last_activity": "最近活动",
+    "no_agents": "未配置 Agent",
+    "no_teams": "未发现远程团队",
+    "refresh": "刷新",
+    "agent_detail": "Agent 详情",
+    "sessions": "会话",
+    "memory": "记忆",
+    "logs": "活动日志",
+    "send_task": "发送任务",
+    "task_placeholder": "描述要发送给该 Agent 的任务...",
+    "task_sent": "任务发送成功",
+    "task_failed": "任务发送失败"
+  },
+  "chat": {
+    "title": "Agent 对话",
+    "placeholder": "输入消息...",
+    "send": "发送",
+    "connecting": "连接中...",
+    "connected": "已连接",
+    "disconnected": "已断开",
+    "error_send": "消息发送失败",
+    "clear": "清空对话",
+    "agent_select": "选择 Agent",
+    "thinking": "Agent 正在思考...",
+    "no_messages": "开始与 Agent 对话",
+    "today": "今天",
+    "yesterday": "昨天"
+  },
+  "plugins": {
+    "title": "插件管理",
+    "enabled": "已启用",
+    "disabled": "已禁用",
+    "no_plugins": "未安装插件",
+    "install": "安装插件",
+    "uninstall": "卸载",
+    "settings": "插件设置",
+    "version": "版本",
+    "author": "作者",
+    "description": "描述",
+    "reload": "重新加载",
+    "reloaded": "插件已重新加载",
+    "install_from": "从 URL 安装"
+  },
+  "widgets": {
+    "title": "仪表盘小部件",
+    "customize": "自定义仪表盘",
+    "save": "保存布局",
+    "reset": "重置布局",
+    "add_widget": "添加小部件",
+    "remove_widget": "移除小部件",
+    "system_health": "系统健康",
+    "agent_status": "Agent 状态",
+    "recent_activities": "最近活动",
+    "cost_summary": "成本摘要",
+    "cron_summary": "定时任务摘要",
+    "memory_summary": "记忆摘要"
   }
 }

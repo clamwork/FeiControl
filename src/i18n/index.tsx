@@ -3,18 +3,25 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import zh from "./locales/zh.json";
 import en from "./locales/en.json";
+import ja from "./locales/ja.json";
+import ko from "./locales/ko.json";
+import es from "./locales/es.json";
 
-type Locale = "zh" | "en";
+export type Locale = "zh" | "en" | "ja" | "ko" | "es";
 
 const translations: Record<Locale, any> = {
   zh,
   en,
+  ja,
+  ko,
+  es,
 };
 
 const LOCALE_STORAGE_KEY = "feicontrol_locale";
 
 // Always default to Chinese for server-side rendering to avoid hydration mismatch
 const DEFAULT_LOCALE: Locale = "zh";
+const ALLOWED_LOCALES: string[] = ["zh", "en", "ja", "ko", "es"];
 
 function getInitialLocale(): Locale {
   // During SSR, always return default locale
@@ -23,15 +30,16 @@ function getInitialLocale(): Locale {
   }
   
   const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-  if (stored === "zh" || stored === "en") {
-    return stored;
+  if (stored && ALLOWED_LOCALES.includes(stored)) {
+    return stored as Locale;
   }
   
   // Detect browser language
   const browserLang = navigator.language.toLowerCase();
-  if (browserLang.startsWith("zh")) {
-    return "zh";
-  }
+  if (browserLang.startsWith("zh")) return "zh";
+  if (browserLang.startsWith("ja")) return "ja";
+  if (browserLang.startsWith("ko")) return "ko";
+  if (browserLang.startsWith("es")) return "es";
   
   return DEFAULT_LOCALE;
 }
