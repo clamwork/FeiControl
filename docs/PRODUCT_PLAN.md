@@ -1,21 +1,22 @@
 # FeiControl — 产品规划白皮书
 
 > 版本: v1.0 | 最后更新: 2025-07-17
-> "A cute mission control for your OpenClaw 💖"
+> "A cute mission control for your AI agents 💖"
 
 ---
 
 ## 📌 核心定位（一句话定义）
 
-> **FeiControl 是 OpenClaw 的桌面伴侣控制台——用一个漂亮的 UI 替你看一眼 Agent 们在做什么。**
+> **FeiControl 是你的 AI Agent 伴侣控制台——用一个漂亮的 UI 替你看一眼所有 Agent 们在做什么。**
 
-不是通用的 AI Agent 管理平台，不是 API 网关，不是企业级编排引擎。它只是 OpenClaw 用户最顺手的那块「副屏」。
+始于 OpenClaw，但不局限于 OpenClaw。通过 Adapter 模式连接不同 Agent 生态（OpenClaw、Hermes Agent 等），让你在统一界面上看见、对话、管理所有 Agent。不是通用 AI 平台，不是 API 网关，不是编排引擎——它只是你最顺手的那块「副屏」。
 
 ### 什么是对的事情
 
 | ✅ 做 | ❌ 不做 |
 |-------|---------|
-| 读取 OpenClaw 文件系统，可视化呈现 | 不依赖任何外部 API 或云服务 |
+| 读取 Agent 文件系统（OpenClaw / Hermes 等），可视化呈现 | 不依赖任何外部 API 或云服务 |
+| Adapter 模式支持多 Agent 后端 | 不做内置 Agent 运行时 |
 | 通过本地 SQLite 存储自身的运行时数据 | 不做用户系统、不存用户数据 |
 | 使用 SSE 推送实时状态 | 不做双向 WebSocket 或消息队列 |
 | 插件机制扩展 UI 功能 | 不做工作流引擎或 Agent 编排 |
@@ -29,35 +30,36 @@
 
 ### 一句话愿景
 
-> 让每个 OpenClaw 用户都有一个漂亮、顺手、随时看一眼就放心的控制台。
+> 让每个 Agent 用户都有一个漂亮、顺手、随时看一眼就放心的统一控制台。
 
 ### 产品使命
 
 FeiControl 只做三件事：
-1. **看见** —— Agent 状态、活动、成本，一页纵览
-2. **对话** —— 像聊天一样和 Agent 交互
-3. **管理** —— 查看记忆、日志、定时任务，不用 SSH
+1. **看见** —— 跨 Agent 状态、活动、成本，一页纵览
+2. **对话** —— 像聊天一样和任意 Agent 交互
+3. **管理** —— 查看记忆、日志、配置，不用 SSH
 
 ### 为什么需要 FeiControl
 
 | 场景 | 没有 FeiControl | 有 FeiControl |
 |------|----------------|---------------|
 | Agent 卡住了 | 不知道，几小时后才发现 | Dashboard 上红点闪烁，一眼看到 |
-| 查看某个 Agent 的记忆 | SSH 进去 `cat ~/.openclaw/workspace-xxx/memory/*.md` | 浏览器里直接浏览编辑 |
+| 查看某个 Agent 的记忆 | SSH 进去 `cat ~/.openclaw/...` | 浏览器里直接浏览编辑 |
 | 跟 Agent 说话 | 终端里 curl API | Chat 界面，流式响应 |
 | 想知道今天花了多少钱 | 自己算 API 调用次数 × 价格 | 自动统计每日成本趋势图 |
 | 管理定时任务 | crontab -e | 可视化 Cron 管理，带运行历史 |
+| 同时用 OpenClaw + Hermes | 两个终端来回切 | 一个 Dashboard 全看见 |
 | 看 3D 办公室 | ❌ | ✅ 樱花树下的 Agent 工位 |
 
-
-### 产品哲学（6 条）
+### 产品哲学（7 条）
 
 1. **Local First** — 数据主权在用户手中，所有文件都在本机，SQLite 只存运行时缓存
 2. **Cute but Serious** — 界面可爱（樱花、表情符号），功能可靠（健康检查、错误处理、PWA）
-3. **Zero Config** — `git clone && npm install && npm run dev` 就可用，自动检测 OpenClaw
-4. **Read-Only by Default** — 默认只读 OpenClaw 文件，写操作需要用户明确授权
+3. **Zero Config** — `git clone && npm install && npm run dev` 就可用，自动检测 Agent
+4. **Read-Only by Default** — 默认只读 Agent 文件，写操作需用户明确授权
 5. **离线友好** — PWA Service Worker 缓存，断网也能看到最近状态
 6. **单用户** — 不做多用户，不做团队协作，不做企业功能。保持简单
+7. **Agent Neutral** — 不绑定任何 Agent 框架，通过 Adapter 平等对待每个后端
 
 ---
 
@@ -250,13 +252,59 @@ FeiControl
 ├─────────────────────────────────────┤
 │  Data Layer                          │
 │  ┌──────────────┐ ┌───────────────┐  │
-│  │ SQLite       │ │ OpenClaw FS   │  │
-│  │ (运行时缓存)  │ │ (只读数据源)   │  │
-│  └──────────────┘ └───────────────┘  │
+│  │ SQLite       │ │ Agent         │  │
+│  │ (运行时缓存)  │ │ Adapters      │  │
+│  └──────────────┘ ├───────────────┤  │
+│                   │OpenClawAdapter│  │
+│                   │HermesAdapter  │  │
+│                   │   (未来更多)   │  │
+│                   └───────────────┘  │
 ├─────────────────────────────────────┤
 │  Infra: Docker + PWA SW             │
 └─────────────────────────────────────┘
 ```
+
+### Agent Adapter 设计
+
+每个 Agent 后端由一个 Adapter 封装，暴露统一接口：
+
+```typescript
+interface AgentAdapter {
+  // 基本信息
+  id: string
+  name: string
+  version: string
+  detected: boolean  // 文件系统上是否存在
+
+  // 读取接口
+  getStatus(): Promise<AgentStatus>
+  getSessions(): Promise<Session[]>
+  getMemory(): Promise<Memory>
+  getConfig(): Promise<Config>
+  getLogs(): Promise<Log[]>
+  getCosts(): Promise<Cost[]>
+  getCronJobs(): Promise<CronJob[]>
+  getWorkspaces(): Promise<Workspace[]>
+
+  // 写入接口（需用户确认）
+  sendMessage(msg: string): Promise<void>
+  updateMemory(memory: Memory): Promise<void>
+}
+
+// 注册表
+const ADAPTERS: AgentAdapter[] = [
+  new OpenClawAdapter(),
+  new HermesAdapter(),
+]
+```
+
+| Adapter | 数据源 | 检测方式 |
+|---------|--------|----------|
+| `OpenClawAdapter` | `~/.openclaw/` 目录 | 检查 `.openclaw` 是否存在 |
+| `HermesAdapter` | `~/.hermes/hermes-agent/config.yaml` + 工作目录 | 检查 `config.yaml` 和 `sessions/` |
+| `AcpAdapter` | ACP 协议端点 | 配置 URL 后连接 |
+
+> **Hermes Agent 已有 `hermes claw` 命令原生支持 OpenClaw 迁移，HermesClaw 社区项目也已桥接两者。FeiControl 在此基础上提供 UI 层面的统一管理。**
 
 ### 架构原则
 
@@ -495,12 +543,12 @@ Layer 5: 插件安全
 ### 版本策略
 
 ```
-v1.x.x — 纯伴侣控制台，专注 OpenClaw 体验优化
+v1.x.x — 伴侣控制台，支持多 Agent 后端
   发布节奏：每 2~4 周一个功能版本
   不需要大版本升级（v2.0 并无必要）
 ```
 
-### Phase 5: 品质打磨（v1.0 → v1.2）
+### Phase 5: 品质打磨 + 多 Agent 互通（v1.0 → v1.2）
 
 #### Sprint 5.1: 质量基础设施（v1.1.0 — 预计 2 周）
 
@@ -516,20 +564,31 @@ v1.x.x — 纯伴侣控制台，专注 OpenClaw 体验优化
 | 🔴 P0 | E2E: Cron CRUD | 任务增删改查 | ✅ 完整 CRUD |
 | 🔴 P0 | PWA 移动端适配 | 触控优化 + 底部导航 | ✅ 触控友好 |
 | 🔴 P0 | Lighthouse CI | 性能基线 | ✅ Performance ≥ 90 |
-| 🟡 P1 | E2E: 日历 | 视图切换 + 事件操作 | ✅ 完整交互 |
-| 🟡 P1 | E2E: 成本页面 | 图表 + 导出 | ✅ 数据正确 |
 | 🟡 P1 | E2E: 文件浏览器 | 导航 + 预览 | ✅ 文件操作 |
 | 🟡 P1 | 图片优化 | next/image + WebP | ✅ 体积减少 50% |
 | 🟢 P2 | E2E: 3D Office | 场景加载 | ✅ 渲染正常 |
 
-#### Sprint 5.2: 插件生态（v1.2.0 — 预计 2 周）
+#### Sprint 5.2: Hermes Agent Adapter（v1.2.0 — 预计 3 周）
+
+> 目标：FeiControl 成为首个同时支持 OpenClaw + Hermes Agent 的伴侣控制台
+
+| 优先级 | 任务 | 说明 | 验收标准 |
+|--------|------|------|----------|
+| 🔴 P0 | HermesAdapter 核心实现 | 读取 config.yaml / sessions / memory | ✅ 成功检测 Hermes Agent |
+| 🔴 P0 | Dashboard 多 Agent 视图 | 同时显示 OpenClaw + Hermes | ✅ 每个 Agent 独立卡片 |
+| 🔴 P0 | Chat 支持后端切换 | 下拉选择 OpenClaw / Hermes | ✅ 消息路由正确 |
+| 🟡 P1 | Hermes 成本追踪 | 解析模型调用记录汇总成本 | ✅ 每日成本趋势正确 |
+| 🟡 P1 | Hermes 文件浏览器 | 查看 Hermes Agent 的工作目录 | ✅ 目录结构准确 |
+| 🟡 P1 | Hermes Cron 管理 | 可视化任务编排 | ✅ 任务状态正确 |
+| 🟢 P2 | ACP 协议支持 | 通过 ACP 连接任意兼容 Agent | ✅ 基础通信可用 |
+
+#### Sprint 5.3: 插件生态（v1.3.0 — 预计 2 周）
 
 | 优先级 | 任务 | 说明 | 验收标准 |
 |--------|------|------|----------|
 | 🟡 P1 | 插件商店 UI | 浏览 / 搜索 / 安装 | ✅ 商店页面 / ✅ 一键安装 |
-| 🟡 P1 | 插件发布文档 | 开发者指南 | ✅ 插件开发文档 |
-| 🟡 P1 | 数据看板增强 | 图表自定义 + 导出增强 | ✅ PDF/PNG 导出 |
-| 🟡 P1 | 定时邮件报表 | 日报 / 周报 / 月报邮件 | ✅ SMTP 配置 / ✅ 模板 |
+| 🟡 P1 | 插件发布文档 | 开发者指南 | ✅ 完整的 PLUGIN_DEV.md |
+| 🟡 P1 | 数据看板增强 | 图表自定义 + PDF/PNG 导出 | ✅ 看板更灵活 |
 | 🟢 P2 | 插件模板脚手架 | `npm create feicontrol-plugin` | ✅ 快速创建 |
 
 ### 不计划的功能
@@ -537,21 +596,24 @@ v1.x.x — 纯伴侣控制台，专注 OpenClaw 体验优化
 | ❌ 不做 | 理由 |
 |---------|------|
 | 多用户系统 | 个人控制台，不需要 |
-| 公开 REST API | 没有外部集成场景 |
 | WebSocket 升级 | SSE 已经够了 |
 | Web Terminal | 这不是终端模拟器 |
-| 工作流引擎 | 任务编排交给 OpenClaw 自己做 |
+| 工作流引擎 | 任务编排交给 Agent 自己做 |
 | 前后端分离 | 单体已经够好，分离带来不必要的复杂度 |
 | 企业级功能（SSO/LDAP/K8s） | 不是目标用户群 |
 | 商业模式（付费版） | 开源项目，不收费 |
 
 ### 长期维护方向
 
-一旦 v1.2 功能稳定，后续迭代聚焦于：
+v1.2 之后，FeiControl 进入稳定维护 + 生态扩展模式：
 
 | 方向 | 说明 |
 |------|------|
-| 🔧 **OpenClaw 版本兼容** | 跟随 OpenClaw 更新，确保新特性有对应展示 |
+| 🔧 **Agent 版本兼容** | 跟随 OpenClaw / Hermes 更新，确保新特性有对应展示 |
+| 🧩 **Agent Adapter 生态** | 新增 Agent 后端的 Adapter，扩大兼容范围 |
+| 🌐 **社区插件商店** | 用户提交自定义插件，丰富扩展能力 |
+| 🔌 **ACP 协议兼容** | 支持 Agent Communication Protocol，对接更多 ACP 兼容 Agent |
+| 📊 **体验持续优化** | 响应式、国际化、可访问性持续提升 |
 | 🌐 **更多语言** | 社区贡献的 i18n 翻译 |
 | 🎨 **主题社区** | 社区贡献的自定义主题 |
 | 🔌 **插件生态** | 社区贡献的插件丰富化 |
