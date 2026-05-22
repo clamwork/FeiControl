@@ -2,7 +2,9 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useI18n } from "@/i18n";
-import { Bot, Globe, RefreshCw, Send, X, ExternalLink, Wifi, WifiOff, Clock, Cpu } from "lucide-react";
+import { Bot, Globe, RefreshCw, Send, X, ExternalLink, Wifi, WifiOff, Clock, Cpu, Sliders } from "lucide-react";
+import MoodBadge from "@/components/personality/MoodBadge";
+import PersonalityTab from "@/components/personality/PersonalityTab";
 
 interface AgentInfo {
   id: string;
@@ -45,6 +47,8 @@ export default function AgentsPage() {
   const [taskInput, setTaskInput] = useState("");
   const [taskSending, setTaskSending] = useState(false);
   const [taskResult, setTaskResult] = useState<"success" | "error" | null>(null);
+  const [moods, setMoods] = useState<Record<string, { mood: string; reason: string }>>({});
+  const [personalityModal, setPersonalityModal] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -70,6 +74,22 @@ export default function AgentsPage() {
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  // 加载所有 Agent 的心情
+  useEffect(() => {
+    if (!agents.length) return;
+    agents.forEach(async (agent) => {
+      try {
+        const res = await fetch(`/api/personality/mood?agentId=${encodeURIComponent(agent.id)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.mood) {
+            setMoods(prev => ({ ...prev, [agent.id]: { mood: data.mood.mood, reason: data.mood.reason } }));
+          }
+        }
+      } catch {}
+    });
+  }, [agents]);
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -187,6 +207,10 @@ export default function AgentsPage() {
                         {agent.name || agent.id}
                       </h3>
                       <div className="flex items-center gap-1">
+                        {/* Mood Badge */}
+                        {moods[agent.id] && (
+                          <MoodBadge mood={moods[agent.id].mood} reason={moods[agent.id].reason} size="sm" />
+                        )}
                         <div
                           className="w-2 h-2 rounded-full"
                           style={{ backgroundColor: getStatusColor(agent.status) }}
@@ -240,6 +264,14 @@ export default function AgentsPage() {
                   >
                     <Send className="w-3.5 h-3.5" />
                     {t("agents.send_task")}
+                  </button>
+                  <button
+                    onClick={() => setPersonalityModal(agent.id)}
+                    className="py-1.5 px-3 rounded-lg text-xs flex items-center gap-1 transition-opacity hover:opacity-80"
+                    style={{ backgroundColor: "var(--surface-elevated)", color: "var(--text-secondary)", border: "1px solid var(--border)" }}
+                  >
+                    <Sliders className="w-3.5 h-3.5" />
+                    性格
                   </button>
                   <button
                     className="py-1.5 px-3 rounded-lg text-xs flex items-center gap-1 transition-opacity hover:opacity-80"
@@ -341,6 +373,27 @@ export default function AgentsPage() {
                 {taskResult === "success" ? t("agents.task_sent") : t("agents.task_failed")}
               </p>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* 性格编辑 Modal */}
+      {personalityModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <div className="w-full max-w-lg max-h-[80vh] overflow-y-auto p-6 rounded-xl" style={{ backgroundColor: "var(--card)", border: "1px solid var(--border)" }}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold" style={{ color: "var(--text-primary)" }}>
+                <Sliders className="w-4 h-4 inline-block mr-2" />
+                性格设置 — {agents.find(a => a.id === personalityModal)?.name || personalityModal}
+              </h3>
+              <button onClick={() => setPersonalityModal(null)}>
+                <X className="w-5 h-5" style={{ color: "var(--text-muted)" }} />
+              </button>
+            </div>
+            <PersonalityTab
+              agentId={personalityModal}
+              agentName={agents.find(a => a.id === personalityModal)?.name}
+            />
           </div>
         </div>
       )}

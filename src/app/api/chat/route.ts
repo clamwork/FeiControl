@@ -3,6 +3,8 @@ import { execSync } from "child_process";
 import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
+import { getPersonality } from "@/lib/personality/repository";
+import { buildPersonalityPrompt } from "@/lib/personality/prompt-builder";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -49,18 +51,26 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     }, null, 2));
 
+    // ── Inject personality prompt ──
+    const personality = getPersonality(agentId);
+    const personalityPrompt = buildPersonalityPrompt(personality, {
+      agentName: agent.name || agentId,
+    });
+
     // Try to send to agent via OpenClaw CLI if available
     let response = "";
     try {
       const cliPath = join(OPENCLAW_DIR, "..", "openclaw", "cli", "openclaw");
       if (existsSync(cliPath)) {
+        // Inject personality into message
+        const augmentedMessage = `${personalityPrompt}\n\n---\n用户消息: ${message}\n\n请根据以上【性格设定】和【语言风格】以最适合的语气回复用户。`;
         const result = execSync(
-          `${cliPath} task --agent ${agentId} --task "${message.replace(/"/g, '\\"')}"`,
+          `${cliPath} task --agent ${agentId} --task "${augmentedMessage.replace(/"/g, '\\"')}"`,
           { encoding: "utf-8", timeout: 120000 }
         );
         response = result.trim();
       } else {
-        response = `[Simulated] Task sent to ${agentId} via ${model}. In production, this would use the OpenClaw CLI to dispatch the task.`;
+        response = `[Simulated] Task sent to ${agentId} via ${model}. (人格注入: ${personality.extraversion}/${personality.conscientiousness}/${personality.humor}/${personality.empathy}/${personality.creativity})`;
       }
     } catch (execError: any) {
       response = `[Error] Failed to execute task: ${execError.message || "Unknown error"}`;
