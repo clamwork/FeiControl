@@ -929,5 +929,105 @@
     "cost_summary": "Cost Summary",
     "cron_summary": "Cron Summary",
     "memory_summary": "Memory Summary"
+  },
+  "personality": {
+    "title": "Personality",
+    "edit_title": "Edit Personality",
+    "presets_title": "Presets",
+    "mood_title": "Mood",
+    "current_mood": "Current Mood",
+    "last_updated": "Last Updated",
+    "loading": "Loading...",
+    "cannot_load": "Cannot load personality config",
+    "adjust_hint": "Adjust the sliders below to change {name}'s personality traits. Each dimension ranges from 1 (low) to 10 (high).",
+    "save": "Save Personality",
+    "saving": "Saving...",
+    "saved": "✓ Saved",
+    "speaking_style": "Speaking Style",
+    "tone": "Tone",
+    "verbosity": "Response Length",
+    "emoji_usage": "Emoji Usage",
+    "default_option": "Default",
+    "applied": "✓ Applied",
+    "apply": "Apply",
+    "no_mood_data": "No mood data yet — will auto-generate after the agent completes its first task",
+    "preset_hint": "Quick-apply a preset personality combo, then fine-tune each dimension manually",
+    "mood_detail": "Mood Details",
+    "dimensions": {
+      "extraversion": "Extraversion",
+      "conscientiousness": "Conscientiousness",
+      "humor": "Humor",
+      "empathy": "Empathy",
+      "creativity": "Creativity"
+    },
+    "dimension_descs": {
+      "extraversion": "Talkative & proactive vs Quiet & passive; extraverted agents recommend features and initiate conversations",
+      "conscientiousness": "Structured output, attention to detail, strict process vs Free-spirited, casual",
+      "humor": "Witty remarks, emojis, fun expressions vs Serious, straightforward answers",
+      "empathy": "Understand feelings before answering, show care vs Direct answers only",
+      "creativity": "Novel ideas, diverse solutions vs Step-by-step, conventional"
+    },
+    "dimension_left": {
+      "introvert": "Introvert",
+      "extravert": "Extravert",
+      "casual": "Casual",
+      "rigorous": "Rigorous",
+      "serious": "Serious",
+      "humorous": "Humorous",
+      "direct": "Direct",
+      "warm": "Warm",
+      "conventional": "Conventional",
+      "innovative": "Innovative"
+    },
+    "dimension_right": {
+      "introvert": "Introvert",
+      "extravert": "Extravert",
+      "casual": "Casual",
+      "rigorous": "Rigorous",
+      "serious": "Serious",
+      "humorous": "Humorous",
+      "direct": "Direct",
+      "warm": "Warm",
+      "conventional": "Conventional",
+      "innovative": "Innovative"
+    },
+    "tone_options": {
+      "formal": "Formal",
+      "casual": "Casual",
+      "warm": "Warm"
+    },
+    "verbosity_options": {
+      "brief": "Brief",
+      "normal": "Normal",
+      "detailed": "Detailed"
+    },
+    "emoji_options": {
+      "never": "Never",
+      "occasional": "Occasional",
+      "frequent": "Frequent"
+    },
+    "preset_names": {
+      "efficient": "Efficient Assistant",
+      "creative": "Creative Partner",
+      "caring": "Caring Helper",
+      "data_expert": "Data Expert",
+      "humorous": "Humorous Buddy"
+    },
+    "preset_descs": {
+      "efficient": "Rigorous, professional, structured output — ideal for data analysis and technical tasks",
+      "creative": "Open, enthusiastic, active mind — great for brainstorming and creative writing",
+      "caring": "Warm, patient, empathetic — perfect for customer service and daily companionship",
+      "data_expert": "Rigorous, calm, precise — suitable for data analysis and report generation",
+      "humorous": "Funny, lively, relaxed — perfect for casual chat and entertainment"
+    },
+    "mood_states": {
+      "happy": "Happy",
+      "calm": "Calm",
+      "tired": "Tired",
+      "sad": "Sad",
+      "confused": "Confused",
+      "excited": "Excited"
+    },
+    "updated_at": "Updated at: {time}"
   }
 }

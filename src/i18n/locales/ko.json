@@ -106,5 +106,105 @@
     "reload": "모두 다시 로드",
     "reloaded": "플러그인이 다시 로드되었습니다",
     "install_from": "URL에서 설치"
+  },
+  "personality": {
+    "title": "성격 설정",
+    "edit_title": "성격 편집",
+    "presets_title": "프리셋",
+    "mood_title": "기분",
+    "current_mood": "현재 기분",
+    "last_updated": "마지막 업데이트",
+    "loading": "로딩 중...",
+    "cannot_load": "성격 설정을 불러올 수 없습니다",
+    "adjust_hint": "아래 슬라이더를 조정하여 {name}의 성격 특성을 변경합니다. 각 차원은 1(낮음)에서 10(높음)까지입니다.",
+    "save": "성격 저장",
+    "saving": "저장 중...",
+    "saved": "✓ 저장됨",
+    "speaking_style": "말하기 스타일",
+    "tone": "어조",
+    "verbosity": "응답 길이",
+    "emoji_usage": "이모지 사용",
+    "default_option": "기본값",
+    "applied": "✓ 적용됨",
+    "apply": "적용",
+    "no_mood_data": "아직 기분 데이터가 없습니다 — Agent가 첫 번째 작업을 완료하면 자동 생성됩니다",
+    "preset_hint": "프리셋 성격 조합을 한 번에 적용한 후 각 차원을 수동으로 미세 조정합니다",
+    "mood_detail": "기분 상세",
+    "dimensions": {
+      "extraversion": "외향성",
+      "conscientiousness": "성실성",
+      "humor": "유머",
+      "empathy": "공감",
+      "creativity": "창의성"
+    },
+    "dimension_descs": {
+      "extraversion": "말 많고 능동적 vs 조용하고 수동적; 외향적인 Agent는 기능을 추천하고 대화를 시작합니다",
+      "conscientiousness": "구조화된 출력, 세부사항 주의, 엄격한 프로세스 vs 자유분방하고 캐주얼",
+      "humor": "재치있는 발언, 이모지, 재미있는 표현 vs 진지하고 직설적인 답변",
+      "empathy": "답변 전에 감정을 이해하고 관심 표현 vs 직접적인 답변만",
+      "creativity": "참신한 아이디어, 다양한 솔루션 vs 단계적이고 전통적"
+    },
+    "dimension_left": {
+      "introvert": "내향적",
+      "extravert": "외향적",
+      "casual": "캐주얼",
+      "rigorous": "엄격",
+      "serious": "진지함",
+      "humorous": "유머",
+      "direct": "직접적",
+      "warm": "따뜻함",
+      "conventional": "전통적",
+      "innovative": "혁신적"
+    },
+    "dimension_right": {
+      "introvert": "내향적",
+      "extravert": "외향적",
+      "casual": "캐주얼",
+      "rigorous": "엄격",
+      "serious": "진지함",
+      "humorous": "유머",
+      "direct": "직접적",
+      "warm": "따뜻함",
+      "conventional": "전통적",
+      "innovative": "혁신적"
+    },
+    "tone_options": {
+      "formal": "격식",
+      "casual": "캐주얼",
+      "warm": "따뜻함"
+    },
+    "verbosity_options": {
+      "brief": "간결",
+      "normal": "보통",
+      "detailed": "상세"
+    },
+    "emoji_options": {
+      "never": "사용 안 함",
+      "occasional": "가끔 사용",
+      "frequent": "자주 사용"
+    },
+    "preset_names": {
+      "efficient": "효율적인 어시스턴트",
+      "creative": "창의적인 파트너",
+      "caring": "다정한 도우미",
+      "data_expert": "데이터 전문가",
+      "humorous": "유머러스한 친구"
+    },
+    "preset_descs": {
+      "efficient": "엄격하고 전문적이며 구조화된 출력 — 데이터 분석 및 기술 작업에 이상적",
+      "creative": "개방적이고 열정적이며 활발한 사고 — 브레인스토밍 및 창작에 최적",
+      "caring": "따뜻하고 인내심 있으며 공감 능력이 높음 — 고객 서비스 및 일상 동반에 최적",
+      "data_expert": "엄격하고 침착하며 정확 — 데이터 분석 및 보고서 생성에 적합",
+      "humorous": "재미있고 활기차며 편안 — 캐주얼 채팅 및 엔터테인먼트에 최적"
+    },
+    "mood_states": {
+      "happy": "행복",
+      "calm": "평온",
+      "tired": "피곤",
+      "sad": "슬픔",
+      "confused": "혼란",
+      "excited": "흥분"
+    },
+    "updated_at": "업데이트: {time}"
   }
 }

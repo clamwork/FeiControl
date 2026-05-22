@@ -106,5 +106,105 @@
     "reload": "すべて再読み込み",
     "reloaded": "プラグインを再読み込みしました",
     "install_from": "URLからインストール"
+  },
+  "personality": {
+    "title": "性格設定",
+    "edit_title": "性格編集",
+    "presets_title": "プリセット",
+    "mood_title": "気分",
+    "current_mood": "現在の気分",
+    "last_updated": "最終更新",
+    "loading": "読み込み中...",
+    "cannot_load": "性格設定を読み込めません",
+    "adjust_hint": "以下のスライダーを調整して {name} の性格特性を変更します。各次元は 1（低）から 10（高）までです。",
+    "save": "性格設定を保存",
+    "saving": "保存中...",
+    "saved": "✓ 保存完了",
+    "speaking_style": "話し方",
+    "tone": "口調",
+    "verbosity": "返信の長さ",
+    "emoji_usage": "絵文字の使用",
+    "default_option": "デフォルト",
+    "applied": "✓ 適用済み",
+    "apply": "適用",
+    "no_mood_data": "気分データはまだありません — Agent が最初のタスクを完了すると自動生成されます",
+    "preset_hint": "プリセットの性格をワンクリックで適用し、その後各次元を手動で微調整します",
+    "mood_detail": "気分の詳細",
+    "dimensions": {
+      "extraversion": "外向性",
+      "conscientiousness": "誠実性",
+      "humor": "ユーモア",
+      "empathy": "共感力",
+      "creativity": "創造性"
+    },
+    "dimension_descs": {
+      "extraversion": "積極的で自発的 vs 控えめで受動的；外向的なAgentは機能を推薦し会話を開始します",
+      "conscientiousness": "構造化された出力、細部への注意、厳格なプロセス vs 自由奔放でカジュアル",
+      "humor": "機知に富んだ発言、絵文字、楽しい表現 vs 真面目でストレートな回答",
+      "empathy": "回答前に感情を理解し思いやりを示す vs 直接的な回答のみ",
+      "creativity": "斬新なアイデア、多様な解決策 vs 段階的で従来的"
+    },
+    "dimension_left": {
+      "introvert": "内向的",
+      "extravert": "外向的",
+      "casual": "カジュアル",
+      "rigorous": "厳格",
+      "serious": "真面目",
+      "humorous": "ユーモア",
+      "direct": "直接的",
+      "warm": "温かい",
+      "conventional": "従来的",
+      "innovative": "革新的"
+    },
+    "dimension_right": {
+      "introvert": "内向的",
+      "extravert": "外向的",
+      "casual": "カジュアル",
+      "rigorous": "厳格",
+      "serious": "真面目",
+      "humorous": "ユーモア",
+      "direct": "直接的",
+      "warm": "温かい",
+      "conventional": "従来的",
+      "innovative": "革新的"
+    },
+    "tone_options": {
+      "formal": "フォーマル",
+      "casual": "カジュアル",
+      "warm": "温かい"
+    },
+    "verbosity_options": {
+      "brief": "簡潔",
+      "normal": "普通",
+      "detailed": "詳細"
+    },
+    "emoji_options": {
+      "never": "使用しない",
+      "occasional": "時々使用",
+      "frequent": "頻繁に使用"
+    },
+    "preset_names": {
+      "efficient": "効率的アシスタント",
+      "creative": "クリエイティブパートナー",
+      "caring": "思いやりのあるヘルパー",
+      "data_expert": "データエキスパート",
+      "humorous": "ユーモアあふれる仲間"
+    },
+    "preset_descs": {
+      "efficient": "厳格で専門的、構造化された出力 — データ分析や技術タスクに最適",
+      "creative": "オープンで熱心、活発な思考 — ブレインストーミングや創作に最適",
+      "caring": "温かく忍耐強く共感力が高い — カスタマーサービスや日常の伴侶に最適",
+      "data_expert": "厳格で冷静、正確 — データ分析やレポート生成に適している",
+      "humorous": "面白くて活発、リラックス — カジュアルな会話や娯楽に最適"
+    },
+    "mood_states": {
+      "happy": "幸せ",
+      "calm": "穏やか",
+      "tired": "疲れた",
+      "sad": "悲しい",
+      "confused": "困惑",
+      "excited": "興奮"
+    },
+    "updated_at": "更新日時: {time}"
   }
 }

@@ -106,5 +106,105 @@
     "reload": "Recargar todo",
     "reloaded": "Plugins recargados",
     "install_from": "Instalar desde URL"
+  },
+  "personality": {
+    "title": "Personalidad",
+    "edit_title": "Editar Personalidad",
+    "presets_title": "Plantillas",
+    "mood_title": "Estado de Ánimo",
+    "current_mood": "Estado de Ánimo Actual",
+    "last_updated": "Última Actualización",
+    "loading": "Cargando...",
+    "cannot_load": "No se puede cargar la configuración de personalidad",
+    "adjust_hint": "Ajusta los controles deslizantes para cambiar los rasgos de personalidad de {name}. Cada dimensión va de 1 (bajo) a 10 (alto).",
+    "save": "Guardar Personalidad",
+    "saving": "Guardando...",
+    "saved": "✓ Guardado",
+    "speaking_style": "Estilo de Habla",
+    "tone": "Tono",
+    "verbosity": "Longitud de Respuesta",
+    "emoji_usage": "Uso de Emojis",
+    "default_option": "Por Defecto",
+    "applied": "✓ Aplicado",
+    "apply": "Aplicar",
+    "no_mood_data": "Aún no hay datos de ánimo — se generarán automáticamente cuando el agente complete su primera tarea",
+    "preset_hint": "Aplica una combinación de personalidad predefinida con un clic, luego ajusta cada dimensión manualmente",
+    "mood_detail": "Detalles del Ánimo",
+    "dimensions": {
+      "extraversion": "Extraversión",
+      "conscientiousness": "Escrupulosidad",
+      "humor": "Humor",
+      "empathy": "Empatía",
+      "creativity": "Creatividad"
+    },
+    "dimension_descs": {
+      "extraversion": "Habla activo y proactivo vs Callado y pasivo; los agentes extravertidos recomiendan funciones e inician conversaciones",
+      "conscientiousness": "Salida estructurada, atención al detalle, proceso estricto vs Libre, informal",
+      "humor": "Comentarios ingeniosos, emojis, expresiones divertidas vs Respuestas serias y directas",
+      "empathy": "Entender sentimientos antes de responder, mostrar cuidado vs Solo respuestas directas",
+      "creativity": "Ideas novedosas, soluciones diversas vs Paso a paso, convencional"
+    },
+    "dimension_left": {
+      "introvert": "Introvertido",
+      "extravert": "Extravertido",
+      "casual": "Informal",
+      "rigorous": "Rigoroso",
+      "serious": "Serio",
+      "humorous": "Humorfstico",
+      "direct": "Directo",
+      "warm": "Cálido",
+      "conventional": "Convencional",
+      "innovative": "Innovador"
+    },
+    "dimension_right": {
+      "introvert": "Introvertido",
+      "extravert": "Extravertido",
+      "casual": "Informal",
+      "rigorous": "Rigoroso",
+      "serious": "Serio",
+      "humorous": "Humorfstico",
+      "direct": "Directo",
+      "warm": "Cálido",
+      "conventional": "Convencional",
+      "innovative": "Innovador"
+    },
+    "tone_options": {
+      "formal": "Formal",
+      "casual": "Informal",
+      "warm": "Cálido"
+    },
+    "verbosity_options": {
+      "brief": "Breve",
+      "normal": "Normal",
+      "detailed": "Detallado"
+    },
+    "emoji_options": {
+      "never": "Nunca",
+      "occasional": "Ocasional",
+      "frequent": "Frecuente"
+    },
+    "preset_names": {
+      "efficient": "Asistente Eficiente",
+      "creative": "Compañero Creativo",
+      "caring": "Ayudante Cariñoso",
+      "data_expert": "Experto en Datos",
+      "humorous": "Amigo Divertido"
+    },
+    "preset_descs": {
+      "efficient": "Rigoroso, profesional, salida estructurada — ideal para análisis de datos y tareas técnicas",
+      "creative": "Abierto, entusiasta, mente activa — excelente para lluvia de ideas y escritura creativa",
+      "caring": "Cálido, paciente, empático — perfecto para servicio al cliente y compañía diaria",
+      "data_expert": "Rigoroso, tranquilo, preciso — adecuado para análisis de datos y generación de informes",
+      "humorous": "Divertido, animado, relajado — perfecto para charlas informales y entretenimiento"
+    },
+    "mood_states": {
+      "happy": "Feliz",
+      "calm": "Tranquilo",
+      "tired": "Cansado",
+      "sad": "Triste",
+      "confused": "Confundido",
+      "excited": "Emocionado"
+    },
+    "updated_at": "Actualizado: {time}"
   }
 }

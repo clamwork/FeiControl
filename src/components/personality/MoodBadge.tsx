@@ -1,15 +1,16 @@
 "use client";
 
 import React from 'react';
+import { useI18n } from '@/i18n';
 
-/** 心情 → Emoji + 颜色 + 中文标签映射 */
-const MOOD_MAP: Record<string, { emoji: string; color: string; label: string }> = {
-  happy:    { emoji: '😊', color: '#4ade80', label: '开心' },
-  calm:     { emoji: '😌', color: '#60a5fa', label: '平静' },
-  tired:    { emoji: '😴', color: '#a78bfa', label: '疲倦' },
-  sad:      { emoji: '😢', color: '#93c5fd', label: '难过' },
-  confused: { emoji: '😕', color: '#fbbf24', label: '困惑' },
-  excited:  { emoji: '🎉', color: '#f472b6', label: '兴奋' },
+/** 心情 → Emoji + 颜色 映射 */
+const MOOD_MAP: Record<string, { emoji: string; color: string }> = {
+  happy:    { emoji: '😊', color: '#4ade80' },
+  calm:     { emoji: '😌', color: '#60a5fa' },
+  tired:    { emoji: '😴', color: '#a78bfa' },
+  sad:      { emoji: '😢', color: '#93c5fd' },
+  confused: { emoji: '😕', color: '#fbbf24' },
+  excited:  { emoji: '🎉', color: '#f472b6' },
 };
 
 interface MoodBadgeProps {
@@ -23,6 +24,8 @@ export default function MoodBadge({ mood, reason, size = 'md', showTooltip = tru
   if (!mood || !MOOD_MAP[mood]) return null;
 
   const info = MOOD_MAP[mood];
+  const { t } = useI18n();
+  const label = t(`personality.mood_states.${mood}`);
   const sizeMap = { sm: 20, md: 28, lg: 36 };
   const px = sizeMap[size];
   const [showTip, setShowTip] = React.useState(false);
@@ -41,7 +44,7 @@ export default function MoodBadge({ mood, reason, size = 'md', showTooltip = tru
       }}
       onMouseEnter={() => setShowTip(true)}
       onMouseLeave={() => setShowTip(false)}
-      title={reason ? `${info.label}: ${reason}` : info.label}
+      title={reason ? `${label}: ${reason}` : label}
     >
       {info.emoji}
       {showTip && showTooltip && reason && (
@@ -63,7 +66,7 @@ export default function MoodBadge({ mood, reason, size = 'md', showTooltip = tru
             boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
           }}
         >
-          {info.label}: {reason}
+          {label}: {reason}
         </span>
       )}
     </span>

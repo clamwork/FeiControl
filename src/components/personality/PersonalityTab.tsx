@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { useI18n } from '@/i18n';
 import DimensionSlider from './DimensionSlider';
 import PresetSelector from './PresetSelector';
 import MoodBadge from './MoodBadge';
@@ -14,57 +15,35 @@ interface PersonalityTabProps {
 }
 
 const VERBOSITY_OPTIONS = [
-  { value: 'brief', label: '简洁' },
-  { value: 'normal', label: '适中' },
-  { value: 'detailed', label: '详细' },
+  { value: 'brief' },
+  { value: 'normal' },
+  { value: 'detailed' },
 ] as const;
 
 const TONE_OPTIONS = [
-  { value: 'formal', label: '正式' },
-  { value: 'casual', label: '随意' },
-  { value: 'warm', label: '温暖' },
+  { value: 'formal' },
+  { value: 'casual' },
+  { value: 'warm' },
 ] as const;
 
 const EMOJI_OPTIONS = [
-  { value: 'never', label: '不用 emoji' },
-  { value: 'occasional', label: '偶尔使用' },
-  { value: 'frequent', label: '经常使用' },
+  { value: 'never' },
+  { value: 'occasional' },
+  { value: 'frequent' },
 ] as const;
 
-const DIMENSION_INFO: Record<string, { label: string; left: string; right: string; desc: string }> = {
-  extraversion: {
-    label: '外向性',
-    left: '内向',
-    right: '外向',
-    desc: '话多主动 vs 话少被动；外向的 Agent 会主动推荐功能、主动交流',
-  },
-  conscientiousness: {
-    label: '严谨性',
-    left: '随性',
-    right: '严谨',
-    desc: '结构化输出、注意细节、严谨流程 vs 自由发挥、不拘小节',
-  },
-  humor: {
-    label: '幽默感',
-    left: '严肃',
-    right: '幽默',
-    desc: '使用俏皮话、表情、趣味表达 vs 板正认真的回答',
-  },
-  empathy: {
-    label: '同理心',
-    left: '直白',
-    right: '温暖',
-    desc: '先理解感受再回答、表达关心 vs 直接给答案',
-  },
-  creativity: {
-    label: '创造力',
-    left: '保守',
-    right: '创新',
-    desc: '提供新颖的想法、多样的解决方案 vs 按部就班',
-  },
+const DIMENSIONS = ['extraversion', 'conscientiousness', 'humor', 'empathy', 'creativity'] as const;
+
+const DIMENSION_META: Record<string, { left: string; right: string }> = {
+  extraversion: { left: 'introvert', right: 'extravert' },
+  conscientiousness: { left: 'casual', right: 'rigorous' },
+  humor: { left: 'serious', right: 'humorous' },
+  empathy: { left: 'direct', right: 'warm' },
+  creativity: { left: 'conventional', right: 'innovative' },
 };
 
 export default function PersonalityTab({ agentId, agentName }: PersonalityTabProps) {
+  const { t } = useI18n();
   const [personality, setPersonality] = useState<AgentPersonality | null>(null);
   const [mood, setMood] = useState<MoodEntry | null>(null);
   const [loading, setLoading] = useState(true);
@@ -131,7 +110,7 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
   if (loading) {
     return (
       <div style={{ padding: 24, textAlign: 'center', color: 'var(--text-muted)' }}>
-        加载中...
+        {t('personality.loading')}
       </div>
     );
   }
@@ -139,15 +118,15 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
   if (!personality) {
     return (
       <div style={{ padding: 24, textAlign: 'center', color: 'var(--text-muted)' }}>
-        无法加载性格配置
+        {t('personality.cannot_load')}
       </div>
     );
   }
 
   const tabs = [
-    { key: 'edit', label: '性格编辑' },
-    { key: 'presets', label: '预设模板' },
-    { key: 'mood', label: '心情状态' },
+    { key: 'edit', label: t('personality.edit_title') },
+    { key: 'presets', label: t('personality.presets_title') },
+    { key: 'mood', label: t('personality.mood_title') },
   ] as const;
 
   return (
@@ -166,10 +145,10 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
           color: 'var(--text-secondary)',
         }}
       >
-        <span>😀 当前心情:</span>
+        <span>😀 {t('personality.current_mood')}:</span>
         <MoodBadge mood={mood?.mood} reason={mood?.reason} size="md" />
         <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--text-muted)' }}>
-          最后更新: {mood?.updatedAt ? new Date(mood.updatedAt).toLocaleString('zh-CN') : '暂无'}
+          {t('personality.last_updated')}: {mood?.updatedAt ? new Date(mood.updatedAt).toLocaleString() : '-'}
         </span>
       </div>
 
@@ -201,23 +180,22 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
       {activeTab === 'edit' && (
         <div>
           <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 16 }}>
-            调整下方的维度滑块来改变 {agentName || agentId} 的性格特质。
-            每个维度从 1（低）到 10（高）。
+            {t('personality.adjust_hint', { name: agentName || agentId })}
           </p>
 
-          {(['extraversion', 'conscientiousness', 'humor', 'empathy', 'creativity'] as const).map((key) => {
-            const info = DIMENSION_INFO[key];
+          {DIMENSIONS.map((key) => {
+            const meta = DIMENSION_META[key];
             return (
               <div key={key}>
                 <DimensionSlider
-                  label={info.label}
+                  label={t(`personality.dimensions.${key}`)}
                   value={personality[key]}
                   onChange={(v) => updateDimension(key, v)}
-                  leftLabel={info.left}
-                  rightLabel={info.right}
+                  leftLabel={t(`personality.dimension_left.${meta.left}`)}
+                  rightLabel={t(`personality.dimension_right.${meta.right}`)}
                 />
                 <p style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: -10, marginBottom: 12, paddingLeft: 2 }}>
-                  {info.desc}
+                  {t(`personality.dimension_descs.${key}`)}
                 </p>
               </div>
             );
@@ -225,14 +203,14 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
 
           {/* 说话风格 */}
           <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginTop: 20, marginBottom: 12 }}>
-            🎙️ 说话风格
+            🎙️ {t('personality.speaking_style')}
           </h4>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
             {/* 语气 */}
             <div>
               <label style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>
-                语气
+                {t('personality.tone')}
               </label>
               <select
                 value={personality.customTraits?.tone || ''}
@@ -250,9 +228,9 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
                   border: '1px solid var(--border)',
                 }}
               >
-                <option value="">默认</option>
+                <option value="">{t('personality.default_option')}</option>
                 {TONE_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{t(`personality.tone_options.${o.value}`)}</option>
                 ))}
               </select>
             </div>
@@ -260,7 +238,7 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
             {/* 回复长度 */}
             <div>
               <label style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>
-                回复长度
+                {t('personality.verbosity')}
               </label>
               <select
                 value={personality.customTraits?.verbosity || ''}
@@ -278,9 +256,9 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
                   border: '1px solid var(--border)',
                 }}
               >
-                <option value="">默认</option>
+                <option value="">{t('personality.default_option')}</option>
                 {VERBOSITY_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{t(`personality.verbosity_options.${o.value}`)}</option>
                 ))}
               </select>
             </div>
@@ -288,7 +266,7 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
             {/* Emoji 使用 */}
             <div>
               <label style={{ fontSize: 12, color: 'var(--text-secondary)', display: 'block', marginBottom: 4 }}>
-                Emoji 使用
+                {t('personality.emoji_usage')}
               </label>
               <select
                 value={personality.customTraits?.emojiUsage || ''}
@@ -306,9 +284,9 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
                   border: '1px solid var(--border)',
                 }}
               >
-                <option value="">默认</option>
+                <option value="">{t('personality.default_option')}</option>
                 {EMOJI_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>{o.label}</option>
+                  <option key={o.value} value={o.value}>{t(`personality.emoji_options.${o.value}`)}</option>
                 ))}
               </select>
             </div>
@@ -332,7 +310,7 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
               transition: 'all 0.2s',
             }}
           >
-            {saving ? '保存中...' : saved ? '✓ 已保存' : '保存性格配置'}
+            {saving ? t('personality.saving') : saved ? t('personality.saved') : t('personality.save')}
           </button>
         </div>
       )}
@@ -349,7 +327,7 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
       {activeTab === 'mood' && (
         <div>
           <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 12 }}>
-            📊 心情详情
+            📊 {t('personality.mood_detail')}
           </h4>
 
           {mood ? (
@@ -365,7 +343,7 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
                 <MoodBadge mood={mood.mood} size="lg" showTooltip={false} />
                 <div>
                   <div style={{ fontWeight: 600, fontSize: 14, color: 'var(--text-primary)' }}>
-                    {mood.mood}
+                    {t(`personality.mood_states.${mood.mood}`)}
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
                     {mood.reason}
@@ -373,12 +351,12 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
                 </div>
               </div>
               <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
-                更新于: {new Date(mood.updatedAt).toLocaleString('zh-CN')}
+                {t('personality.updated_at', { time: new Date(mood.updatedAt).toLocaleString() })}
               </div>
             </div>
           ) : (
             <div style={{ padding: 16, textAlign: 'center', color: 'var(--text-muted)', fontSize: 13 }}>
-              暂无心情数据 — Agent 完成第一个任务后将自动生成
+              {t('personality.no_mood_data')}
             </div>
           )}
         </div>

@@ -1,49 +1,44 @@
 "use client";
 
 import React from 'react';
+import { useI18n } from '@/i18n';
 import type { AgentPersonality } from '@/lib/personality/types';
 
 interface PresetTemplate {
-  name: string;
+  key: string;
   emoji: string;
-  description: string;
   personality: Partial<AgentPersonality>;
   traits: NonNullable<AgentPersonality['customTraits']>;
 }
 
 const PRESETS: PresetTemplate[] = [
   {
-    name: '高效助手',
+    key: 'efficient',
     emoji: '🔧',
-    description: '严谨、专业、结构化输出，适合数据分析和技术任务',
     personality: { extraversion: 5, conscientiousness: 9, humor: 2, empathy: 6, creativity: 5 },
     traits: { tone: 'formal', verbosity: 'detailed', emojiUsage: 'never' },
   },
   {
-    name: '创意伙伴',
+    key: 'creative',
     emoji: '🎨',
-    description: '开放、热情、思维活跃，适合头脑风暴和创意写作',
     personality: { extraversion: 8, conscientiousness: 3, humor: 6, empathy: 7, creativity: 9 },
     traits: { tone: 'casual', verbosity: 'normal', emojiUsage: 'occasional' },
   },
   {
-    name: '贴心管家',
+    key: 'caring',
     emoji: '💝',
-    description: '温暖、耐心、有同理心，适合客服和日常陪伴',
     personality: { extraversion: 6, conscientiousness: 7, humor: 5, empathy: 9, creativity: 4 },
     traits: { tone: 'warm', verbosity: 'normal', emojiUsage: 'frequent' },
   },
   {
-    name: '数据专家',
+    key: 'data_expert',
     emoji: '📊',
-    description: '严谨、冷静、精确，适合数据分析和报告生成',
     personality: { extraversion: 3, conscientiousness: 10, humor: 1, empathy: 4, creativity: 5 },
     traits: { tone: 'formal', verbosity: 'detailed', emojiUsage: 'never' },
   },
   {
-    name: '幽默陪聊',
+    key: 'humorous',
     emoji: '😄',
-    description: '搞笑、活泼、轻松，适合日常闲聊和娱乐互动',
     personality: { extraversion: 9, conscientiousness: 2, humor: 10, empathy: 6, creativity: 8 },
     traits: { tone: 'casual', verbosity: 'brief', emojiUsage: 'frequent' },
   },
@@ -56,9 +51,10 @@ interface PresetSelectorProps {
 
 export default function PresetSelector({ currentPersonality, onApply }: PresetSelectorProps) {
   const [applying, setApplying] = React.useState<string | null>(null);
+  const { t } = useI18n();
 
   const handleApply = (preset: PresetTemplate) => {
-    setApplying(preset.name);
+    setApplying(preset.key);
     onApply({
       ...preset.personality,
       customTraits: preset.traits,
@@ -69,17 +65,17 @@ export default function PresetSelector({ currentPersonality, onApply }: PresetSe
   return (
     <div>
       <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 12 }}>
-        🎯 预设模板
+        🎯 {t('personality.presets_title')}
       </h4>
       <p style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 12 }}>
-        一键应用预设性格组合，之后再手动微调每个维度
+        {t('personality.preset_hint')}
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {PRESETS.map((preset) => {
-          const isActive = applying === preset.name;
+          const isActive = applying === preset.key;
           return (
             <button
-              key={preset.name}
+              key={preset.key}
               onClick={() => handleApply(preset)}
               disabled={!!applying}
               style={{
@@ -99,11 +95,11 @@ export default function PresetSelector({ currentPersonality, onApply }: PresetSe
             >
               <span style={{ fontSize: 24 }}>{preset.emoji}</span>
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600, fontSize: 13 }}>{preset.name}</div>
-                <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>{preset.description}</div>
+                <div style={{ fontWeight: 600, fontSize: 13 }}>{t(`personality.preset_names.${preset.key}`)}</div>
+                <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>{t(`personality.preset_descs.${preset.key}`)}</div>
               </div>
               <span style={{ fontSize: 11, opacity: 0.6, whiteSpace: 'nowrap' }}>
-                {isActive ? '✓ 已应用' : '应用'}
+                {isActive ? '✓ ' + t('personality.applied') : t('personality.apply')}
               </span>
             </button>
           );
