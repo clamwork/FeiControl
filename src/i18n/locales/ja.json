@@ -1002,8 +1002,8 @@
     "download_csv": "CSVをダウンロード",
     "download_json": "JSONをダウンロード",
     "export_data": "データをエクスポート",
-    "costs_filename": "费用-{date}",
-    "activities_filename": "活动-{date}"
+    "costs_filename": "費用-{date}",
+    "activities_filename": "アクティビティ-{date}"
   },
   "settings": {
     "page_title": "設定",
@@ -1023,50 +1023,50 @@
       "title": "システム情報",
       "agent_name": "エージェント名",
       "uptime": "稼働時間",
-      "node_version": "Node.js 版本",
-      "current_model": "当前模型",
-      "workspace": "工作区",
+      "node_version": "Node.js バージョン",
+      "current_model": "現在のモデル",
+      "workspace": "ワークスペース",
       "memory": "メモリー",
-      "free": "可用"
+      "free": "空き容量"
     },
     "integrations": {
-      "title": "集成",
-      "connected": "已连接",
-      "disconnected": "未连接",
-      "configured": "已配置",
-      "not_configured": "未配置",
-      "last_activity": "最后活动"
+      "title": "連携",
+      "connected": "接続済み",
+      "disconnected": "未接続",
+      "configured": "設定済み",
+      "not_configured": "未設定",
+      "last_activity": "最終活動"
     },
     "quick_actions": {
       "title": "クイックアクション",
       "restart_gateway": "ゲートウェイを再起動",
-      "clear_activity_logs": "清除活动日志",
-      "view_gateway_logs": "查看网关日志",
-      "change_password": "更改密码",
-      "placeholder": "占位符",
-      "password_changed": "密码修改成功",
-      "gateway_restart_sent": "网关重启命令已发送（占位符）",
-      "activity_logs_cleared": "活动日志已清除",
-      "opening_logs": "正在打开网关日志...（占位符）",
-      "failed_clear_logs": "清除活动日志失败"
+      "clear_activity_logs": "アクティビティログを消去",
+      "view_gateway_logs": "ゲートウェイログを表示",
+      "change_password": "パスワードを変更",
+      "placeholder": "プレースホルダー",
+      "password_changed": "パスワードを変更しました",
+      "gateway_restart_sent": "ゲートウェイ再起動コマンドを送信しました（プレースホルダー）",
+      "activity_logs_cleared": "アクティビティログを消去しました",
+      "opening_logs": "ゲートウェイログを開いています...（プレースホルダー）",
+      "failed_clear_logs": "アクティビティログの消去に失敗しました"
     }
   },
   "language": {
-    "zh": "中文",
-    "en": "English",
-    "ja": "日语",
-    "ko": "韩语",
-    "es": "西班牙语"
+    "zh": "中国語",
+    "en": "英語",
+    "ja": "日本語",
+    "ko": "韓国語",
+    "es": "スペイン語"
   },
   "keyboard_shortcuts": {
-    "title": "键盘快捷键",
-    "show_help": "显示键盘快捷键",
-    "search": "搜索",
-    "close": "关闭面板",
-    "navigate": "上下导航",
-    "select": "选择项目",
-    "focus_search": "聚焦搜索栏",
-    "footer": "按 ? 切换此面板"
+    "title": "キーボードショートカット",
+    "show_help": "キーボードショートカットを表示",
+    "search": "検索",
+    "close": "パネルを閉じる",
+    "navigate": "上下に移動",
+    "select": "項目を選択",
+    "focus_search": "検索バーにフォーカス",
+    "footer": "? を押してこのパネルを切り替え"
   },
   "widgets": {
     "title": "ダッシュボードウィジェット",
