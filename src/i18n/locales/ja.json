@@ -56,10 +56,10 @@
     "upload": "アップロード"
   },
   "agents": {
-    "title": "エージェント管理",
+    "title": "エージェント一覧",
     "local_title": "ローカルエージェント",
     "remote_title": "リモートチーム",
-    "status_online": "オンライン",
+    "status_online": "稼働中",
     "status_offline": "オフライン",
     "status_working": "作業中",
     "model": "モデル",
@@ -69,7 +69,7 @@
     "no_teams": "リモートチームが見つかりません",
     "refresh": "更新",
     "agent_detail": "エージェント詳細",
-    "sessions": "セッション",
+    "sessions": "セッション数",
     "memory": "メモリー",
     "logs": "活動ログ",
     "send_task": "タスクを送信",
@@ -93,7 +93,7 @@
     "yesterday": "昨日"
   },
   "plugins": {
-    "title": "プラグイン管理",
+    "title": "プラグイン",
     "enabled": "有効",
     "disabled": "無効",
     "no_plugins": "インストールされたプラグインはありません",
@@ -209,7 +209,7 @@
     "growth_title": "📈 成長記録",
     "level": "レベル",
     "skill_points": "スキルポイント",
-    "skills": "スキルツリー",
+    "skills": "スキル",
     "achievements": "実績",
     "growth_history": "成長履歴",
     "no_growth_history": "成長イベントはまだありません — Agent を使って XP を獲得しましょう！",
@@ -223,8 +223,863 @@
     "skill_tree": {
       "efficiency": "効率",
       "creativity": "創造性",
-      "social": "社交",
+      "social": "ソーシャル",
       "learning": "学習"
     }
+  },
+  "actions": {
+    "title": "クイックアクション",
+    "run_action": "アクションを実行",
+    "action_name": "アクション名",
+    "parameters": "パラメータ",
+    "result": {
+      "success": "✓ 成功",
+      "failed": "✗ 失敗"
+    },
+    "history": "履歴",
+    "no_actions": "利用可能なアクションがありません",
+    "execute": "実行",
+    "subtitle": "一般的なメンテナンス・診断タスクをワンクリックで実行",
+    "heartbeat": {
+      "label": "ハートビート確認",
+      "description": "全サービスの稼働状況とサイトの到達可能性を確認"
+    },
+    "git_status": {
+      "label": "Git状態（全リポジトリ）",
+      "description": "全ワークスペースリポジトリの未コミット変更を確認"
+    },
+    "usage_stats": {
+      "label": "使用統計を収集",
+      "description": "ディスク・CPU・メモリ使用状況の概要を取得"
+    },
+    "restart_gateway": {
+      "label": "ゲートウェイを再起動",
+      "description": "OpenClawゲートウェイサービスを再起動"
+    },
+    "clear_temp": {
+      "label": "一時ファイルを削除",
+      "description": "一時ファイルを削除し、PM2ログを整理"
+    },
+    "npm_audit": {
+      "label": "NPMセキュリティ監査",
+      "description": "mission-controlの依存関係の脆弱性を確認"
+    },
+    "button": {
+      "running": "実行中...",
+      "run": "実行"
+    },
+    "recent_results": "最近の結果",
+    "confirm": {
+      "prefix": "確認：",
+      "message": "この操作は実行中のサービスに影響を与える可能性があります。続行してもよろしいですか？",
+      "force_execute": "強制実行"
+    }
+  },
+  "dashboard": {
+    "system_health": "システムヘルス",
+    "agent_team": "エージェントチーム",
+    "working": "作業中",
+    "running": "実行中...",
+    "standby": "待機中",
+    "sleeping": "スリープ",
+    "idle": "アイドル",
+    "cpu_usage": "CPU",
+    "memory_usage": "メモリー",
+    "disk_usage": "磁盘",
+    "gateway_status": "ゲートウェイ状態",
+    "online": "稼働中",
+    "offline": "オフライン",
+    "latency": "レイテンシ",
+    "activities": "アクティビティ",
+    "no_activities": "アクティビティなし",
+    "cron_jobs": "Cronジョブ",
+    "next_run": "次回実行",
+    "skills": "利用可能スキル",
+    "workspace": "工作区",
+    "system": "システム",
+    "recommended_skills": "推奨スキル",
+    "installed_skills": "インストール済みスキル ({count})",
+    "show_all": "すべて表示 ({count})",
+    "collapse": "折りたたむ",
+    "cron_executed": "今日 {ran}/{total} 実行済み",
+    "cron_failures": "⚠️ {count} 件のタスク障害あり、確認してください",
+    "yesterday_summary_not_generated": "📭 昨日のサマリー ({date}) はまだ生成されていません",
+    "areas_for_improvement": "🔍 改善点",
+    "new_gaps": "+{count} 件の新規",
+    "no_improvements_needed": "🎉 改善不要 — 完璧です！",
+    "recommended_skills_title": "💡 推奨スキル",
+    "no_new_recommendations": "新しい推奨はありません",
+    "signal_collection": "🔎 シグナル収集",
+    "daily_review": "📋 日次レビュー",
+    "no_evolution_data": "自己進化データがありません",
+    "heartbeat_tasks": "🫀 ハートビートタスク",
+    "yesterday_review": "📝 昨日のレビュー",
+    "daily_briefing_evolution": "🧬 日次ブリーフィング · 自己進化",
+    "thinking": "思考中",
+    "error": "エラー"
+  },
+  "dock": {
+    "home": "ホーム",
+    "about": "概要",
+    "terminal": "ターミナル",
+    "files": "ファイル",
+    "calendar": "カレンダー",
+    "skills": "スキル",
+    "workflows": "ワークフロー",
+    "cron_jobs": "Cronジョブ",
+    "actions": "アクション",
+    "memory": "メモリー",
+    "social": "ソーシャル",
+    "costs": "コスト",
+    "reports": "レポート",
+    "git": "Git",
+    "office": "オフィス",
+    "settings": "設定",
+    "agents": "エージェント",
+    "chat": "チャット",
+    "plugins": "プラグイン"
+  },
+  "topbar": {
+    "version": "版本",
+    "search_placeholder": "検索... ⌘K",
+    "notifications": "通知",
+    "user_profile": "ユーザー情報",
+    "language": "言語"
+  },
+  "office": {
+    "loading": "3Dオフィスを読み込み中...",
+    "retrying": "3Dオフィスの読み込みに失敗しました。自動リトライ中 ({current}/{max})...",
+    "timeout": "自動リトライ後、3Dオフィスがタイムアウトしました。",
+    "reload_button": "3Dオフィスを再読み込み",
+    "status": {
+      "working": "作業中",
+      "idle": "アイドル",
+      "sleeping": "スリープ",
+      "thinking": "思考中",
+      "error": "エラー"
+    },
+    "panel": {
+      "current_task": "現在のタスク",
+      "stats": "統計",
+      "model": "モデル",
+      "sessions": "セッション数",
+      "total_tokens": "総トークン数",
+      "last_active": "最終アクティブ",
+      "recent_sessions": "最近のセッション",
+      "no_session_history": "セッション履歴がありません",
+      "just_now": "たった今",
+      "min_ago": "{count}分前",
+      "hr_ago": "{count}時間前",
+      "days_ago": "{count}日前"
+    },
+    "activity": {
+      "title": "ライブアクティビティ",
+      "entries": "{count}件",
+      "no_activity": "アクティビティがありません",
+      "seconds_ago": "{count}秒前",
+      "minutes_ago": "{count}分前",
+      "hours_ago": "{count}時間前"
+    },
+    "agent_list": {
+      "title": "エージェント一覧"
+    },
+    "whiteboard": {
+      "click_to_view": "📋 クリックして表示",
+      "roadmap": "路线图"
+    }
+  },
+  "statusbar": {
+    "system_status": "システム状態",
+    "cpu_usage": "CPU使用率",
+    "memory_usage": "メモリ使用率",
+    "disk_usage": "ディスク使用率",
+    "uptime": "稼働時間",
+    "active_agents": "アクティブなエージェント",
+    "labels": {
+      "cpu": "CPU",
+      "ram": "内存",
+      "disk": "磁盘",
+      "vpn": "VPN",
+      "ufw": "防火墙",
+      "services": "服务",
+      "uptime_label": "稼働時間"
+    }
+  },
+  "about": {
+    "title": "概要",
+    "agent_description": "AIアシスタント。OpenClaw搭載。",
+    "statistics": "統計データ",
+    "total_activities": "総アクティビティ数",
+    "success_rate": "成功率",
+    "skills_count": "スキル数",
+    "cron_jobs": "Cronジョブ",
+    "core_skills": "コアスキル",
+    "personality_traits": "性格特性",
+    "direct": "直接的",
+    "gets_straight_to_point": "要点をすぐ伝える",
+    "efficient": "効率的",
+    "results_oriented": "結果重視",
+    "curious": "好奇心",
+    "always_learning": "常に学習",
+    "loyal": "誠実",
+    "your_success_is_my_success": "あなたの成功が私の成功です",
+    "philosophies": "哲学",
+    "philosophy_1": "行動は言葉より雄弁。「お手伝いします」と言う前に、実際に手を動かせ。",
+    "philosophy_2": "意見を持つことは良いことだ。個性のないアシスタントは、余計な手間がかかる検索エンジンにすぎない。",
+    "philosophy_3": "質問する前に試せ。ファイルを読み、検索し、探索せよ——本当に詰まったときだけ質問しろ。",
+    "philosophy_4": "プライバシーは神聖。アクセス権限 ≠ 共有の許可。",
+    "days": "天",
+    "stats": {
+      "uptime": "稼働時間",
+      "activities": "アクティビティ",
+      "success_rate": "成功率",
+      "skills": "スキル"
+    },
+    "sections": {
+      "about": "概要",
+      "personality": "性格",
+      "philosophy": "工作理念",
+      "capabilities": "能力"
+    },
+    "intro": {
+      "i_am": "私は",
+      "running_on": "、",
+      "with_claude": "を搭載したAIエージェントです。Claudeが私の頭脳です。",
+      "purpose": "私の目的は",
+      "tasks": "日常業務の支援です：コミュニケーション管理、スケジュール調整、調査、ファイル管理、そしてデジタルコパイロットとしての役割。",
+      "access": "私はワークスペース、カレンダー、連携機能にアクセスできます——この特権は慎重かつ敬意を持って扱います。"
+    },
+    "born_label": "誕生",
+    "skills": {
+      "telegram": "Telegram Bot",
+      "twitter": "Twitter/X",
+      "web_search": "Web検索",
+      "file_management": "ファイル管理",
+      "cron_scheduler": "Cronスケジューラ",
+      "memory_system": "メモリーシステム",
+      "youtube": "YouTube調査",
+      "email": "メール（Gmail）"
+    },
+    "footer": {
+      "built_with": "♥ を込めて",
+      "tagline": "— あなたのAIコパイロット"
+    },
+    "tech_stack": "OpenClaw + Claude"
+  },
+  "calendar": {
+    "title": "カレンダー",
+    "today": "今日",
+    "week": "週",
+    "month": "月",
+    "year": "年",
+    "week_view": "週",
+    "month_view": "月",
+    "year_view": "年",
+    "add_event": "イベントを追加",
+    "event_title": "イベントタイトル",
+    "start_time": "開始時間",
+    "end_time": "終了時間",
+    "description": "描述",
+    "location": "地点",
+    "no_events": "イベントがありません",
+    "subtitle": "Google Calendar · Google Tasks",
+    "this_week": "今週",
+    "loading": "加载中...",
+    "pending": "待处理",
+    "total": "总计",
+    "completed": "已完成",
+    "no_tasks": "暂无 Google Tasks",
+    "no_task_data": "无任务数据可用",
+    "integration_available": "Google Tasks 集成可用。在",
+    "to_connect": "中配置",
+    "connection": "以连接。",
+    "all_completed": "🎉 所有任务已完成!",
+    "error": {
+      "fetch_events": "无法获取日历事件",
+      "fetch_tasks": "无法获取 Google Tasks",
+      "load_events": "加载日历事件失败",
+      "load_tasks": "加载 Google Tasks 失败",
+      "migrate_legacy": "无法迁移旧的事件完成状态",
+      "sync_tasks": "无法同步 Google Tasks",
+      "save_completion": "无法保存事件完成状态"
+    },
+    "task": {
+      "mark_incomplete": "点击标记为未完成",
+      "mark_complete": "点击标记为已完成",
+      "aria_mark_incomplete": "将 {title} 标记为未完成",
+      "aria_mark_complete": "将 {title} 标记为已完成"
+    },
+    "google_tasks": {
+      "title": "✅ Google Tasks",
+      "pending_total": "待处理 {count} / 总计 {count}",
+      "configure_message": "Google Tasks 集成可用。在 .env.local 中配置 GOOGLE_TASKS_SCRIPT 以连接。",
+      "all_completed": "🎉 所有任务已完成!",
+      "completed_count": "已完成 ({count})",
+      "no_tasks": "暂无 Google Tasks",
+      "no_data": "无任务数据可用"
+    },
+    "months": {
+      "january": "一月",
+      "february": "二月",
+      "march": "三月",
+      "april": "四月",
+      "may": "五月",
+      "june": "六月",
+      "july": "七月",
+      "august": "八月",
+      "september": "九月",
+      "october": "十月",
+      "november": "十一月",
+      "december": "十二月"
+    },
+    "weekdays": {
+      "mon": "周一",
+      "tue": "周二",
+      "wed": "周三",
+      "thu": "周四",
+      "fri": "周五",
+      "sat": "周六",
+      "sun": "周日"
+    }
+  },
+  "costs": {
+    "title": "コスト",
+    "total_cost": "総コスト",
+    "daily_average": "1日平均",
+    "this_month": "今月",
+    "last_month": "先月",
+    "cost_breakdown": "コスト内訳",
+    "no_data": "データがありません",
+    "subtitle": "全エージェントのトークン使用量とコスト追跡",
+    "timeframe": {
+      "7d": "7日間",
+      "30d": "30日間",
+      "90d": "90日間"
+    },
+    "kpi": {
+      "today": "今日",
+      "vs_yesterday": "前日比 ${amount}",
+      "this_month": "今月",
+      "vs_last_month": "先月比 ${amount}",
+      "projected": "月間予測",
+      "projected_note": "現在のペースに基づく",
+      "budget": "予算"
+    },
+    "chart": {
+      "daily_trend": "日次コスト推移",
+      "cost_label": "コスト ($)",
+      "by_agent": "エージェント別",
+      "by_model": "モデル別",
+      "token_usage": "トークン使用量（日次）",
+      "input_tokens": "入力トークン",
+      "output_tokens": "出力トークン"
+    },
+    "table": {
+      "model_pricing_title": "モデル料金（1Mトークンあたり）",
+      "model": "モデル",
+      "input": "入力",
+      "output": "出力",
+      "cache_read": "キャッシュ読み取り",
+      "cache_write": "キャッシュ書き込み",
+      "agent": "エージェント",
+      "breakdown_title": "エージェント別詳細",
+      "tokens": "トークン",
+      "cost": "コスト",
+      "percent_total": "割合"
+    },
+    "models": {
+      "claude_opus": "Claude Opus 4.6",
+      "claude_sonnet": "Claude Sonnet 4.6",
+      "claude_haiku": "Claude Haiku 4.5"
+    }
+  },
+  "cron": {
+    "title": "Cronジョブ",
+    "schedule": "スケジュール",
+    "expression": "式",
+    "next_run": "次回実行",
+    "last_run": "前回実行",
+    "status": "ステータス",
+    "enabled": "有効",
+    "disabled": "無効",
+    "add_job": "ジョブを追加",
+    "edit_job": "ジョブを編集",
+    "delete_job": "ジョブを削除",
+    "job_name": "ジョブ名",
+    "command": "コマンド",
+    "no_jobs": "Cronジョブがありません",
+    "subtitle": "タスク、次回実行時刻、最近の結果、問題を一目で確認。",
+    "page_title": "スケジュールタスク",
+    "sort": {
+      "updated_desc": "最近更新順",
+      "next_run_asc": "次回実行順",
+      "last_run_desc": "最近実行順",
+      "label": "並び順"
+    },
+    "view": {
+      "list": "リスト",
+      "timeline": "タイムライン"
+    },
+    "sorted_by": "\"{label}\"順",
+    "stats": {
+      "total": "総タスク数",
+      "enabled": "有効",
+      "issues": "最近の問題"
+    },
+    "issues": {
+      "warning": "現在 <strong>{count}</strong> 件のタスクに最近の障害があります。リストに赤いエラー表示が示されます。"
+    },
+    "empty": {
+      "title": "スケジュールタスクがありません",
+      "description": "OpenClaw CLIで作成されたタスクがここに表示されます。"
+    },
+    "timeline": {
+      "title": "今後7日間のタイムライン",
+      "timezone_note": "時刻はローカルタイムゾーンで表示"
+    },
+    "delete": {
+      "confirm_title": "删除 \"{name}\"?",
+      "confirm_button": "削除を確認"
+    },
+    "toast": {
+      "triggered_skipped": "✓ \"{name}\" をトリガーしました。本日の定期実行はスキップされました",
+      "triggered": "✓ \"{name}\" をトリガーしました",
+      "failed": "✗ \"{name}\" のトリガーに失敗しました"
+    },
+    "actions": {
+      "sort": "並び順",
+      "refresh": "更新",
+      "close": "閉じる",
+      "cancel": "キャンセル"
+    }
+  },
+  "files": {
+    "title": "ファイル",
+    "upload": "上传",
+    "download": "ダウンロード",
+    "delete_file": "ファイルを削除",
+    "new_folder": "新規フォルダ",
+    "folder_name": "フォルダ名",
+    "file_name": "ファイル名",
+    "size": "サイズ",
+    "modified": "更新日時",
+    "confirm_delete": "削除を確認",
+    "delete_confirm_message": "このファイルを削除してもよろしいですか？",
+    "subtitle": "エージェントのワークスペースとファイルを閲覧",
+    "sidebar": {
+      "workspaces": "ワークスペース"
+    },
+    "view": {
+      "list": "リスト表示",
+      "grid": "アイコン表示"
+    },
+    "empty": {
+      "select_workspace": "选择一个工作区以浏览其文件"
+    }
+  },
+  "git": {
+    "title": "Git",
+    "branch": "ブランチ",
+    "commit": "コミット",
+    "push": "プッシュ",
+    "pull": "プル",
+    "status": "ステータス",
+    "changes": "変更",
+    "uncommitted": "未コミットの変更",
+    "commit_message": "コミットメッセージ",
+    "no_changes": "変更はありません",
+    "subtitle": "{count} 个仓库 · {count} 个有更改",
+    "empty": {
+      "no_repos": "工作区中未找到 Git 仓库"
+    },
+    "action": {
+      "status": "状态",
+      "log": "日志",
+      "diff": "差异",
+      "pull": "拉取"
+    }
+  },
+  "memory": {
+    "title": "メモリー",
+    "search_memories": "搜索记忆",
+    "add_memory": "添加记忆",
+    "memory_content": "记忆内容",
+    "category": "分类",
+    "tags": "标签",
+    "created_at": "创建时间",
+    "no_memories": "メモリーがありません",
+    "subtitle": "浏览和编辑代理记忆文档、规范和技能",
+    "sidebar": {
+      "workspaces": "ワークスペース"
+    },
+    "unsaved_changes": {
+      "confirm": "您有未保存的更改。确定要放弃它们吗?"
+    },
+    "view": {
+      "preview": "预览",
+      "edit": "编辑"
+    },
+    "empty": {
+      "select_document": "选择要预览或编辑的文档",
+      "select_workspace": "请选择工作区"
+    }
+  },
+  "reports": {
+    "title": "レポート",
+    "generate_report": "レポートを生成",
+    "report_type": "レポート種類",
+    "date_range": "日期范围",
+    "export": "导出",
+    "no_reports": "レポートがありません",
+    "subtitle": "分析报告和见解",
+    "refresh_tooltip": "刷新报告",
+    "count": "{count} 个报告",
+    "empty": {
+      "no_reports": "未找到报告",
+      "hint": "memory/ 中匹配 *-analysis-* 或 *-report-* 模式的报告将显示在此处",
+      "select_report": "选择报告进行预览"
+    },
+    "loading_report": "加载报告中..."
+  },
+  "skills": {
+    "title": "スキル",
+    "search_skills": "搜索技能",
+    "skill_details": "技能详情",
+    "install_skill": "安装技能",
+    "uninstall_skill": "卸载技能",
+    "author": "作者",
+    "version": "バージョン",
+    "description": "描述",
+    "no_skills": "暂无技能",
+    "subtitle": "OpenClawシステムで利用可能なスキル",
+    "page_title": "スキル管理",
+    "page_subtitle": "OpenClawシステムで利用可能なスキル",
+    "stats": {
+      "total": "総スキル数",
+      "workspace": "ワークスペーススキル",
+      "system": "システムスキル"
+    },
+    "search": {
+      "placeholder": "スキルを検索..."
+    },
+    "filter": {
+      "all": "すべて ({count})",
+      "workspace": "ワークスペース ({count})",
+      "system": "システム ({count})"
+    },
+    "empty": {
+      "no_skills": "スキルが見つかりません"
+    },
+    "section": {
+      "workspace": "ワークスペーススキル",
+      "system": "システムスキル"
+    },
+    "card": {
+      "files": "{count}ファイル"
+    },
+    "detail": {
+      "homepage": "ホームページ",
+      "files_count": "{count}ファイル",
+      "files_header": "文件 ({count})",
+      "archivos": "{count}ファイル"
+    }
+  },
+  "social": {
+    "title": "ソーシャル",
+    "connect_account": "アカウントを連携",
+    "disconnect_account": "アカウント連携を解除",
+    "post": "投稿",
+    "message": "メッセージ",
+    "followers": "フォロワー",
+    "following": "フォロー中",
+    "no_accounts": "連携済みのアカウントがありません",
+    "subtitle": "ソーシャルメディアプレゼンスを管理",
+    "today": "今日",
+    "stats": {
+      "title": "📊 今月の統計",
+      "posts_count": "{count}件の投稿",
+      "category_distribution": "カテゴリ分布",
+      "publish_status": "公開状況",
+      "published": "✅ 公開済み",
+      "scheduled": "🕐 予定"
+    },
+    "platform": {
+      "linkedin": "LinkedIn",
+      "xiaohongshu": "Xiaohongshu"
+    },
+    "coming_soon": "近日公開",
+    "last_updated": "最終更新：",
+    "status": {
+      "published": "公開済み",
+      "scheduled": "予定"
+    },
+    "post_purpose": "📌 投稿の目的"
+  },
+  "terminal": {
+    "title": "ターミナル",
+    "connect": "接続",
+    "disconnect": "切断",
+    "clear": "クリア",
+    "command_placeholder": "コマンドを入力...",
+    "subtitle": "読み取り専用コマンド（ls, cat, df, ps, git status 等）",
+    "copy": "コピー",
+    "empty": {
+      "type_command": "コマンドを入力するか、上部のクイックコマンドをクリック",
+      "history_hint": "↑↓ でコマンド履歴"
+    },
+    "running": "実行中...",
+    "input": {
+      "placeholder": "コマンドを入力...",
+      "run": "実行"
+    }
+  },
+  "workflows": {
+    "title": "ワークフロー",
+    "create_workflow": "ワークフローを作成",
+    "workflow_name": "ワークフロー名",
+    "steps": "ステップ",
+    "triggers": "トリガー",
+    "run_workflow": "ワークフローを実行",
+    "no_workflows": "ワークフローがありません",
+    "subtitle": "{count} 个活跃流程 · {count} 个自动化定时任务 · {count} 个按需",
+    "stats": {
+      "total": "总工作流",
+      "active_crons": "活跃定时任务",
+      "on_demand": "按需"
+    },
+    "status": {
+      "active": "アクティブ",
+      "inactive": "非アクティブ"
+    },
+    "trigger": {
+      "cron": "⏱ Cron",
+      "demand": "⚡ オンデマンド"
+    },
+    "steps_header": "ステップ",
+    "items": {
+      "social_radar": {
+        "name": "ソーシャルレーダー",
+        "description": "メンションやコラボレーション機会を監視..."
+      },
+      "ai_news": {
+        "name": "AI＆ウェブニュース",
+        "description": "最も関連性の高いAIとWeb開発ニュースを要約..."
+      },
+      "trend_monitor": {
+        "name": "トレンドモニター",
+        "description": "テック分野の緊急トレンドレーダー..."
+      },
+      "linkedin_brief": {
+        "name": "日次LinkedIn投稿",
+        "description": "日次LinkedIn投稿を生成..."
+      },
+      "newsletter_digest": {
+        "name": "ニュースレターダイジェスト",
+        "description": "当日のニュースレターを厳選したダイジェスト..."
+      },
+      "email_categorization": {
+        "name": "メール分類",
+        "description": "日次メールを分類・要約..."
+      },
+      "weekly_newsletter": {
+        "name": "週次ニュースレター",
+        "description": "自动每周推文和 LinkedIn 帖子回顾..."
+      },
+      "advisory_board": {
+        "name": "顾问委员会",
+        "description": "7 位具有自己个性和记忆的 AI 顾问..."
+      },
+      "git_backup": {
+        "name": "Git 备份",
+        "description": "每 4 小时自动提交并推送工作区..."
+      },
+      "nightly_evolution": {
+        "name": "夜间进化",
+        "description": "自主夜间会话,实施改进..."
+      }
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "mark_all_read": "全部标记为已读",
+    "no_notifications": "通知はありません",
+    "just_now": "たった今",
+    "minutes_ago": "分钟前",
+    "hours_ago": "小时前",
+    "days_ago": "天前",
+    "history_title": "通知历史",
+    "filter_all": "すべて",
+    "filter_info": "信息",
+    "filter_success": "成功",
+    "filter_warning": "警告",
+    "filter_error": "エラー",
+    "search_placeholder": "搜索通知...",
+    "delete": "删除",
+    "clear_read": "清除已读",
+    "no_results": "没有匹配的通知",
+    "preferences": "通知偏好",
+    "push_enabled": "推送通知",
+    "push_description": "接收重要事件的桌面通知",
+    "type_info": "信息通知",
+    "type_info_desc": "一般信息和更新",
+    "type_success": "成功通知",
+    "type_success_desc": "成功操作和完成",
+    "type_warning": "警告通知",
+    "type_warning_desc": "警告和潜在问题",
+    "type_error": "错误通知",
+    "type_error_desc": "需要关注的错误和失败",
+    "saved": "偏好已保存"
+  },
+  "global_search": {
+    "placeholder": "搜索页面、技能、操作...",
+    "pages": "页面",
+    "skills": "スキル",
+    "actions": "アクション",
+    "no_results": "未找到结果",
+    "filter_all": "すべて",
+    "filter_memory": "メモリー",
+    "filter_activity": "活动",
+    "filter_task": "任务",
+    "filter_file": "文件",
+    "filter_notification": "通知",
+    "filter_git": "Git",
+    "filter_cron": "定时任务",
+    "type_memory": "メモリー",
+    "type_activity": "活动",
+    "type_task": "任务",
+    "type_file": "文件",
+    "type_notification": "通知",
+    "type_git": "Git",
+    "type_cron": "定时任务",
+    "searching": "検索中...",
+    "no_results_for": "の検索結果は見つかりませんでした",
+    "keyboard_hint": "↑↓ 移動 · Enter 選択 · Esc 閉じる"
+  },
+  "login": {
+    "title": "ログイン",
+    "username": "ユーザー名",
+    "password": "パスワード",
+    "login_button": "ログイン",
+    "invalid_credentials": "ユーザー名またはパスワードが無効です",
+    "connection_error": "接続エラー",
+    "subtitle": "続行するには認証情報を入力してください"
+  },
+  "locale": {
+    "code": "ja-JP"
+  },
+  "greeting": {
+    "late_night": "深夜です、お休みください",
+    "early_morning": "おはようございます！新しい一日の始まりです",
+    "morning": "おはようございます！生産的に過ごしましょう",
+    "noon": "こんにちは！食事を忘れずに",
+    "afternoon": "こんにちは！この調子で",
+    "evening": "こんばんは！今日もお疲れさまでした",
+    "night": "おやすみなさい！素晴らしい一日でした"
+  },
+  "time": {
+    "just_now": "たった今",
+    "min_ago": "{mins}分前",
+    "hr_ago": "{hrs}時間前",
+    "days_ago": "{days}日前",
+    "never_run": "未実行",
+    "failures_count": "{count}件の障害"
+  },
+  "error": {
+    "dashboard_title": "ダッシュボードエラー",
+    "generic_message": "予期しないエラーが発生しました。もう一度お試しください。",
+    "error_id": "エラーID",
+    "retry": "リトライ",
+    "go_home": "ホームに戻る"
+  },
+  "error_boundary": {
+    "title": "問題が発生しました",
+    "message": "予期しないエラーが発生しました。ページをリフレッシュしてください。",
+    "retry": "リトライ",
+    "refresh": "ページをリフレッシュ",
+    "technical_details": "技術詳細"
+  },
+  "export": {
+    "download_csv": "CSVをダウンロード",
+    "download_json": "JSONをダウンロード",
+    "export_data": "データをエクスポート",
+    "costs_filename": "费用-{date}",
+    "activities_filename": "活动-{date}"
+  },
+  "settings": {
+    "page_title": "設定",
+    "page_subtitle": "システム状態、連携、設定",
+    "refresh": "更新",
+    "last_updated": "最終更新",
+    "version_info": "Mission Control v1.0.0",
+    "dashboard_name": "OpenClaw Agent Dashboard",
+    "appearance": {
+      "title": "外観",
+      "theme": "テーマ",
+      "theme_dark": "ダーク",
+      "theme_light": "ライト",
+      "theme_system": "システム"
+    },
+    "system_info": {
+      "title": "システム情報",
+      "agent_name": "エージェント名",
+      "uptime": "稼働時間",
+      "node_version": "Node.js 版本",
+      "current_model": "当前模型",
+      "workspace": "工作区",
+      "memory": "メモリー",
+      "free": "可用"
+    },
+    "integrations": {
+      "title": "集成",
+      "connected": "已连接",
+      "disconnected": "未连接",
+      "configured": "已配置",
+      "not_configured": "未配置",
+      "last_activity": "最后活动"
+    },
+    "quick_actions": {
+      "title": "クイックアクション",
+      "restart_gateway": "ゲートウェイを再起動",
+      "clear_activity_logs": "清除活动日志",
+      "view_gateway_logs": "查看网关日志",
+      "change_password": "更改密码",
+      "placeholder": "占位符",
+      "password_changed": "密码修改成功",
+      "gateway_restart_sent": "网关重启命令已发送（占位符）",
+      "activity_logs_cleared": "活动日志已清除",
+      "opening_logs": "正在打开网关日志...（占位符）",
+      "failed_clear_logs": "清除活动日志失败"
+    }
+  },
+  "language": {
+    "zh": "中文",
+    "en": "English",
+    "ja": "日语",
+    "ko": "韩语",
+    "es": "西班牙语"
+  },
+  "keyboard_shortcuts": {
+    "title": "键盘快捷键",
+    "show_help": "显示键盘快捷键",
+    "search": "搜索",
+    "close": "关闭面板",
+    "navigate": "上下导航",
+    "select": "选择项目",
+    "focus_search": "聚焦搜索栏",
+    "footer": "按 ? 切换此面板"
+  },
+  "widgets": {
+    "title": "ダッシュボードウィジェット",
+    "customize": "ダッシュボードをカスタマイズ",
+    "save": "レイアウトを保存",
+    "reset": "レイアウトをリセット",
+    "add_widget": "ウィジェットを追加",
+    "remove_widget": "ウィジェットを削除",
+    "system_health": "システムヘルス",
+    "agent_status": "エージェント状態",
+    "recent_activities": "最近のアクティビティ",
+    "cost_summary": "コスト概要",
+    "cron_summary": "Cron概要",
+    "memory_summary": "メモリー概要"
   }
 }

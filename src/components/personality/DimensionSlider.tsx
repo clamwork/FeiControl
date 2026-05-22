@@ -19,8 +19,8 @@ export default function DimensionSlider({
   min = 1,
   max = 10,
   onChange,
-  leftLabel = '低',
-  rightLabel = '高',
+  leftLabel = '',
+  rightLabel = '',
 }: DimensionSliderProps) {
   const pct = ((value - min) / (max - min)) * 100;
 

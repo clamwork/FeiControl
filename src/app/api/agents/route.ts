@@ -104,7 +104,7 @@ export async function GET() {
     const config = JSON.parse(readFileSync(configPath, "utf-8"));
 
     // Get agents from config
-    const agents: Agent[] = config.agents.list.map((agent: any) => {
+    const agents: Agent[] = (config.agents?.list || []).map((agent: any) => {
       const agentInfo = getAgentDisplayInfo(agent.id, agent);
 
       // Get telegram account info
@@ -178,7 +178,7 @@ export async function GET() {
         role: agentInfo.role,
         model:
           (typeof agent.model === 'string' ? agent.model : agent.model?.primary) ||
-          (typeof config.agents.defaults.model === 'string' ? config.agents.defaults.model : config.agents.defaults.model?.primary) ||
+          (typeof config.agents?.defaults?.model === 'string' ? config.agents.defaults.model : config.agents?.defaults?.model?.primary) ||
           'unknown',
         workspace: agent.workspace,
         dmPolicy:

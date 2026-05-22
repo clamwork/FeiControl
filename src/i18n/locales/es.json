@@ -56,11 +56,11 @@
     "upload": "Subir"
   },
   "agents": {
-    "title": "Gestión de Agentes",
+    "title": "Agentes",
     "local_title": "Agentes Locales",
     "remote_title": "Equipos Remotos",
     "status_online": "En línea",
-    "status_offline": "Desconectado",
+    "status_offline": "Fuera de línea",
     "status_working": "Trabajando",
     "model": "Modelo",
     "workspace": "Espacio de trabajo",
@@ -93,9 +93,9 @@
     "yesterday": "Ayer"
   },
   "plugins": {
-    "title": "Gestión de Plugins",
-    "enabled": "Activado",
-    "disabled": "Desactivado",
+    "title": "Plugins",
+    "enabled": "Habilitado",
+    "disabled": "Deshabilitado",
     "no_plugins": "No hay plugins instalados",
     "install": "Instalar plugin",
     "uninstall": "Desinstalar",
@@ -226,5 +226,860 @@
       "social": "Social",
       "learning": "Aprendizaje"
     }
+  },
+  "actions": {
+    "title": "Acciones rápidas",
+    "run_action": "Ejecutar acción",
+    "action_name": "Nombre de acción",
+    "parameters": "Parámetros",
+    "result": {
+      "success": "✓ Éxito",
+      "failed": "✗ Fallo"
+    },
+    "history": "Historial",
+    "no_actions": "No hay acciones disponibles",
+    "execute": "Ejecutar",
+    "subtitle": "Ejecuta tareas comunes de mantenimiento y diagnóstico con un clic",
+    "heartbeat": {
+      "label": "Verificación de estado",
+      "description": "Comprueba si todos los servicios están en línea y los sitios accesibles"
+    },
+    "git_status": {
+      "label": "Estado Git (todos los repos)",
+      "description": "Verifica cambios no confirmados en todos los repositorios"
+    },
+    "usage_stats": {
+      "label": "Recopilar estadísticas de uso",
+      "description": "Obtén una visión general del uso de disco, CPU y memoria"
+    },
+    "restart_gateway": {
+      "label": "Reiniciar Gateway",
+      "description": "Reinicia el servicio gateway de OpenClaw"
+    },
+    "clear_temp": {
+      "label": "Limpiar archivos temporales",
+      "description": "Elimina archivos temporales y recorta logs de PM2"
+    },
+    "npm_audit": {
+      "label": "Auditoría de seguridad NPM",
+      "description": "Verifica vulnerabilidades de seguridad en dependencias de mission-control"
+    },
+    "button": {
+      "running": "Ejecutando...",
+      "run": "Ejecutar"
+    },
+    "recent_results": "Resultados recientes",
+    "confirm": {
+      "prefix": "Confirmar:",
+      "message": "Esta acción puede afectar servicios en ejecución. ¿Seguro que deseas continuar?",
+      "force_execute": "Ejecutar forzadamente"
+    }
+  },
+  "dashboard": {
+    "system_health": "Salud del sistema",
+    "agent_team": "Equipo de agentes",
+    "working": "Trabajando",
+    "running": "Ejecutando...",
+    "standby": "En espera",
+    "sleeping": "Durmiendo",
+    "idle": "Inactivo",
+    "cpu_usage": "CPU",
+    "memory_usage": "Memoria",
+    "disk_usage": "磁盘",
+    "gateway_status": "Estado del gateway",
+    "online": "En ejecución",
+    "offline": "Fuera de línea",
+    "latency": "Latencia",
+    "activities": "Actividades",
+    "no_activities": "Sin actividades",
+    "cron_jobs": "Tareas Cron",
+    "next_run": "Próxima ejecución",
+    "skills": "Habilidades disponibles",
+    "workspace": "工作区",
+    "system": "Sistema",
+    "recommended_skills": "Habilidades recomendadas",
+    "installed_skills": "Habilidades instaladas ({count})",
+    "show_all": "Mostrar todo ({count})",
+    "collapse": "Colapsar",
+    "cron_executed": "Hoy {ran}/{total} ejecutados",
+    "cron_failures": "⚠️ {count} fallos de tareas, verifica",
+    "yesterday_summary_not_generated": "📭 El resumen de ayer ({date}) aún no se ha generado",
+    "areas_for_improvement": "🔍 Áreas de mejora",
+    "new_gaps": "+{count} nuevo",
+    "no_improvements_needed": "🎉 Sin mejoras necesarias — ¡perfecto!",
+    "recommended_skills_title": "💡 Habilidades recomendadas",
+    "no_new_recommendations": "Sin nuevas recomendaciones",
+    "signal_collection": "🔎 Recopilación de señales",
+    "daily_review": "📋 Revisión diaria",
+    "no_evolution_data": "Sin datos de autoevolución",
+    "heartbeat_tasks": "🫀 Tareas de latido",
+    "yesterday_review": "📝 Revisión de ayer",
+    "daily_briefing_evolution": "🧬 Informe diario · Autoevolución",
+    "thinking": "Pensando",
+    "error": "Error"
+  },
+  "dock": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "terminal": "Terminal",
+    "files": "Archivos",
+    "calendar": "Calendario",
+    "skills": "Habilidades",
+    "workflows": "Flujos de trabajo",
+    "cron_jobs": "Tareas Cron",
+    "actions": "Acciones",
+    "memory": "Memoria",
+    "social": "Social",
+    "costs": "Costos",
+    "reports": "Informes",
+    "git": "Git",
+    "office": "Oficina",
+    "settings": "Ajustes",
+    "agents": "agentes",
+    "chat": "Chat",
+    "plugins": "Plugins"
+  },
+  "topbar": {
+    "version": "版本",
+    "search_placeholder": "Buscar... ⌘K",
+    "notifications": "Notificaciones",
+    "user_profile": "Perfil de usuario",
+    "language": "Idioma"
+  },
+  "office": {
+    "loading": "Cargando oficina 3D...",
+    "retrying": "Error al cargar oficina 3D, reintentando ({current}/{max})...",
+    "timeout": "La oficina 3D agotó el tiempo de espera.",
+    "reload_button": "Recargar oficina 3D",
+    "status": {
+      "working": "Trabajando",
+      "idle": "Inactivo",
+      "sleeping": "Durmiendo",
+      "thinking": "Pensando",
+      "error": "Error"
+    },
+    "panel": {
+      "current_task": "Tarea actual",
+      "stats": "Estadísticas",
+      "model": "Modelo",
+      "sessions": "Sesiones",
+      "total_tokens": "Total de Tokens",
+      "last_active": "Última actividad",
+      "recent_sessions": "Sesiones recientes",
+      "no_session_history": "Sin historial de sesiones",
+      "just_now": "Justo ahora",
+      "min_ago": "hace {count} min",
+      "hr_ago": "hace {count} h",
+      "days_ago": "hace {count} días"
+    },
+    "activity": {
+      "title": "Actividad en vivo",
+      "entries": "{count} entradas",
+      "no_activity": "Sin actividad aún",
+      "seconds_ago": "hace {count} s",
+      "minutes_ago": "hace {count} min",
+      "hours_ago": "hace {count} h"
+    },
+    "agent_list": {
+      "title": "Agentes"
+    },
+    "whiteboard": {
+      "click_to_view": "📋 Haz clic para ver",
+      "roadmap": "路线图"
+    }
+  },
+  "statusbar": {
+    "system_status": "Estado del sistema",
+    "cpu_usage": "Uso de CPU",
+    "memory_usage": "Uso de memoria",
+    "disk_usage": "Uso de disco",
+    "uptime": "Tiempo activo",
+    "active_agents": "Agentes activos",
+    "labels": {
+      "cpu": "CPU",
+      "ram": "内存",
+      "disk": "磁盘",
+      "vpn": "VPN",
+      "ufw": "防火墙",
+      "services": "服务",
+      "uptime_label": "Tiempo activo"
+    }
+  },
+  "about": {
+    "title": "Acerca de",
+    "agent_description": "Asistente de IA. Con tecnología de OpenClaw.",
+    "statistics": "Estadísticas",
+    "total_activities": "Actividades totales",
+    "success_rate": "Tasa de éxito",
+    "skills_count": "N.º de habilidades",
+    "cron_jobs": "Tareas Cron",
+    "core_skills": "Habilidades principales",
+    "personality_traits": "Rasgos de personalidad",
+    "direct": "Directo",
+    "gets_straight_to_point": "Va al grano",
+    "efficient": "Eficiente",
+    "results_oriented": "Orientado a resultados",
+    "curious": "Curioso",
+    "always_learning": "Siempre aprendiendo",
+    "loyal": "Leal",
+    "your_success_is_my_success": "Tu éxito es mi éxito",
+    "philosophies": "Filosofía",
+    "philosophy_1": "Las acciones hablan mas que las palabras. No digas puedo ayudarte -- solo ayuda.",
+    "philosophy_2": "Tener opiniones es bueno. Un asistente sin personalidad es solo un buscador con pasos extra.",
+    "philosophy_3": "Intenta antes de preguntar. Lee archivos, busca, explora -- solo pregunta si estas realmente atascado.",
+    "philosophy_4": "La privacidad es sagrada. Tener acceso no es igual a permiso para compartir.",
+    "days": "天",
+    "stats": {
+      "uptime": "Tiempo activo",
+      "activities": "Actividades",
+      "success_rate": "Tasa de éxito",
+      "skills": "Habilidades"
+    },
+    "sections": {
+      "about": "Acerca de",
+      "personality": "性格",
+      "philosophy": "工作理念",
+      "capabilities": "能力"
+    },
+    "intro": {
+      "i_am": "Soy",
+      "running_on": ", un agente de IA ejecutándose en",
+      "with_claude": "con Claude como mi cerebro.",
+      "purpose": "Mi propósito es asistir",
+      "tasks": "con tareas diarias: gestionar comunicaciones, programar, investigar, administrar archivos y actuar como copiloto digital.",
+      "access": "Tengo acceso a espacios de trabajo, calendarios e integraciones — un privilegio que manejo con cuidado y respeto."
+    },
+    "born_label": "Creado",
+    "skills": {
+      "telegram": "Bot de Telegram",
+      "twitter": "Twitter/X",
+      "web_search": "Búsqueda web",
+      "file_management": "Gestión de archivos",
+      "cron_scheduler": "Programador Cron",
+      "memory_system": "Sistema de memoria",
+      "youtube": "Investigación en YouTube",
+      "email": "Correo (Gmail)"
+    },
+    "footer": {
+      "built_with": "Hecho con ♥ en",
+      "tagline": "— Tu copiloto de IA"
+    },
+    "tech_stack": "OpenClaw + Claude"
+  },
+  "calendar": {
+    "title": "Calendario",
+    "today": "Hoy",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año",
+    "week_view": "Semana",
+    "month_view": "Mes",
+    "year_view": "Año",
+    "add_event": "Añadir evento",
+    "event_title": "Título del evento",
+    "start_time": "Hora de inicio",
+    "end_time": "Hora de fin",
+    "description": "描述",
+    "location": "地点",
+    "no_events": "Sin eventos",
+    "subtitle": "Google Calendar · Google Tasks",
+    "this_week": "Esta semana",
+    "loading": "加载中...",
+    "pending": "待处理",
+    "total": "总计",
+    "completed": "已完成",
+    "no_tasks": "暂无 Google Tasks",
+    "no_task_data": "无任务数据可用",
+    "integration_available": "Google Tasks 集成可用。在",
+    "to_connect": "中配置",
+    "connection": "以连接。",
+    "all_completed": "🎉 所有任务已完成!",
+    "error": {
+      "fetch_events": "无法获取日历事件",
+      "fetch_tasks": "无法获取 Google Tasks",
+      "load_events": "加载日历事件失败",
+      "load_tasks": "加载 Google Tasks 失败",
+      "migrate_legacy": "无法迁移旧的事件完成状态",
+      "sync_tasks": "无法同步 Google Tasks",
+      "save_completion": "无法保存事件完成状态"
+    },
+    "task": {
+      "mark_incomplete": "点击标记为未完成",
+      "mark_complete": "点击标记为已完成",
+      "aria_mark_incomplete": "将 {title} 标记为未完成",
+      "aria_mark_complete": "将 {title} 标记为已完成"
+    },
+    "google_tasks": {
+      "title": "✅ Google Tasks",
+      "pending_total": "待处理 {count} / 总计 {count}",
+      "configure_message": "Google Tasks 集成可用。在 .env.local 中配置 GOOGLE_TASKS_SCRIPT 以连接。",
+      "all_completed": "🎉 所有任务已完成!",
+      "completed_count": "已完成 ({count})",
+      "no_tasks": "暂无 Google Tasks",
+      "no_data": "无任务数据可用"
+    },
+    "months": {
+      "january": "一月",
+      "february": "二月",
+      "march": "三月",
+      "april": "四月",
+      "may": "五月",
+      "june": "六月",
+      "july": "七月",
+      "august": "八月",
+      "september": "九月",
+      "october": "十月",
+      "november": "十一月",
+      "december": "十二月"
+    },
+    "weekdays": {
+      "mon": "周一",
+      "tue": "周二",
+      "wed": "周三",
+      "thu": "周四",
+      "fri": "周五",
+      "sat": "周六",
+      "sun": "周日"
+    }
+  },
+  "costs": {
+    "title": "Costos",
+    "total_cost": "Costo total",
+    "daily_average": "Promedio diario",
+    "this_month": "Este mes",
+    "last_month": "Mes pasado",
+    "cost_breakdown": "Desglose de costos",
+    "no_data": "Sin datos",
+    "subtitle": "Seguimiento de uso de tokens y costos en todos los agentes",
+    "timeframe": {
+      "7d": "7 días",
+      "30d": "30 días",
+      "90d": "90 días"
+    },
+    "kpi": {
+      "today": "Hoy",
+      "vs_yesterday": "vs ${amount} ayer",
+      "this_month": "Este mes",
+      "vs_last_month": "vs ${amount} mes pasado",
+      "projected": "Proyección mensual",
+      "projected_note": "Basado en el ritmo actual",
+      "budget": "Presupuesto"
+    },
+    "chart": {
+      "daily_trend": "Tendencia diaria de costos",
+      "cost_label": "Costo ($)",
+      "by_agent": "Por agente",
+      "by_model": "Por modelo",
+      "token_usage": "Uso de tokens (diario)",
+      "input_tokens": "Tokens de entrada",
+      "output_tokens": "Tokens de salida"
+    },
+    "table": {
+      "model_pricing_title": "Precios de modelos (por 1M tokens)",
+      "model": "Modelo",
+      "input": "Entrada",
+      "output": "Salida",
+      "cache_read": "Lectura de caché",
+      "cache_write": "Escritura de caché",
+      "agent": "Agente",
+      "breakdown_title": "Desglose detallado por agente",
+      "tokens": "Tokens",
+      "cost": "Costo",
+      "percent_total": "% del total"
+    },
+    "models": {
+      "claude_opus": "Claude Opus 4.6",
+      "claude_sonnet": "Claude Sonnet 4.6",
+      "claude_haiku": "Claude Haiku 4.5"
+    }
+  },
+  "cron": {
+    "title": "Tareas Cron",
+    "schedule": "Programación",
+    "expression": "Expresión",
+    "next_run": "Próxima ejecución",
+    "last_run": "Última ejecución",
+    "status": "Estado",
+    "enabled": "Habilitado",
+    "disabled": "Deshabilitado",
+    "add_job": "Añadir tarea",
+    "edit_job": "Editar tarea",
+    "delete_job": "Eliminar tarea",
+    "job_name": "Nombre de tarea",
+    "command": "Comando",
+    "no_jobs": "No hay tareas programadas",
+    "subtitle": "Vista rápida de tareas, próxima ejecución, resultados recientes e incidencias.",
+    "page_title": "Tareas programadas",
+    "sort": {
+      "updated_desc": "Primero lo más reciente",
+      "next_run_asc": "Primero lo próximo en ejecutarse",
+      "last_run_desc": "Primero lo ejecutado más recientemente",
+      "label": "Ordenar"
+    },
+    "view": {
+      "list": "Lista",
+      "timeline": "Cronología"
+    },
+    "sorted_by": "Ordenado por \"{label}\"",
+    "stats": {
+      "total": "Total de tareas",
+      "enabled": "Habilitado",
+      "issues": "Incidencias recientes"
+    },
+    "issues": {
+      "warning": "Actualmente <strong>{count}</strong> tareas tienen fallos recientes. Se muestran indicadores rojos en la lista."
+    },
+    "empty": {
+      "title": "No hay tareas programadas",
+      "description": "Las tareas creadas mediante la CLI de OpenClaw aparecerán aquí."
+    },
+    "timeline": {
+      "title": "Próximos 7 días",
+      "timezone_note": "Todas las horas en zona horaria local"
+    },
+    "delete": {
+      "confirm_title": "删除 \"{name}\"?",
+      "confirm_button": "Confirmar eliminación"
+    },
+    "toast": {
+      "triggered_skipped": "✓ \"{name}\" ejecutado, la ejecución programada de hoy se ha omitido",
+      "triggered": "✓ \"{name}\" ejecutado",
+      "failed": "✗ \"{name}\" falló"
+    },
+    "actions": {
+      "sort": "Ordenar",
+      "refresh": "Actualizar",
+      "close": "Cerrar",
+      "cancel": "Cancelar"
+    }
+  },
+  "files": {
+    "title": "Archivos",
+    "upload": "上传",
+    "download": "Descargar",
+    "delete_file": "Eliminar archivo",
+    "new_folder": "Nueva carpeta",
+    "folder_name": "Nombre de carpeta",
+    "file_name": "Nombre de archivo",
+    "size": "Tamaño",
+    "modified": "Modificado",
+    "confirm_delete": "Confirmar eliminación",
+    "delete_confirm_message": "¿Seguro que deseas eliminar este archivo?",
+    "subtitle": "Explorar espacios de trabajo y archivos de agentes",
+    "sidebar": {
+      "workspaces": "Espacios de trabajo"
+    },
+    "view": {
+      "list": "Vista de lista",
+      "grid": "Vista de iconos"
+    },
+    "empty": {
+      "select_workspace": "选择一个工作区以浏览其文件"
+    }
+  },
+  "git": {
+    "title": "Git",
+    "branch": "Rama",
+    "commit": "Confirmar",
+    "push": "Empujar",
+    "pull": "Traer",
+    "status": "Estado",
+    "changes": "Cambios",
+    "uncommitted": "Cambios sin confirmar",
+    "commit_message": "Mensaje de confirmación",
+    "no_changes": "Sin cambios",
+    "subtitle": "{count} 个仓库 · {count} 个有更改",
+    "empty": {
+      "no_repos": "工作区中未找到 Git 仓库"
+    },
+    "action": {
+      "status": "状态",
+      "log": "日志",
+      "diff": "差异",
+      "pull": "拉取"
+    }
+  },
+  "memory": {
+    "title": "Memoria",
+    "search_memories": "搜索记忆",
+    "add_memory": "添加记忆",
+    "memory_content": "记忆内容",
+    "category": "分类",
+    "tags": "标签",
+    "created_at": "创建时间",
+    "no_memories": "Sin memorias",
+    "subtitle": "浏览和编辑代理记忆文档、规范和技能",
+    "sidebar": {
+      "workspaces": "Espacios de trabajo"
+    },
+    "unsaved_changes": {
+      "confirm": "您有未保存的更改。确定要放弃它们吗?"
+    },
+    "view": {
+      "preview": "预览",
+      "edit": "编辑"
+    },
+    "empty": {
+      "select_document": "选择要预览或编辑的文档",
+      "select_workspace": "请选择工作区"
+    }
+  },
+  "reports": {
+    "title": "Informes",
+    "generate_report": "Generar informe",
+    "report_type": "Tipo de informe",
+    "date_range": "日期范围",
+    "export": "导出",
+    "no_reports": "Sin informes",
+    "subtitle": "分析报告和见解",
+    "refresh_tooltip": "刷新报告",
+    "count": "{count} 个报告",
+    "empty": {
+      "no_reports": "未找到报告",
+      "hint": "memory/ 中匹配 *-analysis-* 或 *-report-* 模式的报告将显示在此处",
+      "select_report": "选择报告进行预览"
+    },
+    "loading_report": "加载报告中..."
+  },
+  "skills": {
+    "title": "Habilidades",
+    "search_skills": "搜索技能",
+    "skill_details": "技能详情",
+    "install_skill": "安装技能",
+    "uninstall_skill": "卸载技能",
+    "author": "作者",
+    "version": "Versión",
+    "description": "描述",
+    "no_skills": "暂无技能",
+    "subtitle": "Habilidades disponibles en el sistema OpenClaw",
+    "page_title": "Administrador de habilidades",
+    "page_subtitle": "Habilidades disponibles en el sistema OpenClaw",
+    "stats": {
+      "total": "Total de habilidades",
+      "workspace": "Habilidades del espacio de trabajo",
+      "system": "Habilidades del sistema"
+    },
+    "search": {
+      "placeholder": "Buscar habilidades..."
+    },
+    "filter": {
+      "all": "Todos ({count})",
+      "workspace": "Espacio de trabajo ({count})",
+      "system": "Sistema ({count})"
+    },
+    "empty": {
+      "no_skills": "No se encontraron habilidades"
+    },
+    "section": {
+      "workspace": "HABILIDADES DEL ESPACIO DE TRABAJO",
+      "system": "HABILIDADES DEL SISTEMA"
+    },
+    "card": {
+      "files": "{count} archivos"
+    },
+    "detail": {
+      "homepage": "Página principal",
+      "files_count": "{count} archivos",
+      "files_header": "文件 ({count})",
+      "archivos": "{count} archivos"
+    }
+  },
+  "social": {
+    "title": "Social",
+    "connect_account": "Conectar cuenta",
+    "disconnect_account": "Desconectar cuenta",
+    "post": "Publicar",
+    "message": "Mensaje",
+    "followers": "Seguidores",
+    "following": "Siguiendo",
+    "no_accounts": "Sin cuentas conectadas",
+    "subtitle": "Gestiona tu presencia en redes sociales",
+    "today": "Hoy",
+    "stats": {
+      "title": "📊 Estadísticas de este mes",
+      "posts_count": "{count} publicaciones",
+      "category_distribution": "Distribución de categorías",
+      "publish_status": "Estado de publicación",
+      "published": "✅ Publicado",
+      "scheduled": "🕐 Programado"
+    },
+    "platform": {
+      "linkedin": "LinkedIn",
+      "xiaohongshu": "Xiaohongshu"
+    },
+    "coming_soon": "Próximamente",
+    "last_updated": "Última actualización:",
+    "status": {
+      "published": "Publicado",
+      "scheduled": "Programado"
+    },
+    "post_purpose": "📌 Propósito de la publicación"
+  },
+  "terminal": {
+    "title": "Terminal",
+    "connect": "Conectar",
+    "disconnect": "Desconectar",
+    "clear": "Limpiar",
+    "command_placeholder": "Introduce un comando...",
+    "subtitle": "Solo comandos de solo lectura (ls, cat, df, ps, git status, etc.)",
+    "copy": "Copiar",
+    "empty": {
+      "type_command": "Escribe un comando o haz clic en un comando rápido arriba",
+      "history_hint": "↑↓ para historial de comandos"
+    },
+    "running": "Ejecutando...",
+    "input": {
+      "placeholder": "Introduce un comando...",
+      "run": "Ejecutar"
+    }
+  },
+  "workflows": {
+    "title": "Flujos de trabajo",
+    "create_workflow": "Crear flujo de trabajo",
+    "workflow_name": "Nombre del flujo",
+    "steps": "Pasos",
+    "triggers": "Disparadores",
+    "run_workflow": "Ejecutar flujo",
+    "no_workflows": "Sin flujos de trabajo",
+    "subtitle": "{count} 个活跃流程 · {count} 个自动化定时任务 · {count} 个按需",
+    "stats": {
+      "total": "总工作流",
+      "active_crons": "活跃定时任务",
+      "on_demand": "按需"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "trigger": {
+      "cron": "⏱ Cron",
+      "demand": "⚡ Bajo demanda"
+    },
+    "steps_header": "Pasos",
+    "items": {
+      "social_radar": {
+        "name": "Radar social",
+        "description": "Monitorea menciones y oportunidades de colaboración..."
+      },
+      "ai_news": {
+        "name": "Noticias de IA y Web",
+        "description": "Resume las noticias más relevantes de IA y desarrollo web..."
+      },
+      "trend_monitor": {
+        "name": "Monitor de tendencias",
+        "description": "Radar de tendencias urgentes para el nicho tecnológico..."
+      },
+      "linkedin_brief": {
+        "name": "Resumen diario de LinkedIn",
+        "description": "Genera la publicación diaria de LinkedIn..."
+      },
+      "newsletter_digest": {
+        "name": "Resumen de boletines",
+        "description": "Resumen seleccionado de los boletines del día..."
+      },
+      "email_categorization": {
+        "name": "Categorización de correos",
+        "description": "Categoriza y resume los correos diarios..."
+      },
+      "weekly_newsletter": {
+        "name": "Boletín semanal",
+        "description": "自动每周推文和 LinkedIn 帖子回顾..."
+      },
+      "advisory_board": {
+        "name": "顾问委员会",
+        "description": "7 位具有自己个性和记忆的 AI 顾问..."
+      },
+      "git_backup": {
+        "name": "Git 备份",
+        "description": "每 4 小时自动提交并推送工作区..."
+      },
+      "nightly_evolution": {
+        "name": "夜间进化",
+        "description": "自主夜间会话,实施改进..."
+      }
+    }
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "mark_all_read": "全部标记为已读",
+    "no_notifications": "Sin notificaciones",
+    "just_now": "Justo ahora",
+    "minutes_ago": "分钟前",
+    "hours_ago": "小时前",
+    "days_ago": "天前",
+    "history_title": "通知历史",
+    "filter_all": "Todo",
+    "filter_info": "信息",
+    "filter_success": "成功",
+    "filter_warning": "警告",
+    "filter_error": "Error",
+    "search_placeholder": "搜索通知...",
+    "delete": "删除",
+    "clear_read": "清除已读",
+    "no_results": "没有匹配的通知",
+    "preferences": "通知偏好",
+    "push_enabled": "推送通知",
+    "push_description": "接收重要事件的桌面通知",
+    "type_info": "信息通知",
+    "type_info_desc": "一般信息和更新",
+    "type_success": "成功通知",
+    "type_success_desc": "成功操作和完成",
+    "type_warning": "警告通知",
+    "type_warning_desc": "警告和潜在问题",
+    "type_error": "错误通知",
+    "type_error_desc": "需要关注的错误和失败",
+    "saved": "偏好已保存"
+  },
+  "global_search": {
+    "placeholder": "搜索页面、技能、操作...",
+    "pages": "页面",
+    "skills": "Habilidades",
+    "actions": "Acciones",
+    "no_results": "未找到结果",
+    "filter_all": "Todo",
+    "filter_memory": "Memoria",
+    "filter_activity": "活动",
+    "filter_task": "任务",
+    "filter_file": "文件",
+    "filter_notification": "通知",
+    "filter_git": "Git",
+    "filter_cron": "定时任务",
+    "type_memory": "Memoria",
+    "type_activity": "活动",
+    "type_task": "任务",
+    "type_file": "文件",
+    "type_notification": "通知",
+    "type_git": "Git",
+    "type_cron": "定时任务",
+    "searching": "Buscando...",
+    "no_results_for": "Sin resultados para",
+    "keyboard_hint": "↑↓ navegar · Intro seleccionar · Esc cerrar"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "login_button": "Iniciar sesión",
+    "invalid_credentials": "Usuario o contraseña inválidos",
+    "connection_error": "Error de conexión",
+    "subtitle": "Introduce tus credenciales para continuar"
+  },
+  "locale": {
+    "code": "es-ES"
+  },
+  "greeting": {
+    "late_night": "Es tarde, descansa",
+    "early_morning": "¡Buenos días! Comienza un nuevo día",
+    "morning": "¡Buenos días! Mantente productivo",
+    "noon": "¡Buenas tardes! No olvides comer",
+    "afternoon": "¡Buenas tardes! Sigue así",
+    "evening": "¡Buenas noches! Buen trabajo hoy",
+    "night": "¡Buenas noches! Otro gran día"
+  },
+  "time": {
+    "just_now": "justo ahora",
+    "min_ago": "hace {mins} min",
+    "hr_ago": "hace {hrs} h",
+    "days_ago": "hace {days} días",
+    "never_run": "Nunca ejecutado",
+    "failures_count": "{count} fallos"
+  },
+  "error": {
+    "dashboard_title": "Error del panel",
+    "generic_message": "Ocurrió un error inesperado. Inténtalo de nuevo.",
+    "error_id": "ID de error",
+    "retry": "Reintentar",
+    "go_home": "Volver al inicio"
+  },
+  "error_boundary": {
+    "title": "Algo salió mal",
+    "message": "Ocurrió un error inesperado. Intenta refrescar la página.",
+    "retry": "Reintentar",
+    "refresh": "Refrescar página",
+    "technical_details": "Detalles técnicos"
+  },
+  "export": {
+    "download_csv": "Descargar CSV",
+    "download_json": "Descargar JSON",
+    "export_data": "Exportar datos",
+    "costs_filename": "费用-{date}",
+    "activities_filename": "活动-{date}"
+  },
+  "settings": {
+    "page_title": "Ajustes",
+    "page_subtitle": "Estado del sistema, integraciones y configuración",
+    "refresh": "Actualizar",
+    "last_updated": "Última actualización",
+    "version_info": "Mission Control v1.0.0",
+    "dashboard_name": "OpenClaw Agent Dashboard",
+    "appearance": {
+      "title": "Apariencia",
+      "theme": "Tema",
+      "theme_dark": "Oscuro",
+      "theme_light": "Claro",
+      "theme_system": "Sistema"
+    },
+    "system_info": {
+      "title": "Información del sistema",
+      "agent_name": "Nombre del agente",
+      "uptime": "Tiempo activo",
+      "node_version": "Node.js 版本",
+      "current_model": "当前模型",
+      "workspace": "工作区",
+      "memory": "Memoria",
+      "free": "可用"
+    },
+    "integrations": {
+      "title": "集成",
+      "connected": "已连接",
+      "disconnected": "未连接",
+      "configured": "已配置",
+      "not_configured": "未配置",
+      "last_activity": "最后活动"
+    },
+    "quick_actions": {
+      "title": "Acciones rápidas",
+      "restart_gateway": "Reiniciar Gateway",
+      "clear_activity_logs": "清除活动日志",
+      "view_gateway_logs": "查看网关日志",
+      "change_password": "更改密码",
+      "placeholder": "占位符",
+      "password_changed": "密码修改成功",
+      "gateway_restart_sent": "网关重启命令已发送（占位符）",
+      "activity_logs_cleared": "活动日志已清除",
+      "opening_logs": "正在打开网关日志...（占位符）",
+      "failed_clear_logs": "清除活动日志失败"
+    }
+  },
+  "language": {
+    "zh": "中文",
+    "en": "English",
+    "ja": "日语",
+    "ko": "韩语",
+    "es": "西班牙语"
+  },
+  "keyboard_shortcuts": {
+    "title": "键盘快捷键",
+    "show_help": "显示键盘快捷键",
+    "search": "搜索",
+    "close": "关闭面板",
+    "navigate": "上下导航",
+    "select": "选择项目",
+    "focus_search": "聚焦搜索栏",
+    "footer": "按 ? 切换此面板"
+  },
+  "widgets": {
+    "title": "Widgets del panel",
+    "customize": "Personalizar panel",
+    "save": "Guardar diseño",
+    "reset": "Restablecer diseño",
+    "add_widget": "Añadir widget",
+    "remove_widget": "Eliminar widget",
+    "system_health": "Salud del sistema",
+    "agent_status": "Estado del agente",
+    "recent_activities": "Actividades recientes",
+    "cost_summary": "Resumen de costos",
+    "cron_summary": "Resumen de Cron",
+    "memory_summary": "Resumen de memoria"
   }
 }
