@@ -5,8 +5,15 @@ import { useI18n } from '@/i18n';
 import DimensionSlider from './DimensionSlider';
 import PresetSelector from './PresetSelector';
 import MoodBadge from './MoodBadge';
+import LevelBadge from './LevelBadge';
+import SkillTree from './SkillTree';
+import AchievementPanel from './AchievementPanel';
+import GrowthHistory from './GrowthHistory';
 import type { AgentPersonality, AgentMood } from '@/lib/personality/types';
 import type { MoodEntry } from '@/lib/personality/types';
+import type { SkillData } from './SkillTree';
+import type { AchievementData } from './AchievementPanel';
+import type { GrowthEvent } from './GrowthHistory';
 import { inferPersonality } from '@/lib/personality/prompt-builder';
 
 interface PersonalityTabProps {
@@ -49,14 +56,27 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [activeTab, setActiveTab] = useState<'edit' | 'presets' | 'mood'>('edit');
+  const [activeTab, setActiveTab] = useState<'edit' | 'presets' | 'mood' | 'growth'>('edit');
 
-  // 加载性格
+  // 成长系统状态
+  const [level, setLevel] = useState<{ level: number; xp: number; xpToNext: number; skillPoints: number } | null>(null);
+  const [skills, setSkills] = useState<SkillData[]>([]);
+  const [stats, setStats] = useState({ efficiency: 0, creativity: 0, social: 0, learning: 0, initiativeBonus: 0, empathyBonus: 0 });
+  const [achievements, setAchievements] = useState<AchievementData[]>([]);
+  const [eventCounts, setEventCounts] = useState({ tasksCompleted: 0, messagesSent: 0, initiativesAdopted: 0 });
+  const [growthEvents, setGrowthEvents] = useState<GrowthEvent[]>([]);
+  const [growthLoading, setGrowthLoading] = useState(false);
+  const [skillUnlockLoading, setSkillUnlockLoading] = useState(false);
+
+  // 加载性格 & 成长数据
   useEffect(() => {
     Promise.all([
       fetch(`/api/personality?agentId=${encodeURIComponent(agentId)}`),
       fetch(`/api/personality/mood?agentId=${encodeURIComponent(agentId)}`),
-    ]).then(async ([pRes, mRes]) => {
+      fetch(`/api/personality/level?agentId=${encodeURIComponent(agentId)}`),
+      fetch(`/api/personality/level/skills?agentId=${encodeURIComponent(agentId)}`),
+      fetch(`/api/personality/level/achievements?agentId=${encodeURIComponent(agentId)}`),
+    ]).then(async ([pRes, mRes, lRes, skRes, aRes]) => {
       if (pRes.ok) {
         const data = await pRes.json();
         setPersonality(data.personality);
@@ -64,6 +84,20 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
       if (mRes.ok) {
         const data = await mRes.json();
         setMood(data.mood);
+      }
+      if (lRes.ok) {
+        const data = await lRes.json();
+        setLevel(data.level);
+      }
+      if (skRes.ok) {
+        const data = await skRes.json();
+        setSkills(data.skills ?? []);
+        setStats(data.stats ?? { efficiency: 0, creativity: 0, social: 0, learning: 0, initiativeBonus: 0, empathyBonus: 0 });
+      }
+      if (aRes.ok) {
+        const data = await aRes.json();
+        setAchievements(data.achievements ?? []);
+        setEventCounts(data.eventCounts ?? { tasksCompleted: 0, messagesSent: 0, initiativesAdopted: 0 });
       }
     }).finally(() => setLoading(false));
   }, [agentId]);
@@ -107,6 +141,43 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
     setPersonality({ ...personality, ...partial });
   };
 
+  const [growthSubTab, setGrowthSubTab] = useState<'skills' | 'achievements' | 'history'>('skills');
+
+  const handleSkillUnlock = async (skillKey: string) => {
+    setSkillUnlockLoading(true);
+    try {
+      const res = await fetch('/api/personality/level/skills/unlock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agentId, skillKey }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSkills(data.skills ?? skills);
+        setStats(data.stats ?? stats);
+        if (data.newAchievements?.length > 0) {
+          setAchievements(prev => [...prev, ...data.newAchievements.map((a: any) => ({
+            key: a.key,
+            name: a.name,
+            description: '',
+            condition: '',
+            reward: a.reward,
+            unlocked: true,
+            unlockedAt: new Date().toISOString(),
+          }))]);
+        }
+        // 刷新等级（经验可能变化）
+        const lvlRes = await fetch(`/api/personality/level?agentId=${encodeURIComponent(agentId)}`);
+        if (lvlRes.ok) {
+          const lvlData = await lvlRes.json();
+          setLevel(lvlData.level);
+        }
+      }
+    } finally {
+      setSkillUnlockLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div style={{ padding: 24, textAlign: 'center', color: 'var(--text-muted)' }}>
@@ -127,6 +198,7 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
     { key: 'edit', label: t('personality.edit_title') },
     { key: 'presets', label: t('personality.presets_title') },
     { key: 'mood', label: t('personality.mood_title') },
+    { key: 'growth', label: t('personality.growth_title') },
   ] as const;
 
   return (
@@ -358,6 +430,75 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
             <div style={{ padding: 16, textAlign: 'center', color: 'var(--text-muted)', fontSize: 13 }}>
               {t('personality.no_mood_data')}
             </div>
+          )}
+        </div>
+      )}
+
+      {/* 成长 Tab */}
+      {activeTab === 'growth' && (
+        <div>
+          {/* 等级 + XP 进度条 */}
+          {level && (
+            <div style={{ marginBottom: 16 }}>
+              <LevelBadge
+                level={level.level}
+                xp={level.xp}
+                xpToNext={level.xpToNext}
+                skillPoints={level.skillPoints}
+                size="md"
+              />
+            </div>
+          )}
+
+          <div style={{
+            display: 'flex',
+            gap: 8,
+            marginBottom: 16,
+            borderBottom: '1px solid var(--border)',
+            paddingBottom: 8,
+          }}>
+            {(['skills', 'achievements', 'history'] as const).map(subTab => (
+              <button
+                key={subTab}
+                onClick={() => setGrowthSubTab(subTab)}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: 6,
+                  fontSize: 12,
+                  fontWeight: growthSubTab === subTab ? 600 : 400,
+                  border: 'none',
+                  backgroundColor: growthSubTab === subTab ? 'var(--accent)' : 'transparent',
+                  color: growthSubTab === subTab ? 'white' : 'var(--text-secondary)',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                }}
+              >
+                {subTab === 'skills' && `🔧 ${t('personality.skills')}`}
+                {subTab === 'achievements' && `🏆 ${t('personality.achievements')}`}
+                {subTab === 'history' && `📜 ${t('personality.growth_history')}`}
+              </button>
+            ))}
+          </div>
+
+          {growthSubTab === 'skills' && (
+            <SkillTree
+              skills={skills}
+              stats={stats}
+              skillPoints={level?.skillPoints ?? 0}
+              onUnlock={handleSkillUnlock}
+              loading={skillUnlockLoading}
+            />
+          )}
+
+          {growthSubTab === 'achievements' && (
+            <AchievementPanel
+              achievements={achievements}
+              eventCounts={eventCounts}
+            />
+          )}
+
+          {growthSubTab === 'history' && (
+            <GrowthHistory events={growthEvents} />
           )}
         </div>
       )}

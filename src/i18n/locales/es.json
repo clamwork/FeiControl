@@ -205,6 +205,26 @@
       "confused": "Confundido",
       "excited": "Emocionado"
     },
-    "updated_at": "Actualizado: {time}"
+    "updated_at": "Actualizado: {time}",
+    "growth_title": "📈 Crecimiento",
+    "level": "Nivel",
+    "skill_points": "pts. habilidad",
+    "skills": "Habilidades",
+    "achievements": "Logros",
+    "growth_history": "Historial de Crecimiento",
+    "no_growth_history": "Aún no hay eventos de crecimiento — ¡usa este agente para ganar XP!",
+    "tasks_done": "Tareas",
+    "messages_sent": "Mensajes",
+    "adopted": "Adoptado",
+    "efficiency": "Eficiencia",
+    "initiative": "Iniciativa",
+    "empathy_boost": "Empatía",
+    "pt": "pto",
+    "skill_tree": {
+      "efficiency": "Eficiencia",
+      "creativity": "Creatividad",
+      "social": "Social",
+      "learning": "Aprendizaje"
+    }
   }
 }

@@ -65,6 +65,44 @@ export function getPersonalityDb(): Database.Database {
       updated_at    TEXT NOT NULL DEFAULT (datetime('now')),
       FOREIGN KEY (agent_id) REFERENCES agent_personalities(agent_id) ON DELETE CASCADE
     );
+
+    -- Sprint 1: Growth RPG 系统
+    CREATE TABLE IF NOT EXISTS agent_levels (
+      agent_id    TEXT PRIMARY KEY,
+      level       INTEGER NOT NULL DEFAULT 1,
+      xp          INTEGER NOT NULL DEFAULT 0,
+      xp_to_next  INTEGER NOT NULL DEFAULT 100,
+      skill_points INTEGER NOT NULL DEFAULT 0,
+      updated_at  TEXT DEFAULT (datetime('now')),
+      FOREIGN KEY (agent_id) REFERENCES agent_personalities(agent_id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS agent_skills (
+      id          TEXT PRIMARY KEY,
+      agent_id    TEXT NOT NULL,
+      skill_key   TEXT NOT NULL,
+      level       INTEGER NOT NULL DEFAULT 0,
+      unlocked_at TEXT,
+      FOREIGN KEY (agent_id) REFERENCES agent_levels(agent_id) ON DELETE CASCADE,
+      UNIQUE(agent_id, skill_key)
+    );
+
+    CREATE TABLE IF NOT EXISTS agent_achievements (
+      id              TEXT PRIMARY KEY,
+      agent_id        TEXT NOT NULL,
+      achievement_key TEXT NOT NULL,
+      unlocked_at     TEXT DEFAULT (datetime('now')),
+      FOREIGN KEY (agent_id) REFERENCES agent_levels(agent_id) ON DELETE CASCADE,
+      UNIQUE(agent_id, achievement_key)
+    );
+
+    CREATE TABLE IF NOT EXISTS agent_event_counts (
+      agent_id     TEXT NOT NULL,
+      event_key    TEXT NOT NULL,   -- e.g. 'tasks_completed', 'messages_sent', 'initiative_adopted'
+      count        INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (agent_id, event_key),
+      FOREIGN KEY (agent_id) REFERENCES agent_personalities(agent_id) ON DELETE CASCADE
+    );
   `);
 
   return _db;

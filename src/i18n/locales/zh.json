@@ -1028,6 +1028,26 @@
       "confused": "困惑",
       "excited": "兴奋"
     },
-    "updated_at": "更新于: {time}"
+    "updated_at": "更新于: {time}",
+    "growth_title": "📈 成长记录",
+    "level": "等级",
+    "skill_points": "技能点",
+    "skills": "技能树",
+    "achievements": "成就",
+    "growth_history": "成长历史",
+    "no_growth_history": "暂无成长事件 — 开始使用 Agent 来获得经验吧！",
+    "tasks_done": "任务完成",
+    "messages_sent": "消息数",
+    "adopted": "被采纳",
+    "efficiency": "效率",
+    "initiative": "主动发起",
+    "empathy_boost": "同理心",
+    "pt": "点",
+    "skill_tree": {
+      "efficiency": "效率",
+      "creativity": "创意",
+      "social": "社交",
+      "learning": "学习"
+    }
   }
 }

@@ -1,42 +1,55 @@
 /**
- * 心情计算单元测试
+ * 心情计算 + 主动发起单元测试
  */
+import { describe, it, expect, afterAll } from 'vitest';
 import { calculateMood } from '../mood-calculator';
 import { checkInitiative } from '../initiative-engine';
 import { closePersonalityDb } from '../db';
 
-function assert(condition: boolean, msg: string) {
-  if (!condition) throw new Error(`FAIL: ${msg}`);
-  console.log(`  ✓ ${msg}`);
-}
+describe('心情衰减', () => {
+  it('task_done → mood 应改善', () => {
+    const result = calculateMood('t', [{type:'task_done', timestamp:Date.now()-5000}], 'calm', Date.now()-3600000);
+    expect(result.mood).toBe('happy');
+  });
 
-// 1. 平静+任务完成 → 开心
-assert(calculateMood('t', [{type:'task_done', timestamp:Date.now()-5000}], 'calm', Date.now()-3600000).mood === 'happy', 'task_done');
+  it('task_fail → confused', () => {
+    const result = calculateMood('t', [{type:'task_fail', timestamp:Date.now()-5000}], 'happy', Date.now()-3600000);
+    expect(result.mood).toBe('confused');
+  });
 
-// 2. 开心+任务失败 → 困惑
-assert(calculateMood('t', [{type:'task_fail', timestamp:Date.now()-5000}], 'happy', Date.now()-3600000).mood === 'confused', 'task_fail');
+  it('criticism → confused', () => {
+    const result = calculateMood('t', [{type:'user_criticism', timestamp:Date.now()-5000}], 'happy', Date.now()-3600000);
+    expect(result.mood).toBe('confused');
+  });
 
-// 3. 开心+批评 → 困惑
-assert(calculateMood('t', [{type:'user_criticism', timestamp:Date.now()-5000}], 'happy', Date.now()-3600000).mood === 'confused', 'criticism');
+  it('praise → excited', () => {
+    const result = calculateMood('t', [{type:'user_praise', timestamp:Date.now()-5000}], 'calm', Date.now()-3600000);
+    expect(result.mood).toBe('excited');
+  });
 
-// 4. 平静+表扬 → 兴奋
-assert(calculateMood('t', [{type:'user_praise', timestamp:Date.now()-5000}], 'calm', Date.now()-3600000).mood === 'excited', 'praise');
+  it('idle → calm (衰减)', () => {
+    const result = calculateMood('t', [{type:'long_idle', timestamp:Date.now()-5000}], 'excited', Date.now()-3600000);
+    expect(result.mood).toBe('calm');
+  });
 
-// 5. 兴奋+空闲 → 平静(衰减)
-assert(calculateMood('t', [{type:'long_idle', timestamp:Date.now()-5000}], 'excited', Date.now()-3600000).mood === 'calm', 'idle_decay');
+  it('fail + praise → happy', () => {
+    const result = calculateMood('t', [
+      {type:'task_fail', timestamp:Date.now()-10000},
+      {type:'user_praise', timestamp:Date.now()-5000},
+    ], 'calm', Date.now()-3600000);
+    expect(result.mood).toBe('happy');
+  });
 
-// 6. task_fail(sad) + praise(happy) → happy
-assert(calculateMood('t', [
-  {type:'task_fail', timestamp:Date.now()-10000},
-  {type:'user_praise', timestamp:Date.now()-5000},
-], 'calm', Date.now()-3600000).mood === 'happy', 'fail_then_praise');
+  it('8h idle → calm', () => {
+    const result = calculateMood('t', [], 'excited', Date.now()-8*3600000);
+    expect(result.mood).toBe('calm');
+  });
 
-// 7. 8小时无事件 → 平静
-assert(calculateMood('t', [], 'excited', Date.now()-8*3600000).mood === 'calm', 'long_idle');
+  it('未启用不发起', () => {
+    expect(checkInitiative('nonexistent')).toBeNull();
+  });
+});
 
-// 8. 未启用不发起 DB 调用
-assert(checkInitiative('nonexistent') === null, 'no_initiative');
-
-console.log('\n=== 心情计算测试通过 ===');
-closePersonalityDb();
-process.exit(0);
+afterAll(() => {
+  closePersonalityDb();
+});

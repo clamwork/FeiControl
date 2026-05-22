@@ -205,6 +205,26 @@
       "confused": "困惑",
       "excited": "興奮"
     },
-    "updated_at": "更新日時: {time}"
+    "updated_at": "更新日時: {time}",
+    "growth_title": "📈 成長記録",
+    "level": "レベル",
+    "skill_points": "スキルポイント",
+    "skills": "スキルツリー",
+    "achievements": "実績",
+    "growth_history": "成長履歴",
+    "no_growth_history": "成長イベントはまだありません — Agent を使って XP を獲得しましょう！",
+    "tasks_done": "タスク完了",
+    "messages_sent": "メッセージ",
+    "adopted": "採用",
+    "efficiency": "効率",
+    "initiative": "自発性",
+    "empathy_boost": "共感力",
+    "pt": "pt",
+    "skill_tree": {
+      "efficiency": "効率",
+      "creativity": "創造性",
+      "social": "社交",
+      "learning": "学習"
+    }
   }
 }

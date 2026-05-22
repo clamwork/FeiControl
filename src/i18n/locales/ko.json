@@ -205,6 +205,26 @@
       "confused": "혼란",
       "excited": "흥분"
     },
-    "updated_at": "업데이트: {time}"
+    "updated_at": "업데이트: {time}",
+    "growth_title": "📈 성장 기록",
+    "level": "레벨",
+    "skill_points": "스킬 포인트",
+    "skills": "스킬 트리",
+    "achievements": "업적",
+    "growth_history": "성장 내역",
+    "no_growth_history": "성장 이벤트가 없습니다 — Agent를 사용하여 XP를 획득하세요!",
+    "tasks_done": "작업 완료",
+    "messages_sent": "메시지",
+    "adopted": "채택",
+    "efficiency": "효율",
+    "initiative": "주도성",
+    "empathy_boost": "공감",
+    "pt": "pt",
+    "skill_tree": {
+      "efficiency": "효율",
+      "creativity": "창의",
+      "social": "사회",
+      "learning": "학습"
+    }
   }
 }

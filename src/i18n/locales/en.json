@@ -1028,6 +1028,26 @@
       "confused": "Confused",
       "excited": "Excited"
     },
-    "updated_at": "Updated at: {time}"
+    "updated_at": "Updated at: {time}",
+    "growth_title": "📈 Growth",
+    "level": "Level",
+    "skill_points": "sk. pts",
+    "skills": "Skills",
+    "achievements": "Achievements",
+    "growth_history": "Growth History",
+    "no_growth_history": "No growth events yet — start using this agent to earn XP!",
+    "tasks_done": "Tasks",
+    "messages_sent": "Messages",
+    "adopted": "Adopted",
+    "efficiency": "Efficiency",
+    "initiative": "Initiative",
+    "empathy_boost": "Empathy",
+    "pt": "pt",
+    "skill_tree": {
+      "efficiency": "Efficiency",
+      "creativity": "Creativity",
+      "social": "Social",
+      "learning": "Learning"
+    }
   }
 }

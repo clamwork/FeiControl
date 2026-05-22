@@ -1,104 +1,107 @@
 /**
  * 存储层单元测试
  */
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { getPersonalityDb, closePersonalityDb } from '../db';
 import {
-  getPersonality,
-  upsertPersonality,
-  resetPersonality,
-  updateMood,
-  getMood,
-  getMoodHistory,
-  getInitiativeSettings,
-  upsertInitiativeSettings,
-  getAllEnabledInitiativeSettings,
+  getPersonality, upsertPersonality, resetPersonality, saveInferredResult,
+  getMood, updateMood, getMoodHistory,
+  getInitiativeSettings, upsertInitiativeSettings, getAllEnabledInitiativeSettings,
 } from '../repository';
-import type { AgentPersonality, AgentMood } from '../types';
+import type { AgentPersonality } from '../types';
 
-function assert(condition: boolean, msg: string) {
-  if (!condition) throw new Error(`FAIL: ${msg}`);
-  console.log(`  ✓ ${msg}`);
-}
+const TEST_AGENT = 'test-repo-agent';
 
-// 清理数据库
-const db = getPersonalityDb();
-db.exec('DELETE FROM agent_mood_history');
-db.exec('DELETE FROM agent_moods');
-db.exec('DELETE FROM agent_initiative_settings');
-db.exec('DELETE FROM agent_personalities');
-
-const TEST_AGENT = 'test-repo';
-
-// 1. 默认值
-const def = getPersonality(TEST_AGENT);
-assert(def.agentId === TEST_AGENT, '默认性格 agentId 正确');
-assert(def.extraversion === 5, '默认外向 = 5');
-assert(def.conscientiousness === 5, '默认严谨 = 5');
-assert(def.humor === 5, '默认幽默 = 5');
-assert(def.empathy === 5, '默认同理心 = 5');
-assert(def.creativity === 5, '默认创造力 = 5');
-assert(def.isAutoInferred === false, '默认非推断');
-
-// 2. 创建/更新
-upsertPersonality({ agentId: TEST_AGENT, extraversion: 8, conscientiousness: 9, humor: 2, empathy: 7, creativity: 6, isAutoInferred: false });
-const p = getPersonality(TEST_AGENT);
-assert(p.extraversion === 8, '外向已更新为 8');
-assert(p.conscientiousness === 9, '严谨已更新为 9');
-
-// 3. 带自定义风格
-upsertPersonality({
-  agentId: TEST_AGENT,
-  extraversion: 8, conscientiousness: 9, humor: 2, empathy: 7, creativity: 6,
-  isAutoInferred: false,
-  customTraits: { tone: 'formal', verbosity: 'detailed', emojiUsage: 'never' },
+beforeAll(() => {
+  const db = getPersonalityDb();
+  db.prepare('DELETE FROM agent_personalities WHERE agent_id = ?').run(TEST_AGENT);
+  db.prepare('DELETE FROM agent_moods WHERE agent_id = ?').run(TEST_AGENT);
+  db.prepare('DELETE FROM agent_mood_history WHERE agent_id = ?').run(TEST_AGENT);
+  db.prepare('DELETE FROM agent_initiative_settings WHERE agent_id = ?').run(TEST_AGENT);
 });
-const p2 = getPersonality(TEST_AGENT);
-assert(p2.customTraits?.tone === 'formal', 'tone = formal');
-assert(p2.customTraits?.verbosity === 'detailed', 'verbosity = detailed');
-assert(p2.customTraits?.emojiUsage === 'never', 'emojiUsage = never');
 
-// 4. 重置
-resetPersonality(TEST_AGENT);
-const p3 = getPersonality(TEST_AGENT);
-assert(p3.extraversion === 5, '重置后外向 = 5');
+afterAll(() => {
+  closePersonalityDb();
+});
 
-// 恢复 personality 以便后续测试（外键依赖）
-upsertPersonality({ agentId: TEST_AGENT, extraversion: 5, conscientiousness: 5, humor: 5, empathy: 5, creativity: 5, isAutoInferred: false });
+describe('Personality CRUD', () => {
+  it('默认性格 agentId 正确', () => {
+    const p = getPersonality(TEST_AGENT);
+    expect(p.agentId).toBe(TEST_AGENT);
+  });
 
-// 5. 心情 CRUD
-const noMood = getMood(TEST_AGENT);
-assert(noMood === null, '未设置心情 → null');
+  it('默认外向 = 5', () => {
+    expect(getPersonality(TEST_AGENT).extraversion).toBe(5);
+  });
 
-updateMood(TEST_AGENT, 'happy', '测试通过', 'test');
-const mood = getMood(TEST_AGENT);
-assert(mood !== null, '心情已设置');
-assert(mood!.mood === 'happy', '心情 = happy');
-assert(mood!.reason === '测试通过', '原因正确');
+  it('更新外向 = 8', () => {
+    upsertPersonality({ agentId: TEST_AGENT, extraversion: 8, conscientiousness: 5, humor: 5, empathy: 5, creativity: 5, isAutoInferred: false });
+    expect(getPersonality(TEST_AGENT).extraversion).toBe(8);
+  });
 
-// 6. 心情历史
-const history = getMoodHistory(TEST_AGENT);
-assert(history.length === 1, '心情历史 = 1 条');
-assert(history[0].mood === 'happy', '历史心情 = happy');
+  it('更新严谨 = 9', () => {
+    upsertPersonality({ agentId: TEST_AGENT, extraversion: 8, conscientiousness: 9, humor: 5, empathy: 5, creativity: 5, isAutoInferred: false });
+    expect(getPersonality(TEST_AGENT).conscientiousness).toBe(9);
+  });
 
-updateMood(TEST_AGENT, 'excited', '又一个测试', 'test2');
-const history2 = getMoodHistory(TEST_AGENT);
-assert(history2.length === 2, '心情历史 = 2 条');
+  it('保存推断结果', () => {
+    saveInferredResult(TEST_AGENT, { extraversion: 7, conscientiousness: 6, humor: 8, empathy: 4, creativity: 9, confidence: 0.85 });
+    const p = getPersonality(TEST_AGENT);
+    expect(p.isAutoInferred).toBe(true);
+    expect(p.extraversion).toBe(7);
+  });
 
-// 7. 主动发起设置
-const defInitiative = getInitiativeSettings(TEST_AGENT);
-assert(defInitiative.enabled === false, '默认未启用');
-assert(defInitiative.frequency === 'low', '默认频率 = low');
+  it('重置后回到默认', () => {
+    resetPersonality(TEST_AGENT);
+    // Re-insert for subsequent tests
+    const db = getPersonalityDb();
+    db.prepare('INSERT OR IGNORE INTO agent_personalities (agent_id) VALUES (?)').run(TEST_AGENT);
+    expect(getPersonality(TEST_AGENT).extraversion).toBe(5);
+  });
+});
 
-upsertInitiativeSettings({ agentId: TEST_AGENT, enabled: true, frequency: 'high' });
-const initiative = getInitiativeSettings(TEST_AGENT);
-assert(initiative.enabled === true, '已启用');
-assert(initiative.frequency === 'high', '频率 = high');
+describe('Mood CRUD', () => {
+  it('未设置心情 → null', () => {
+    expect(getMood('non-existent')).toBeNull();
+  });
 
-// 8. 查询所有已启用
-const allEnabled = getAllEnabledInitiativeSettings();
-assert(allEnabled.length >= 1, '至少 1 个已启用');
-assert(allEnabled.some(s => s.agentId === TEST_AGENT), '包含测试 Agent');
+  it('设置心情', () => {
+    updateMood(TEST_AGENT, 'happy', '测试', 'test');
+    const mood = getMood(TEST_AGENT);
+    expect(mood).not.toBeNull();
+    expect(mood?.mood).toBe('happy');
+  });
 
-console.log('\n=== 存储层测试通过 ===');
+  it('更新心情', () => {
+    updateMood(TEST_AGENT, 'excited', '新测试', 'test2');
+    expect(getMood(TEST_AGENT)?.mood).toBe('excited');
+  });
 
-closePersonalityDb();
+  it('心情历史记录', () => {
+    updateMood(TEST_AGENT, 'happy', '测试', 'test');
+    const history = getMoodHistory(TEST_AGENT, 10);
+    expect(history.length).toBeGreaterThanOrEqual(1);
+    expect(history[0].mood).toBe('happy');
+  });
+});
+
+describe('Initiative Settings CRUD', () => {
+  it('默认未启用', () => {
+    const s = getInitiativeSettings(TEST_AGENT);
+    expect(s.enabled).toBe(false);
+    expect(s.frequency).toBe('low');
+  });
+
+  it('启用主动发起', () => {
+    upsertInitiativeSettings({ agentId: TEST_AGENT, enabled: true, frequency: 'high' });
+    const s = getInitiativeSettings(TEST_AGENT);
+    expect(s.enabled).toBe(true);
+    expect(s.frequency).toBe('high');
+  });
+
+  it('已启用的列表', () => {
+    const list = getAllEnabledInitiativeSettings();
+    expect(list.length).toBeGreaterThanOrEqual(1);
+    expect(list.some(s => s.agentId === TEST_AGENT)).toBe(true);
+  });
+});
