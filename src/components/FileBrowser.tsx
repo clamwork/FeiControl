@@ -25,6 +25,7 @@ import {
   RefreshCw,
   MoreVertical,
   CheckSquare,
+  Edit3,
 } from "lucide-react";
 import { FilePreview } from "./FilePreview";
 
@@ -291,6 +292,8 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [batchDeleting, setBatchDeleting] = useState(false);
   const [confirmBatchDelete, setConfirmBatchDelete] = useState(false);
+  const [filterQuery, setFilterQuery] = useState("");
+  const [renameTarget, setRenameTarget] = useState<{ item: FileEntry; newName: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadItems = useCallback(() => {
@@ -427,6 +430,32 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
       setConfirmBatchDelete(false);
     }
   };
+
+  // Rename handler
+  const handleRename = async (item: FileEntry, newName: string) => {
+    const filePath = path ? `${path}/${item.name}` : item.name;
+    try {
+      const res = await fetch("/api/files/rename", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ workspace, path: filePath, newName }),
+      });
+      if (res.ok) {
+        setRenameTarget(null);
+        loadItems();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Rename failed");
+      }
+    } catch {
+      alert("Rename failed");
+    }
+  };
+
+  // Filter items by name
+  const filteredItems = filterQuery
+    ? items.filter((item) => item.name.toLowerCase().includes(filterQuery.toLowerCase()))
+    : items;
 
   // Create folder
   const handleCreateFolder = async () => {
@@ -565,6 +594,23 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
         </button>
       </div>
 
+      {/* Filter input */}
+      <div style={{ padding: "0.5rem 1rem", borderBottom: filterQuery ? "2px solid var(--accent)" : "1px solid var(--border)" }}>
+        <input
+          value={filterQuery}
+          onChange={(e) => setFilterQuery(e.target.value)}
+          placeholder="Filter files..."
+          style={{
+            width: "100%",
+            background: "transparent",
+            border: "none",
+            outline: "none",
+            color: "var(--text-primary)",
+            fontSize: "0.8rem",
+          }}
+        />
+      </div>
+
       {/* New Folder input */}
       {showNewFolder && (
         <div style={{ display: "flex", gap: "0.5rem", padding: "0.75rem 1rem", borderBottom: "1px solid var(--border)", backgroundColor: "var(--card-elevated)" }}>
@@ -687,7 +733,7 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
           minHeight: "100px",
         }}
       >
-        {items.length === 0 && !dragging && (
+{filteredItems.length === 0 && !dragging && (
           <div className="flex flex-col items-center justify-center py-12" style={{ color: "var(--text-secondary)" }}>
             <FolderOpen className="w-16 h-16 mb-4 opacity-50" />
             <p>This folder is empty</p>
@@ -703,16 +749,15 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
         )}
 
         {/* List View */}
-        {viewMode === "list" && items.length > 0 && !dragging && (
+        {viewMode === "list" && filteredItems.length > 0 && !dragging && (
           <div className="rounded-xl overflow-hidden" style={{ backgroundColor: "var(--card)" }}>
             <div
-              className="hidden md:grid grid-cols-12 gap-4 px-4 md:px-6 py-2 md:py-3 text-xs md:text-sm font-medium"
               style={{ backgroundColor: "var(--background)", color: "var(--text-secondary)" }}
             >
               <div className="col-span-1 flex items-center">
                 <input
                   type="checkbox"
-                  checked={selectedItems.size === items.length && items.length > 0}
+                  checked={selectedItems.size === filteredItems.length && filteredItems.length > 0}
                   onChange={toggleAll}
                   style={{ cursor: "pointer" }}
                   onClick={(e) => e.stopPropagation()}
@@ -724,7 +769,7 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
               <div className="col-span-1"></div>
             </div>
 
-            {items.map((item) => {
+            {filteredItems.map((item) => {
               const Icon = getFileIcon(item.name, item.type);
               const iconColor = getFileColor(item.name, item.type);
               const filePath = path ? `${path}/${item.name}` : item.name;
@@ -795,6 +840,13 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
                       </button>
                     )}
                     <button
+                      onClick={(e) => { e.stopPropagation(); setRenameTarget({ item, newName: item.name }); }}
+                      title="Rename"
+                      style={{ padding: "0.25rem", borderRadius: "0.25rem", background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)" }}
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
                       onClick={(e) => { e.stopPropagation(); setConfirmDelete(item); }}
                       title="Delete"
                       style={{ padding: "0.25rem", borderRadius: "0.25rem", background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)" }}
@@ -809,12 +861,11 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
         )}
 
         {/* Grid View */}
-        {viewMode === "grid" && items.length > 0 && !dragging && (
+        {viewMode === "grid" && filteredItems.length > 0 && !dragging && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-4 p-4">
-            {items.map((item) => {
+            {filteredItems.map((item) => {
               const Icon = getFileIcon(item.name, item.type);
               const iconColor = getFileColor(item.name, item.type);
-
               return (
                 <div
                   key={item.name}
@@ -879,6 +930,13 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
                       </button>
                     )}
                     <button
+                      onClick={(e) => { e.stopPropagation(); setRenameTarget({ item, newName: item.name }); }}
+                      title="Rename"
+                      style={{ padding: "0.2rem", borderRadius: "0.25rem", background: "var(--card-elevated)", border: "none", cursor: "pointer", color: "var(--text-muted)" }}
+                    >
+                      <Edit3 className="w-3 h-3" />
+                    </button>
+                    <button
                       onClick={(e) => { e.stopPropagation(); setConfirmDelete(item); }}
                       style={{ padding: "0.2rem", borderRadius: "0.25rem", background: "var(--card-elevated)", border: "none", cursor: "pointer", color: "var(--text-muted)" }}
                     >
@@ -924,6 +982,61 @@ export function FileBrowser({ workspace, path, onNavigate, viewMode = "list" }: 
                 style={{ padding: "0.5rem 1rem", borderRadius: "0.5rem", background: "var(--error, #ef4444)", color: "#fff", border: "none", cursor: "pointer", fontWeight: 600 }}
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rename Dialog */}
+      {renameTarget && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 999,
+          backgroundColor: "rgba(0,0,0,0.7)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          <div style={{
+            backgroundColor: "var(--card)", borderRadius: "1rem",
+            padding: "2rem", maxWidth: "400px", width: "90%",
+            border: "1px solid var(--border)",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+          }}>
+            <h3 style={{ color: "var(--text-primary)", marginBottom: "0.75rem", fontSize: "1.1rem", fontWeight: 600 }}>
+              Rename
+            </h3>
+            <p style={{ color: "var(--text-secondary)", marginBottom: "0.75rem", fontSize: "0.9rem" }}>
+              Enter a new name for <strong style={{ color: "var(--text-primary)" }}>{renameTarget.item.name}</strong>
+            </p>
+            <input
+              autoFocus
+              value={renameTarget.newName}
+              onChange={(e) => setRenameTarget({ ...renameTarget, newName: e.target.value })}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleRename(renameTarget.item, renameTarget.newName);
+                } else if (e.key === "Escape") {
+                  setRenameTarget(null);
+                }
+              }}
+              style={{
+                width: "100%", padding: "0.5rem 0.75rem", borderRadius: "0.5rem",
+                backgroundColor: "var(--surface)", color: "var(--text-primary)",
+                border: "1px solid var(--border)", outline: "none",
+                fontSize: "0.9rem", marginBottom: "1.25rem",
+              }}
+            />
+            <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
+              <button
+                onClick={() => setRenameTarget(null)}
+                style={{ padding: "0.5rem 1rem", borderRadius: "0.5rem", background: "var(--card-elevated)", color: "var(--text-secondary)", border: "none", cursor: "pointer" }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleRename(renameTarget.item, renameTarget.newName)}
+                style={{ padding: "0.5rem 1rem", borderRadius: "0.5rem", background: "var(--accent)", color: "#fff", border: "none", cursor: "pointer", fontWeight: 600 }}
+              >
+                Rename
               </button>
             </div>
           </div>

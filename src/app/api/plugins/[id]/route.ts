@@ -6,20 +6,21 @@ export const runtime = "nodejs";
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const pm = getPluginManager();
     const manifests = await pm.scan();
-    const manifest = manifests.find((m) => m.id === params.id);
+    const manifest = manifests.find((m) => m.id === id);
 
     if (!manifest) {
       return NextResponse.json({ error: "Plugin not found" }, { status: 404 });
     }
 
-    const loaded = pm.get(params.id);
-    const logs = pm.getLogs(params.id, 100);
-    const config = pm.readPluginConfig(params.id);
+    const loaded = pm.get(id);
+    const logs = pm.getLogs(id, 100);
+    const config = pm.readPluginConfig(id);
 
     return NextResponse.json({
       manifest,
@@ -37,9 +38,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const pm = getPluginManager();
     const body = await request.json();
     const { action, config } = body;
@@ -49,13 +51,13 @@ export async function PATCH(
         if (config === undefined) {
           return NextResponse.json({ error: "Missing config data" }, { status: 400 });
         }
-        const success = pm.writePluginConfig(params.id, config);
+        const success = pm.writePluginConfig(id, config);
         return NextResponse.json({ success, config });
       }
 
       case "toggle": {
         const enabled = body.enabled !== false;
-        const result = await pm.toggle(params.id, enabled);
+        const result = await pm.toggle(id, enabled);
         return NextResponse.json({ success: result, enabled });
       }
 
