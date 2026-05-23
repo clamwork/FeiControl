@@ -87,6 +87,7 @@ async function getFiles(): Promise<Array<{ path: string; display: string }>> {
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q')?.trim() || '';
+  const workspaceFilter = searchParams.get('workspace');
 
   if (query.length < 2) {
     return NextResponse.json({ results: [], query });
@@ -94,7 +95,11 @@ export async function GET(request: NextRequest) {
 
   try {
     const files = await getFiles();
-    const results = await Promise.all(files.map((f) => searchFile(f.path, query, f.display)));
+    // Filter by workspace if specified
+    const filteredFiles = workspaceFilter
+      ? files.filter((f) => f.display.startsWith(workspaceFilter) || f.display === `${workspaceFilter}.md`)
+      : files;
+    const results = await Promise.all(filteredFiles.map((f) => searchFile(f.path, query, f.display)));
     const sorted = results
       .filter(Boolean)
       .sort((a, b) => (b?.matches || 0) - (a?.matches || 0)) as SearchResult[];

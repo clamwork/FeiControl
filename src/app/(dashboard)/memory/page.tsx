@@ -5,6 +5,7 @@ import { Eye, Edit3, RefreshCw, Brain } from "lucide-react";
 import { FileTree, FileNode } from "@/components/FileTree";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
+import { MemorySearchBar } from "@/components/MemorySearchBar";
 import { useI18n } from "@/i18n";
 
 type ViewMode = "edit" | "preview";
@@ -390,6 +391,16 @@ export default function MemoryPage() {
                     overflowY: "auto",
                   }}
                 >
+                  {/* Search bar */}
+                  <div style={{ padding: "8px" }}>
+                    <MemorySearchBar
+                      workspace={selectedWorkspace || undefined}
+                      onSelect={(path) => {
+                        setSelectedPath(path);
+                      }}
+                    />
+                  </div>
+
                   {isLoading ? (
                     <div style={{ padding: "24px", textAlign: "center", color: "var(--text-secondary)" }}>
                       Loading...
