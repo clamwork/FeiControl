@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useI18n } from "@/i18n";
-import { Blocks, RefreshCw, ToggleLeft, ToggleRight, Download, Trash2, Globe, Loader2 } from "lucide-react";
+import { Blocks, RefreshCw, ToggleLeft, ToggleRight, Download, Trash2, Globe, Loader2, Terminal, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 interface PluginItem {
   id: string;
@@ -128,6 +129,14 @@ export default function PluginsPage() {
           {t("plugins.title")}
         </h1>
         <div className="flex items-center gap-2">
+          <Link
+            href="/dev"
+            className="px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5 transition-opacity hover:opacity-80"
+            style={{ backgroundColor: "var(--surface-elevated)", color: "var(--text-secondary)", border: "1px solid var(--border)" }}
+          >
+            <Terminal className="w-4 h-4" />
+            {t("dev.title") || "Developer Console"}
+          </Link>
           <button
             onClick={() => setShowInstall(!showInstall)}
             className="px-3 py-1.5 rounded-lg text-sm flex items-center gap-1.5 transition-opacity"

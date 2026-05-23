@@ -1,0 +1,10 @@
+{
+  "id": "example-plugin",
+  "name": "Example Plugin",
+  "version": "1.0.0",
+  "author": "FeiControl Team",
+  "description": "A sample plugin for development and testing",
+  "entry": "plugin.js",
+  "icon": "🔌",
+  "permissions": ["log", "config"]
+}

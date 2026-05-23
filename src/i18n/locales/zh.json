@@ -57,7 +57,8 @@
     "settings": "设置",
     "agents": "智能体",
     "chat": "聊天",
-    "plugins": "插件"
+    "plugins": "插件",
+    "dev": "开发者控制台"
   },
   "office": {
     "loading": "3D 办公室正在加载...",
@@ -923,6 +924,15 @@
     "reload": "重新加载",
     "reloaded": "插件已重新加载",
     "install_from": "从 URL 安装"
+  },
+  "dev": {
+    "title": "开发者控制台",
+    "runtime": "运行时",
+    "memory": "内存",
+    "plugins_status": "插件状态",
+    "plugin_logs": "插件日志",
+    "recent_activities": "最近活动",
+    "no_activities": "暂无最近活动"
   },
   "widgets": {
     "title": "仪表盘小部件",

@@ -57,7 +57,8 @@
     "settings": "Settings",
     "agents": "agents",
     "chat": "Chat",
-    "plugins": "Plugins"
+    "plugins": "Plugins",
+    "dev": "Developer Console"
   },
   "office": {
     "loading": "3D Office is loading...",
@@ -923,6 +924,15 @@
     "reload": "Reload All",
     "reloaded": "Plugins reloaded",
     "install_from": "Install from URL"
+  },
+  "dev": {
+    "title": "Developer Console",
+    "runtime": "Runtime",
+    "memory": "Memory",
+    "plugins_status": "Plugin Status",
+    "plugin_logs": "Plugin Logs",
+    "recent_activities": "Recent Activities",
+    "no_activities": "No recent activities"
   },
   "widgets": {
     "title": "Dashboard Widgets",
