@@ -28,6 +28,7 @@
     "more": "更多",
     "collapse": "收起",
     "no_data": "暂无数据",
+    "continue": "继续",
     "unable_to_fetch": "无法获取数据"
   },
   "topbar": {
@@ -1050,6 +1051,9 @@
     "initiative": "主动发起",
     "empathy_boost": "同理心",
     "pt": "点",
+    "evolution_title": "获得称号",
+    "evolution_unlock": "🔓 解锁效果",
+    "evolution_milestone_at": "进化里程碑 · Lv.",
     "skill_tree": {
       "efficiency": "效率",
       "creativity": "创意",

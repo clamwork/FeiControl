@@ -28,6 +28,7 @@
     "more": "More",
     "collapse": "Collapse",
     "no_data": "No data",
+    "continue": "Continue",
     "unable_to_fetch": "Unable to fetch data"
   },
   "topbar": {
@@ -1050,6 +1051,9 @@
     "initiative": "Initiative",
     "empathy_boost": "Empathy",
     "pt": "pt",
+    "evolution_title": "Title Earned",
+    "evolution_unlock": "🔓 Unlock Effects",
+    "evolution_milestone_at": "Evolution Milestone · Lv.",
     "skill_tree": {
       "efficiency": "Efficiency",
       "creativity": "Creativity",

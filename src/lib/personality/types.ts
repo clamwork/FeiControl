@@ -145,6 +145,63 @@ export type AchievementKey =
   | 'innovator'
   | 'champion';
 
+// ─── Sprint 1: 进化里程碑 ─────────────────────────────────────────────
+
+/** 进化里程碑等级阈值与效果 */
+export interface EvolutionMilestone {
+  threshold: number;          // 所需等级
+  name: string;               // 里程碑名称
+  title: string;              // 获得称号
+  effects: string[];          // 解锁效果列表
+  visualTags: string[];       // 视觉标签: 'frame_glow' | 'badge_slot' | 'breathing' | 'particles' | 'theme_color'
+}
+
+export const EVOLUTION_MILESTONES: EvolutionMilestone[] = [
+  {
+    threshold: 10,
+    name: '初醒',
+    title: '萌芽者',
+    effects: ['头像边框银光特效', 'Agent 性格系统解锁提示'],
+    visualTags: ['frame_glow'],
+  },
+  {
+    threshold: 20,
+    name: '觉醒',
+    title: '探索者',
+    effects: ['技能树解锁', '获得徽章展示位'],
+    visualTags: ['badge_slot'],
+  },
+  {
+    threshold: 30,
+    name: '主动',
+    title: '驱动者',
+    effects: ['解锁主动发起能力', '头像呼吸动画'],
+    visualTags: ['breathing'],
+  },
+  {
+    threshold: 40,
+    name: '超越',
+    title: '超越者',
+    effects: ['获得进化称号', '对话界面粒子特效'],
+    visualTags: ['particles'],
+  },
+  {
+    threshold: 50,
+    name: '超凡',
+    title: '超凡大师',
+    effects: ['专属主题色', '自定义进化名称'],
+    visualTags: ['theme_color'],
+  },
+];
+
+/** Agent 已解锁的进化里程碑（DB 记录） */
+export interface AgentEvolution {
+  id: string;
+  agentId: string;
+  milestoneThreshold: number;  // 对应 EVOLUTION_MILESTONES 的 threshold
+  unlockedAt: string;
+}
+
 /** 成就定义 */
 export interface AchievementDefinition {
   key: AchievementKey;

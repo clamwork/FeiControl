@@ -96,6 +96,16 @@ export function getPersonalityDb(): Database.Database {
       UNIQUE(agent_id, achievement_key)
     );
 
+    -- Sprint 1: 进化里程碑系统
+    CREATE TABLE IF NOT EXISTS agent_evolution_milestones (
+      id                 TEXT PRIMARY KEY,
+      agent_id           TEXT NOT NULL,
+      milestone_threshold INTEGER NOT NULL,  -- 对应 EVOLUTION_MILESTONES 的 threshold (10/20/30/40/50)
+      unlocked_at        TEXT DEFAULT (datetime('now')),
+      FOREIGN KEY (agent_id) REFERENCES agent_personalities(agent_id) ON DELETE CASCADE,
+      UNIQUE(agent_id, milestone_threshold)
+    );
+
     CREATE TABLE IF NOT EXISTS agent_event_counts (
       agent_id     TEXT NOT NULL,
       event_key    TEXT NOT NULL,   -- e.g. 'tasks_completed', 'messages_sent', 'initiative_adopted'

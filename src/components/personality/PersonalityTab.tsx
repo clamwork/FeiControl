@@ -9,7 +9,9 @@ import LevelBadge from './LevelBadge';
 import SkillTree from './SkillTree';
 import AchievementPanel from './AchievementPanel';
 import GrowthHistory from './GrowthHistory';
+import EvolutionMilestone from './EvolutionMilestone';
 import type { AgentPersonality, AgentMood } from '@/lib/personality/types';
+import type { EvolutionMilestone as MilestoneType } from '@/lib/personality/types';
 import type { MoodEntry } from '@/lib/personality/types';
 import type { SkillData } from './SkillTree';
 import type { AchievementData } from './AchievementPanel';
@@ -68,6 +70,31 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
   const [growthLoading, setGrowthLoading] = useState(false);
   const [skillUnlockLoading, setSkillUnlockLoading] = useState(false);
 
+  // 进化里程碑动画状态
+  const [activeMilestone, setActiveMilestone] = useState<MilestoneType | null>(null);
+  const [evolutionUnlocked, setEvolutionUnlocked] = useState<number[]>([]);
+
+  /** 检测并触发进化里程碑动画 */
+  const checkEvolutionOnLevel = async (currentLevel: number) => {
+    try {
+      const res = await fetch('/api/personality/level/evolution', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agentId, currentLevel }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.unlocked?.length > 0) {
+          // 只播最后一个（如果同时解锁多个，取最后一个里程碑展示）
+          setActiveMilestone(data.unlocked[data.unlocked.length - 1].milestone);
+          setEvolutionUnlocked(data.unlocked.map((u: any) => u.milestone.threshold));
+        }
+      }
+    } catch (e) {
+      // 静默失败
+    }
+  };
+
   // 加载性格 & 成长数据
   useEffect(() => {
     Promise.all([
@@ -88,6 +115,8 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
       if (lRes.ok) {
         const data = await lRes.json();
         setLevel(data.level);
+        // 检测进化里程碑
+        checkEvolutionOnLevel(data.level.level);
       }
       if (skRes.ok) {
         const data = await skRes.json();
@@ -171,6 +200,8 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
         if (lvlRes.ok) {
           const lvlData = await lvlRes.json();
           setLevel(lvlData.level);
+          // 技能解锁可能也伴随升级，重新检测进化里程碑
+          checkEvolutionOnLevel(lvlData.level.level);
         }
       }
     } finally {
@@ -501,6 +532,15 @@ export default function PersonalityTab({ agentId, agentName }: PersonalityTabPro
             <GrowthHistory events={growthEvents} />
           )}
         </div>
+      )}
+
+      {/* 进化里程碑动画弹窗 */}
+      {activeMilestone && (
+        <EvolutionMilestone
+          milestone={activeMilestone}
+          agentName={agentName}
+          onDismiss={() => setActiveMilestone(null)}
+        />
       )}
     </div>
   );
