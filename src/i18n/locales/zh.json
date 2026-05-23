@@ -58,6 +58,8 @@
     "agents": "智能体",
     "chat": "聊天",
     "plugins": "插件",
+    "favorites": "收藏夹",
+    "activity": "活动看板",
     "dev": "开发者控制台"
   },
   "office": {
@@ -1070,5 +1072,29 @@
       "social": "社交",
       "learning": "学习"
     }
+  },
+  "favorites": {
+    "title": "收藏夹",
+    "subtitle": "快速访问你收藏的项目",
+    "empty": "还没有收藏的内容 — 浏览文件或 Agent 时点击星标即可收藏",
+    "bookmark_added": "已添加到收藏夹",
+    "bookmark_removed": "已从收藏夹移除",
+    "type_file": "文件",
+    "type_agent": "Agent",
+    "type_page": "页面"
+  },
+  "activity_dashboard": {
+    "title": "活动看板",
+    "subtitle": "查看系统活动统计数据",
+    "total": "总活动数",
+    "today": "今日活动",
+    "success_rate": "成功率",
+    "by_status": "按状态",
+    "by_type": "按类型",
+    "trend": "近7日趋势",
+    "hourly": "时段分布",
+    "recent": "最近活动",
+    "no_data": "暂无活动数据",
+    "loading": "加载中..."
   }
 }

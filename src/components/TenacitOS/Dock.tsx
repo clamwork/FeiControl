@@ -20,6 +20,8 @@ import {
   MessageSquare,
   Blocks,
   Terminal,
+  Bookmark,
+  Activity,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useI18n } from "@/i18n";
@@ -41,6 +43,8 @@ const useDockItems = () => {
     { href: "/agents", label: t("dock.agents"), icon: Bot },
     { href: "/chat", label: t("dock.chat"), icon: MessageSquare },
     { href: "/plugins", label: t("dock.plugins"), icon: Blocks },
+    { href: "/favorites", label: t("dock.favorites"), icon: Bookmark },
+    { href: "/activity", label: t("dock.activity"), icon: Activity },
     { href: "/dev", label: t("dock.dev") || "Dev", icon: Terminal },
   ];
 };

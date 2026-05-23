@@ -58,6 +58,8 @@
     "agents": "agents",
     "chat": "Chat",
     "plugins": "Plugins",
+    "favorites": "Favorites",
+    "activity": "Activity",
     "dev": "Developer Console"
   },
   "office": {
@@ -1070,5 +1072,29 @@
       "social": "Social",
       "learning": "Learning"
     }
+  },
+  "favorites": {
+    "title": "Favorites",
+    "subtitle": "Quick access to your bookmarked items",
+    "empty": "No bookmarks yet — star files or agents to add them here",
+    "bookmark_added": "Added to favorites",
+    "bookmark_removed": "Removed from favorites",
+    "type_file": "File",
+    "type_agent": "Agent",
+    "type_page": "Page"
+  },
+  "activity_dashboard": {
+    "title": "Activity Dashboard",
+    "subtitle": "View system activity statistics",
+    "total": "Total Activities",
+    "today": "Today's Activities",
+    "success_rate": "Success Rate",
+    "by_status": "By Status",
+    "by_type": "By Type",
+    "trend": "7-Day Trend",
+    "hourly": "Hourly Distribution",
+    "recent": "Recent Activity",
+    "no_data": "No activity data yet",
+    "loading": "Loading..."
   }
 }
